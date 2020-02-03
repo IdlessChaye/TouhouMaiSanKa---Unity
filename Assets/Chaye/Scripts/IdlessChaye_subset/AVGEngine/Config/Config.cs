@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class ResourceManager {
-
+    [Serializable]
+    public class Config {
+        public string PlayerIdentifier;
     }
 }

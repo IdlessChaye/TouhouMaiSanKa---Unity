@@ -21,6 +21,8 @@ MonoBehaviour:
   DialogsSubFolderPathInReadonlyDataFolderName: AVGEngine/Dialogs
   DefaultDataSubFolderPathInReadonlyDataFolderName: AVGEngine/DefaultData
   VideosSubFolderPathInReadonlyDataFolderName: AVGEngine/Videos
+  DataSubFolderPathInPersistentFolderName: AVGEngine/Data
+  PlayerConfigFileName: Config.txt
   DefaultConfigFileName: DefaultConfig.txt
   ResourcesFolderName: Resources
   MainScriptFileName: Main.txt

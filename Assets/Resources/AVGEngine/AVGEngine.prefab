@@ -43,5 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a7c5c3f46675d4bbe0853876d93189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugMode: 1
   constData: {fileID: 11400000, guid: e5b9d02886a63e543b5e102f25aeddf6, type: 2}
   text: {fileID: 0}

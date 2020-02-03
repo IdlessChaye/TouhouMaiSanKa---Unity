@@ -55,10 +55,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void Initialize() {
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
+            /*configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
+            configManager.SaveConfigContext();*/
+            //playerRecordManager.PlayerRecord.markList.Add("呜呜呜");
+            //playerRecordManager.SavePlayerRecord();
             StateMachine.TransferStateTo(InitState.Instance);
 
             if (isDebugMode) {
-                text.text = configManager.ConfigContext;
+                text.text = configManager.Config.PlayerIdentifier;
+                text.text = playerRecordManager.PlayerRecord.markList[0];
             }
         }
 
