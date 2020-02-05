@@ -29,7 +29,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             Initialize();
         }
         #endregion
-
+        public bool isShutDown;
         public bool isDebugMode;
 
         public ConstData constData;
@@ -39,6 +39,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public StateMachineManager StateMachine => stateMachine;
 
         public FileManager FileManager => fileManager;
+        public ConfigManager ConfigManager => configManager;
 
 
 
@@ -54,12 +55,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void Initialize() {
+            if(isShutDown)
+                return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
             /*configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             configManager.SaveConfigContext();*/
             //playerRecordManager.PlayerRecord.markList.Add("呜呜呜");
             //playerRecordManager.SavePlayerRecord();
             StateMachine.TransferStateTo(InitState.Instance);
+            print(resourceManager.Get<string>("SC_!!!"));
+            //print(resourceManager.Get<Texture2D>("BI_???"));
 
             if (isDebugMode) {
                 text.text = configManager.Config.PlayerIdentifier;

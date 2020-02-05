@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 592567022
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: avgengine.unity3d
+      Dependencies: {}

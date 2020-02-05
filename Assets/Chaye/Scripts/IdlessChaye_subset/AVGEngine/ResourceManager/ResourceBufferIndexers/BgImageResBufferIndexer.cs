@@ -10,7 +10,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             throw new System.NotImplementedException();
         }
 
-        protected override TValue LoadValueByPath(string path) {
+        protected override TValue LoadValue(string finalIndex) {
             throw new System.NotImplementedException();
         }
     }

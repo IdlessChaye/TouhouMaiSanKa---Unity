@@ -13,6 +13,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private ConstData constData;
 
+        private VoiceAssetBundleConfigManager voiceAssetBundleConfigManager;
+
+        private VoiceAssetBundleResManager<AssetBundle> voiceAssetBundleResManager;
+
+        
+
+        private string language;
+
         public FileManager(ConfigManager configManager, PlayerRecordManager playerRecordManager, ResourceManager resourceManager, ConstData constData) {
             this.configManager = configManager;
             this.playerRecordManager = playerRecordManager;
@@ -35,6 +43,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 // 写入DefaultConfig到Persistent文件夹
                 WriteSingleTXTFileInPersistentFolder(constData.DataSubFolderPathInPersistentFolderName, constData.PlayerConfigFileName, configContext);
             }
+
+            language = configManager.Config.Language;
         }
 
         public void LoadPlayerRecord() {
@@ -45,7 +55,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void LoadStoryRecords() {
             List<FileInfo> fileInfoList = new List<FileInfo>();
-            GetAllFilesOfFolderPath(constData.SaveDataSubFolderPathInPersistentFolderName, fileInfoList, "txt");
+            string folderPath = Application.persistentDataPath + "/" + constData.SaveDataSubFolderPathInPersistentFolderName;
+            GetAllFilesOfFolderPath(folderPath, fileInfoList, new string[] { "txt" });
             bool isSuccess = playerRecordManager.LoadStoryRecordContext(fileInfoList); // 后续处理由PlayerRecordManager实现
         }
 
@@ -53,8 +64,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return ReadTXTFile(path);
         }
 
+        public void LoadVoiceAssetBundleConfig() {
+            voiceAssetBundleConfigManager = new VoiceAssetBundleConfigManager();
+            string folderPath = constData.VoiceAssetBundleConfigSubFolderPathInReadonly;
+            string vabConfigContext = ReadSingleTXTFileInBothReadonlyFolder(folderPath, constData.VoiceAssetBundleConfigFileName);
+            voiceAssetBundleConfigManager.LoadVoiceAssetBundleConfigContext(vabConfigContext);
+            voiceAssetBundleResManager = new VoiceAssetBundleResManager<AssetBundle>(constData.VoiceAssetBundleBufferMaxCount);
+            voiceAssetBundleResManager.LoadConfigManager(voiceAssetBundleConfigManager);
+        }
+
         public void LoadResource() {
             // 
+            resourceManager.LoadBgImage(GetBgImages());
         }
 
         public void SaveConfig(string configContext) {
@@ -71,6 +92,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 constData.SaveDataCommonPrefixName + indexOfRecord;
             WriteSingleTXTFileInPersistentFolder(constData.SaveDataSubFolderPathInPersistentFolderName, fileName, storyRecordContext);
         }
+
+        public AssetBundle GetAssetBundleByName(string name) {
+            string folderName = Application.streamingAssetsPath + "/" + constData.AssetBundlePathInStreamingAssets;
+            string assetbundleName = name + constData.AssetBundleVariant;
+            string path = folderName + "/" + assetbundleName;
+            AssetBundle ab = AssetBundle.LoadFromFile(path);
+            return ab;
+        }
+
+
+
+
 
         private string ReadSingleTXTFileInPersistentFolder(string folderPath, string fileName) {
             string context = null;
@@ -106,16 +139,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        private void GetAllFilesOfFolderPath(string folderPath, List<FileInfo> result, string fileFormat) {
+        private void GetAllFilesOfFolderPath(string folderPath, List<FileInfo> result, string[] fileFormatList) {
             if (!Directory.Exists(folderPath)) {
                 return;
             }
             foreach (string subdir in Directory.GetDirectories(folderPath)) {
-                GetAllFilesOfFolderPath(subdir, result, fileFormat);
+                GetAllFilesOfFolderPath(subdir, result, fileFormatList);
             }
             DirectoryInfo folder = new DirectoryInfo(folderPath);
-            FileInfo[] files = folder.GetFiles("*." + fileFormat);
-            result.AddRange(files);
+            for (int i = 0; i < fileFormatList.Length; i++) {
+                string fileFormat = fileFormatList[i];
+                FileInfo[] files = folder.GetFiles("*." + fileFormat);
+                result.AddRange(files);
+            }
         }
 
         private void WriteSingleTXTFileInPersistentFolder(string folderPath, string fileName, string contexts) {
@@ -132,5 +168,46 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
+        private List<FileInfo> GetBgImages() {
+            List<FileInfo> fileInfoList = new List<FileInfo>();
+            string folderPathOfStreaming = Application.streamingAssetsPath + "/" + constData.BgImagesSubFolderPathInReadonlyDataFolderName;
+            GetAllFilesOfFolderPath(folderPathOfStreaming, fileInfoList, new string[] { "png","jpg" });
+            //string folderPathOfResources = Application.dataPath
+            return fileInfoList;
+        }
+
+
     }
 }
+
+
+
+/* 全平台异步读取StreamingAssets文件夹内的资源代码
+void Awake()
+    {
+        string path =
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Application.streamingAssetsPath + "/Josn/modelname.json";
+#elif UNITY_IPHONE && !UNITY_EDITOR
+        "file://" + Application.streamingAssetsPath + "/Josn/modelname.json";
+#elif UNITY_STANDLONE_WIN||UNITY_EDITOR
+        "file://" + Application.streamingAssetsPath + "/Josn/modelname.json";
+#else
+        string.Empty;
+#endif
+        StartCoroutine(ReadData(path));
+    }
+ 
+    IEnumerator ReadData(string path)
+    {
+        WWW www = new WWW(path);
+        yield return www;
+        while (www.isDone == false)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        yield return new WaitForSeconds(0.5f);
+        string data = www.text;
+        yield return new WaitForEndOfFrame();
+    }
+ */

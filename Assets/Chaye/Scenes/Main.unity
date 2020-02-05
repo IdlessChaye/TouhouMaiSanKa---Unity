@@ -134,6 +134,8 @@ GameObject:
   - component: {fileID: 519753142}
   - component: {fileID: 519753143}
   - component: {fileID: 519753144}
+  - component: {fileID: 519753145}
+  - component: {fileID: 519753146}
   m_Layer: 0
   m_Name: Test
   m_TagString: Untagged
@@ -202,6 +204,31 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f5aea1f19002104d852420797531cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &519753145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519753139}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 161e7b13561c9e84cb05f22c2268db55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  texture: {fileID: 2052584166}
+--- !u!114 &519753146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519753139}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81387511a958c984485f79b96ea64120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &550902831
@@ -965,6 +992,10 @@ PrefabInstance:
       propertyPath: text
       value: 
       objectReference: {fileID: 1685844431}
+    - target: {fileID: 1438220515, guid: bd1e38ec5b38e74489919f1ac7d2617e, type: 3}
+      propertyPath: isShutDown
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8812937806374715658, guid: bd1e38ec5b38e74489919f1ac7d2617e,
         type: 3}
       propertyPath: m_LocalPosition.x

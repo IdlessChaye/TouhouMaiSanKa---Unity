@@ -1,19 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class BgImageResManager<TValue> where TValue : class {
+    public class BgImageResManager<TValue> : BaseResManager<TValue> where TValue : class {
+        
         private BgImageResBufferIndexer<TValue> bufferIndexer;
 
         public BgImageResManager(int bufferMaxCount) {
             bufferIndexer = new BgImageResBufferIndexer<TValue>(bufferMaxCount);
         }
 
-        public TValue Get(string subName) {
-            string key = subName;
-            string path = "???";
-            return bufferIndexer.GetValue(key,path);
+        public override TValue Get(string subIndex) {
+            string key = subIndex;
+            string finalIndex = subIndex;
+            if(PathDict.ContainsKey(key)) {
+                finalIndex = PathDict[key];
+            }
+            return bufferIndexer.GetValue(key, finalIndex);
+        }
+
+        public override bool LoadFileInfoList(List<FileInfo> fileInfoList) {
+            for(int i = 0;i< fileInfoList.Count;i++) {
+                FileInfo fileInfo = fileInfoList[i];
+                string name = fileInfo.Name;
+                string fullPath = fileInfo.FullName;
+                if(pathDict.ContainsKey(name)) {
+                    pathDict[name] = fullPath;
+                }else { 
+                    pathDict.Add(name, fullPath);
+                }
+            }
+            return true;
         }
     }
 }

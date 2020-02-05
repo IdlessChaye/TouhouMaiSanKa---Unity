@@ -20,32 +20,37 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private BgImageResManager<Texture2D> BgImageResManager {
             get {
                 if (bgImageResManager == null) {
-                    bgImageResManager = new BgImageResManager<Texture2D>(constData.BgImageBufferMaxCount);
+                    bgImageResManager = new BgImageResManager<Texture2D>(ConstData.BgImageBufferMaxCount);
                 }
                 return bgImageResManager;
             }
         }
+
         #endregion
 
-        public Object Get(string index) {
+        public bool LoadBgImage(List<System.IO.FileInfo> fileInfoList) { // 规定保存记录的文件命名格式是固定的   
+            return BgImageResManager.LoadFileInfoList(fileInfoList);
+        }
+
+        public TValue Get<TValue>(string index) where TValue : class {
             string subName;
             string typeName = GetTypeNameOfIndex(index, out subName);
-            if (index.Equals(ConstData.ScriptIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetScript(subName);
-            } else if (index.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetBgImage(subName);
-            } else if (index.Equals(ConstData.FgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetFgImage(subName); 
-            } else if (index.Equals(ConstData.BGMIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetBGM(subName);
-            } else if (index.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetSound(subName); 
-            } else if (index.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetVoice(subName); 
-            } else if (index.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetVideo(subName); 
-            } else if (index.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetDialog(subName); 
+            if (typeName.Equals(ConstData.ScriptIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetScript(subName) as TValue;
+            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetBgImage(subName) as TValue;
+            } else if (typeName.Equals(ConstData.FgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetFgImage(subName) as TValue; 
+            } else if (typeName.Equals(ConstData.BGMIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetBGM(subName) as TValue;
+            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetSound(subName) as TValue; 
+            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetVoice(subName) as TValue; 
+            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetVideo(subName) as TValue; 
+            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+                return GetDialog(subName) as TValue; 
             }
             return null;
         }
@@ -63,7 +68,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
-        private String GetScript(string subName) {
+        private string GetScript(string subName) {
+            return subName;
             return null;
         }
         private Texture2D GetBgImage(string subName){
@@ -84,12 +90,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private UnityEngine.Video.VideoClip GetVideo(string subName) {
             return null;
         }
-        private String GetDialog(string subName) {
+        private string GetDialog(string subName) {
             return null;
         }
-    }
-
-    public class String : Object{
-        public string str { get; set; }
     }
 }

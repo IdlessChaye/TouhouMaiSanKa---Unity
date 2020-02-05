@@ -31,7 +31,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             bufferDict = new Dictionary<TKey, ResBufferUnit<TKey, TValue>>(MaxCount);
         }
 
-        public TValue GetValue(TKey key, string path) {
+        public TValue GetValue(TKey key, string finalIndex) {
             if (bufferDict.ContainsKey(key)) {
                 ResBufferUnit<TKey, TValue> unit = bufferDict[key];
                 if (First != unit) {
@@ -40,15 +40,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
                 return unit.Data;
             } else {
-                if (AddNewValue(key, path) == true) {
+                if (AddNewValue(key, finalIndex) == true) {
                     return bufferDict[key].Data;
                 } else {
-                    throw new System.Exception("ResourceBufferIndexer::AddValue出问题了");
+                    throw new System.Exception("ResBufferIndexer::AddNewValue出问题了");
                 }
             }
         }
 
-        protected abstract TValue LoadValueByPath(string path);
+        protected abstract TValue LoadValue(string finalIndex);
 
         protected abstract void DestroyValue(TValue value);
 
@@ -67,7 +67,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 First.Previous = unit;
                 First = unit;
             } else {
-                RemoveUnitAndDestroyValue(Last);
+                RemoveAndDestroyUnit(Last);
                 First.Previous = unit;
                 First = unit;
             }
@@ -75,10 +75,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return true;
         }
 
-        private bool AddNewValue(TKey key, string path) {
-            TValue value = LoadValueByPath(path);
+        private bool AddNewValue(TKey key, string finalIndex) {
+            TValue value = LoadValue(finalIndex);
             if (value == null) {
-                throw new System.Exception($"ResourceBufferIndexer::AddValueByPath::LoadValueByPath出问题了, path : {path}");
+                throw new System.Exception($"ResourceBufferIndexer::AddValueByPath::LoadValueByPath出问题了, finalIndex : {finalIndex}");
             }
             ResBufferUnit<TKey, TValue> newUnit = new ResBufferUnit<TKey, TValue> {
                 Key = key,
@@ -111,12 +111,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return unit;
         }
 
-        private void RemoveUnitAndDestroyValue(ResBufferUnit<TKey, TValue> unit) {
+        private void RemoveAndDestroyUnit(ResBufferUnit<TKey, TValue> unit) {
             ResBufferUnit<TKey, TValue> oldUnit = RemoveUnit(unit);
             if (oldUnit == null) {
                 throw new System.Exception("咋回事儿?");
             }
-            DestroyValue(oldUnit.Data);
+            TValue value = unit.Data;
+            unit.Data = null;
+            DestroyValue(value);
         }
     }
 }
