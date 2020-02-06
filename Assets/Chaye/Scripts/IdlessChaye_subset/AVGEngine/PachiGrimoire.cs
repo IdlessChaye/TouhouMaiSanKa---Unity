@@ -41,7 +41,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public FileManager FileManager => fileManager;
         public ConfigManager ConfigManager => configManager;
 
-
+        public UITexture t;
 
         private StateMachineManager stateMachine = new StateMachineManager(VoidState.Instance);
 
@@ -53,6 +53,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private ResourceManager resourceManager = new ResourceManager();
 
+        IEnumerator TestGetBgImage() {
+            yield return new WaitForSeconds(1f);
+            for(int i = 0; i < 100; i ++) {
+                string name = i.ToString();
+                name = "BI_" + name;
+                Texture2D tex = resourceManager.Get<Texture2D>(name);
+                t.mainTexture = tex;
+                yield return new WaitForSeconds(1f);
+            }
+        }
 
         public void Initialize() {
             if(isShutDown)
@@ -63,8 +73,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             //playerRecordManager.PlayerRecord.markList.Add("呜呜呜");
             //playerRecordManager.SavePlayerRecord();
             StateMachine.TransferStateTo(InitState.Instance);
-            print(resourceManager.Get<string>("SC_!!!"));
-            //print(resourceManager.Get<Texture2D>("BI_???"));
+            //StartCoroutine(TestGetBgImage());
 
             if (isDebugMode) {
                 text.text = configManager.Config.PlayerIdentifier;

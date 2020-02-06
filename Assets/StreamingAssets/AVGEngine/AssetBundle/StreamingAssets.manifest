@@ -1,7 +1,7 @@
 ManifestFileVersion: 0
-CRC: 592567022
+CRC: 1204387089
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: avgengine.unity3d
+      Name: bgimage.unity3d
       Dependencies: {}

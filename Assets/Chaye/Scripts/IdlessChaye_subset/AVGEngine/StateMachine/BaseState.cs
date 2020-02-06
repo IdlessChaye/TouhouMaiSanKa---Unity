@@ -66,7 +66,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             PachiGrimoire.I.FileManager.LoadConfig();
             PachiGrimoire.I.FileManager.LoadPlayerRecord();
             PachiGrimoire.I.FileManager.LoadStoryRecords();
-            PachiGrimoire.I.FileManager.LoadVoiceAssetBundleConfig();
             PachiGrimoire.I.FileManager.LoadResource();
         }
 

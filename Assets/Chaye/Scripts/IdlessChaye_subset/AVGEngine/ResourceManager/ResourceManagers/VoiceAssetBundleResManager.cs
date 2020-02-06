@@ -15,7 +15,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public TValue Get(string subIndex) {
             string key = subIndex;
             string chapter = configManager.GetChapter(subIndex);
-            return bufferIndexer.GetValue(key, chapter);
+            return bufferIndexer.Get(key, chapter);
         }
 
         public bool LoadConfigManager(VoiceAssetBundleConfigManager configManager) {

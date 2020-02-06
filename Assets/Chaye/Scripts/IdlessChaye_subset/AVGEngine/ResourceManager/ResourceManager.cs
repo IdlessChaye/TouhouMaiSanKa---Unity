@@ -16,8 +16,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
         #region ResManagers
+        private ScriptResManager<string> scriptResManager;
+        public ScriptResManager<string> ScriptResManager {
+            get {
+                if(scriptResManager == null) {
+                    scriptResManager = new ScriptResManager<string>(constData.ScriptBufferMaxCount);
+                }
+                return scriptResManager;
+            }
+        }
+
         private BgImageResManager<Texture2D> bgImageResManager;
-        private BgImageResManager<Texture2D> BgImageResManager {
+        public BgImageResManager<Texture2D> BgImageResManager {
             get {
                 if (bgImageResManager == null) {
                     bgImageResManager = new BgImageResManager<Texture2D>(ConstData.BgImageBufferMaxCount);
@@ -26,11 +36,68 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
+        private FgImageResManager<Texture2D> fgImageResManager;
+        public FgImageResManager<Texture2D> FgImageResManager {
+            get {
+                if(fgImageResManager == null) {
+                    fgImageResManager = new FgImageResManager<Texture2D>(ConstData.FgImageBufferMaxCount);
+                }
+                return fgImageResManager;
+            }
+        }
+
+        private BGMResManager<AudioClip> bgmResManager;
+        public BGMResManager<AudioClip> BGMResManager {
+            get {
+                if(bgmResManager == null) {
+                    bgmResManager = new BGMResManager<AudioClip>(ConstData.BGMBufferMaxCount);
+                }
+                return bgmResManager;
+            }
+        }
+
+        private SoundResManager<AudioClip> soundResManager;
+        public SoundResManager<AudioClip> SoundResManager {
+            get {
+                if (soundResManager == null) {
+                    soundResManager = new SoundResManager<AudioClip>(ConstData.SoundBufferMaxCount);
+                }
+                return soundResManager;
+            }
+        }
+
+        private VoiceResManager<AudioClip> voiceResManager;
+        public VoiceResManager<AudioClip> VoiceResManager {
+            get {
+                if (voiceResManager == null) {
+                    voiceResManager = new VoiceResManager<AudioClip>(ConstData.VoiceBufferMaxCount);
+                }
+                return voiceResManager;
+            }
+        }
+
+        private VideoResManager<UnityEngine.Video.VideoClip> videoResManager;
+        public VideoResManager<UnityEngine.Video.VideoClip> VideoResManager {
+            get {
+                if (videoResManager == null) {
+                    videoResManager = new VideoResManager<UnityEngine.Video.VideoClip>(ConstData.VideoBufferMaxCount);
+                }
+                return videoResManager;
+            }
+        }
+
+        private DialogResManager<List<string>> dialogResManager;
+        public DialogResManager<List<string>> DialogResManager {
+            get {
+                if (dialogResManager == null) {
+                    dialogResManager = new DialogResManager<List<string>>(ConstData.DialogBufferMaxCount);
+                }
+                return dialogResManager;
+            }
+        }
         #endregion
 
-        public bool LoadBgImage(List<System.IO.FileInfo> fileInfoList) { // 规定保存记录的文件命名格式是固定的   
-            return BgImageResManager.LoadFileInfoList(fileInfoList);
-        }
+
 
         public TValue Get<TValue>(string index) where TValue : class {
             string subName;
@@ -55,6 +122,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return null;
         }
 
+
+
         private string GetTypeNameOfIndex(string index, out string subName) {
             subName = null;
             if (index == null)
@@ -67,31 +136,34 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return typeName;
         }
 
-
         private string GetScript(string subName) {
-            return subName;
-            return null;
+            return ScriptResManager.Get(subName);
         }
         private Texture2D GetBgImage(string subName){
             return BgImageResManager.Get(subName);
         }
         private Texture2D GetFgImage(string subName) {
-            return null;
+            return FgImageResManager.Get(subName);
         }
         private AudioClip GetBGM(string subName) {
-            return null;
+            return BGMResManager.Get(subName);
         }
         private AudioClip GetSound(string subName) {
-            return null;
+            return SoundResManager.Get(subName); ;
         }
         private AudioClip GetVoice(string subName) {
-            return null;
+            return VoiceResManager.Get(subName);
         }
         private UnityEngine.Video.VideoClip GetVideo(string subName) {
-            return null;
+            return VideoResManager.Get(subName);
         }
         private string GetDialog(string subName) {
-            return null;
+            //"ScriptName_0"
+            int _index = subName.IndexOf('_');
+            string subIndex = subName.Substring(0, _index);
+            int number = int.Parse(subName.Substring(_index + 1));
+            List<string> list  = DialogResManager.Get(subIndex);
+            return list[number];
         }
     }
 }

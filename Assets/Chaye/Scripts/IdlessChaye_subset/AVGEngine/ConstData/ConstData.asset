@@ -12,18 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3646c6b66d0c5a54f9718b0b4cadbd78, type: 3}
   m_Name: ConstData
   m_EditorClassIdentifier: 
+  AssetBundlePathInStreamingAssets: AVGEngine/AssetBundle
+  AssetBundleVariant: .unity3d
   ScriptsSubFolderPathInReadonlyDataFolderName: AVGEngine/Scripts
+  IsScriptABLoadedAllOnce: 1
+  ScriptIndexPrefix: SC
+  ScriptBufferMaxCount: 3
+  MainScriptFileName: Main.txt
   BgImagesSubFolderPathInReadonlyDataFolderName: AVGEngine/BgImages
+  IsBgImageABLoadedAllOnce: 0
+  BgImageBufferMaxCount: 4
+  BgImageIndexPrefix: BI
   FgImagesSubFolderPathInReadonlyDataFolderName: AVGEngine/FgImages
+  IsFgImageABLoadedAllOnce: 1
+  FgImageBufferMaxCount: 20
+  FgImageIndexPrefix: FI
   BGMsSubFolderPathInReadonlyDataFolderName: AVGEngine/BGMs
+  BGMBufferMaxCount: 3
+  BGMIndexPrefix: BM
   SoundsSubFolderPathInReadonlyDataFolderName: AVGEngine/Sounds
+  SoundBufferMaxCount: 5
+  SoundIndexPrefix: SD
   VoicesSubFolderPathInReadonlyDataFolderName: AVGEngine/Voices
-  DialogsSubFolderPathInReadonlyDataFolderName: AVGEngine/Dialogs
-  DefaultDataSubFolderPathInReadonlyDataFolderName: AVGEngine/DefaultData
+  VoiceBufferMaxCount: 100
+  VoiceIndexPrefix: VI
+  VoiceAssetBundleConfigSubFolderPathInReadonly: AVGEngine/DefaultData
+  VoiceAssetBundleConfigFileName: VoiceAssetBundleConfig
+  VoiceAssetBundleBufferMaxCount: 2
   VideosSubFolderPathInReadonlyDataFolderName: AVGEngine/Videos
+  VideoBufferMaxCount: 1
+  VideoIndexPrefix: VD
+  DialogsSubFolderPathInReadonlyDataFolderName: AVGEngine/Dialogs
+  DialogBufferMaxCount: 3
+  DialogIndexPrefix: DL
+  ChineseDialogFolderName: Chinese
+  DefaultDataSubFolderPathInReadonlyDataFolderName: AVGEngine/DefaultData
+  DefaultConfigFileName: DefaultConfig.txt
   DataSubFolderPathInPersistentFolderName: AVGEngine/Data
   PlayerConfigFileName: Config.txt
-  DefaultConfigFileName: DefaultConfig.txt
-  ResourcesFolderName: Resources
-  MainScriptFileName: Main.txt
-  ChineseDialogFolderName: Chinese
+  PlayerRecordFileName: PlayerRecord.txt
+  SaveDataSubFolderPathInPersistentFolderName: AVGEngine/Data/SaveData
+  SaveDataCommonPrefixName: SaveData
+  SaveDataQuickPrefixName: Quick
+  SaveDataNormalMaxCount: 99
+  SaveDataQuickMaxCount: 1

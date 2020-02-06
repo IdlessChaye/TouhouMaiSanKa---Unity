@@ -18,14 +18,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if(PathDict.ContainsKey(key)) {
                 finalIndex = PathDict[key];
             }
-            return bufferIndexer.GetValue(key, finalIndex);
+            return bufferIndexer.Get(key, finalIndex);
         }
 
         public override bool LoadFileInfoList(List<FileInfo> fileInfoList) {
             for(int i = 0;i< fileInfoList.Count;i++) {
                 FileInfo fileInfo = fileInfoList[i];
-                string name = fileInfo.Name;
+                string name = fileInfo.Name.Split('.')[0];
                 string fullPath = fileInfo.FullName;
+                Debug.Log($"LoadFIList,name:{name}, fullPath:{fullPath}");
                 if(pathDict.ContainsKey(name)) {
                     pathDict[name] = fullPath;
                 }else { 
@@ -33,6 +34,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
             }
             return true;
+        }
+
+        public bool ForceAdd(string key, TValue value) {
+            return bufferIndexer.ForceAdd(key, value);
         }
     }
 }

@@ -31,8 +31,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             bufferDict = new Dictionary<TKey, ResBufferUnit<TKey, TValue>>(MaxCount);
         }
 
-        public TValue GetValue(TKey key, string finalIndex) {
+        public TValue Get(TKey key, string finalIndex) {
+            Debug.Log("Get finalIndex: "+finalIndex);
             if (bufferDict.ContainsKey(key)) {
+                Debug.Log("Contain");
                 ResBufferUnit<TKey, TValue> unit = bufferDict[key];
                 if (First != unit) {
                     RemoveUnit(unit);
@@ -40,7 +42,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
                 return unit.Data;
             } else {
-                if (AddNewValue(key, finalIndex) == true) {
+                Debug.Log("Not Contain");
+                if (AddNewValueByFinalIndex(key, finalIndex) == true) {
                     return bufferDict[key].Data;
                 } else {
                     throw new System.Exception("ResBufferIndexer::AddNewValue出问题了");
@@ -48,16 +51,39 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
+        public bool ForceAdd(TKey key, TValue value) {
+            if (value == null) {
+                return false;
+            }
+            ResBufferUnit<TKey, TValue> newUnit = new ResBufferUnit<TKey, TValue> {
+                Key = key,
+                Data = value
+            };
+            return AddUnit(newUnit, true);
+        }
+
+
+
         protected abstract TValue LoadValue(string finalIndex);
 
         protected abstract void DestroyValue(TValue value);
 
 
 
-        private bool AddUnit(ResBufferUnit<TKey, TValue> unit) {
+        private bool BeLargerSize(int largerMaxCount) {
+            if (largerMaxCount <= MaxCount)
+                return false;
+            MaxCount = largerMaxCount;
+            Debug.Log("Size!" + MaxCount);
+            return true;
+        }
+
+        private bool AddUnit(ResBufferUnit<TKey, TValue> unit, bool beLarger = false) {
             if (unit == null || unit.Data == null)
                 return false;
             unit.Next = First;
+            Debug.Log("Data : "+unit.Data);
+            Debug.Log("Count : "+Count);
             if (Count == 0) {
                 Count++;
                 First = unit;
@@ -67,7 +93,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 First.Previous = unit;
                 First = unit;
             } else {
-                RemoveAndDestroyUnit(Last);
+                if (beLarger) {
+                    BeLargerSize(Count + 1);
+                } else {
+                    RemoveAndDestroyUnit(Last);
+                }
+                Count++;
                 First.Previous = unit;
                 First = unit;
             }
@@ -75,7 +106,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return true;
         }
 
-        private bool AddNewValue(TKey key, string finalIndex) {
+        private bool AddNewValueByFinalIndex(TKey key, string finalIndex) {
             TValue value = LoadValue(finalIndex);
             if (value == null) {
                 throw new System.Exception($"ResourceBufferIndexer::AddValueByPath::LoadValueByPath出问题了, finalIndex : {finalIndex}");
@@ -108,10 +139,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             } else {
                 Last = previous;
             }
+            Count--;
             return unit;
         }
 
         private void RemoveAndDestroyUnit(ResBufferUnit<TKey, TValue> unit) {
+            Debug.Log("NOOOOOO!" + unit.Data);
             ResBufferUnit<TKey, TValue> oldUnit = RemoveUnit(unit);
             if (oldUnit == null) {
                 throw new System.Exception("咋回事儿?");
