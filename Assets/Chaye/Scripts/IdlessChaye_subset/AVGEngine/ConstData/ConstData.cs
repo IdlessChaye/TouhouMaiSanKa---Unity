@@ -67,7 +67,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public bool IsDialogABLoadedAllOnce = true;
         public int DialogBufferMaxCount = 3;
         public string DialogIndexPrefix = "DL";
-        public string ChineseDialogName = "chinese_";
+        public string ChineseDialogName = "chinese";
 
 
 

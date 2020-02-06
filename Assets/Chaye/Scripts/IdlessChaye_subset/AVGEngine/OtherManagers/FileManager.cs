@@ -107,7 +107,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public AssetBundle GetAssetBundleByName(string name) {
             string folderName = Application.streamingAssetsPath + "/" + constData.AssetBundlePathInStreamingAssets;
             string path = folderName + "/" + name;
-            AssetBundle ab = AssetBundle.LoadFromFile(path);
+            AssetBundle ab = null;
+            if (File.Exists(path)) {
+                ab = AssetBundle.LoadFromFile(path);
+            }
             return ab;
         }
 
@@ -152,8 +155,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             string number = assetName.Substring(_index + 1);
             Debug.Log($"LoadVoiceAsset. scriptName: {script}, number: {number}");
             AssetBundle ab = voiceAssetBundleResManager.Get(script);
-            AudioClip clip = ab.LoadAsset<AudioClip>(assetName);
-            if (clip.LoadAudioData()) {
+            AudioClip clip = ab?.LoadAsset<AudioClip>(assetName);
+            if (clip != null && clip.LoadAudioData()) {
                 Debug.Log("音频已成功加载");
                 return clip;
             } else {
@@ -163,7 +166,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public UnityEngine.Video.VideoClip LoadVideoAsset(string assetName) {
-            return videoAssetBundle.LoadAsset<UnityEngine.Video.VideoClip>(assetName);
+            return videoAssetBundle?.LoadAsset<UnityEngine.Video.VideoClip>(assetName);
         }
 
         public List<string> LoadDialogAsset(string assetName) {
@@ -292,7 +295,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager.ScriptResManager.LoadFileInfoList(GetFileInfosInStreamingFolder(constData.ScriptsSubFolderPathInReadonlyDataFolderName, new string[] { "txt" }));
 
             scriptAssetBundle = GetAssetBundleByName(constData.ScriptAssetBundleName);
-            if (constData.IsScriptABLoadedAllOnce) {
+            if (scriptAssetBundle != null && constData.IsScriptABLoadedAllOnce) {
                 string[] names = scriptAssetBundle.GetAllAssetNames();
                 for (int i = 0; i < names.Length; i++) {
                     string name = names[i];
@@ -308,7 +311,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager.BgImageResManager.LoadFileInfoList(GetFileInfosInStreamingFolder(constData.BgImagesSubFolderPathInReadonlyDataFolderName, new string[] { "png", "jpg" }));
 
             bgImageAssetBundle = GetAssetBundleByName(constData.BgImageAssetBundleName);
-            if (constData.IsBgImageABLoadedAllOnce) {
+            if (bgImageAssetBundle != null && constData.IsBgImageABLoadedAllOnce) {
                 Debug.Log("IsBgImageABLoadedAllOnce");
                 string[] names = bgImageAssetBundle.GetAllAssetNames();
                 for (int i = 0; i < names.Length; i++) {
@@ -326,7 +329,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager.FgImageResManager.LoadFileInfoList(GetFileInfosInStreamingFolder(constData.FgImagesSubFolderPathInReadonlyDataFolderName, new string[] { "png", "jpg" }));
 
             fgImageAssetBundle = GetAssetBundleByName(constData.FgImageAssetBundleName);
-            if (constData.IsFgImageABLoadedAllOnce) {
+            if (fgImageAssetBundle!=null && constData.IsFgImageABLoadedAllOnce) {
                 string[] names = fgImageAssetBundle.GetAllAssetNames();
                 for (int i = 0; i < names.Length; i++) {
                     string name = names[i];
@@ -342,7 +345,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager.BGMResManager.LoadFileInfoList(GetFileInfosInStreamingFolder(constData.BGMsSubFolderPathInReadonlyDataFolderName, new string[] { "mp3" }));
 
             bgmAssetBundle = GetAssetBundleByName(constData.BGMAssetBundleName);
-            if (constData.IsBGMABLoadedAllOnce) {
+            if (bgmAssetBundle!=null && constData.IsBGMABLoadedAllOnce) {
                 string[] names = bgmAssetBundle.GetAllAssetNames();
                 for (int i = 0; i < names.Length; i++) {
                     string name = names[i];
@@ -361,7 +364,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager.SoundResManager.LoadFileInfoList(GetFileInfosInStreamingFolder(constData.SoundsSubFolderPathInReadonlyDataFolderName, new string[] { "mp3" }));
 
             soundAssetBundle = GetAssetBundleByName(constData.SoundAssetBundleName);
-            if (constData.IsSoundABLoadedAllOnce) {
+            if (soundAssetBundle!= null && constData.IsSoundABLoadedAllOnce) {
                 string[] names = soundAssetBundle.GetAllAssetNames();
                 for (int i = 0; i < names.Length; i++) {
                     string name = names[i];
@@ -398,11 +401,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             string nameAssetBundle = constData.DialogAssetBundleSubName;
             if (language.Equals(constData.ChineseDialogName, System.StringComparison.OrdinalIgnoreCase)) {
-                nameAssetBundle = constData.ChineseDialogName + nameAssetBundle;
+                nameAssetBundle = constData.ChineseDialogName+ "_" + nameAssetBundle;
             }
             dialogAssetBundle = GetAssetBundleByName(nameAssetBundle);
 
-            if (constData.IsDialogABLoadedAllOnce) {
+            if (dialogAssetBundle != null &&  constData.IsDialogABLoadedAllOnce) {
                 string[] names = dialogAssetBundle.GetAllAssetNames();
                 for (int i = 0; i < names.Length; i++) {
                     string name = names[i];

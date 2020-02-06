@@ -31,17 +31,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
         public bool isShutDown;
         public bool isDebugMode;
+        public UnityEngine.UI.Text text;
+        public UITexture t;
+
+
 
         public ConstData constData;
-
-        public UnityEngine.UI.Text text;
-
         public StateMachineManager StateMachine => stateMachine;
-
         public FileManager FileManager => fileManager;
         public ConfigManager ConfigManager => configManager;
 
-        public UITexture t;
 
         private StateMachineManager stateMachine = new StateMachineManager(VoidState.Instance);
 
@@ -55,7 +54,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         IEnumerator TestGetBgImage() {
             yield return new WaitForSeconds(1f);
-            for(int i = 0; i < 100; i ++) {
+            for (int i = 0; i < 100; i++) {
                 string name = i.ToString();
                 name = "BI_" + name;
                 Texture2D tex = resourceManager.Get<Texture2D>(name);
@@ -68,8 +67,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if(isShutDown)
                 return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
-            /*configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
-            configManager.SaveConfigContext();*/
+
+
+            //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
+            //configManager.Config.Language = "Chinese";
+            //configManager.SaveConfigContext();
             //playerRecordManager.PlayerRecord.markList.Add("呜呜呜");
             //playerRecordManager.SavePlayerRecord();
             StateMachine.TransferStateTo(InitState.Instance);

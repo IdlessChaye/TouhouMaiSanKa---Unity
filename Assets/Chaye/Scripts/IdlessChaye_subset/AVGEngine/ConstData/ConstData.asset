@@ -28,9 +28,11 @@ MonoBehaviour:
   FgImageBufferMaxCount: 20
   FgImageIndexPrefix: FI
   BGMsSubFolderPathInReadonlyDataFolderName: AVGEngine/BGMs
+  IsBGMABLoadedAllOnce: 0
   BGMBufferMaxCount: 3
   BGMIndexPrefix: BM
   SoundsSubFolderPathInReadonlyDataFolderName: AVGEngine/Sounds
+  IsSoundABLoadedAllOnce: 1
   SoundBufferMaxCount: 5
   SoundIndexPrefix: SD
   VoicesSubFolderPathInReadonlyDataFolderName: AVGEngine/Voices
@@ -43,9 +45,10 @@ MonoBehaviour:
   VideoBufferMaxCount: 1
   VideoIndexPrefix: VD
   DialogsSubFolderPathInReadonlyDataFolderName: AVGEngine/Dialogs
+  IsDialogABLoadedAllOnce: 1
   DialogBufferMaxCount: 3
   DialogIndexPrefix: DL
-  ChineseDialogFolderName: Chinese
+  ChineseDialogName: chinese
   DefaultDataSubFolderPathInReadonlyDataFolderName: AVGEngine/DefaultData
   DefaultConfigFileName: DefaultConfig.txt
   DataSubFolderPathInPersistentFolderName: AVGEngine/Data

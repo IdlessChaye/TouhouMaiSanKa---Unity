@@ -20,7 +20,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public ScriptResManager<string> ScriptResManager {
             get {
                 if(scriptResManager == null) {
-                    scriptResManager = new ScriptResManager<string>(constData.ScriptBufferMaxCount);
+                    scriptResManager = new ScriptResManager<string>(ConstData.ScriptBufferMaxCount);
                 }
                 return scriptResManager;
             }
@@ -96,7 +96,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         #endregion
-
 
 
         public TValue Get<TValue>(string index) where TValue : class {
