@@ -52,6 +52,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private ResourceManager resourceManager = new ResourceManager();
 
+        private StageContextManager stageContextManager = new StageContextManager();
+
+        private ScriptManager scriptManager;
+
         IEnumerator TestGetBgImage() {
             yield return new WaitForSeconds(1f);
             for (int i = 0; i < 100; i++) {
@@ -67,7 +71,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if(isShutDown)
                 return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
-
+            scriptManager = new ScriptManager(resourceManager, stageContextManager);
 
             //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             //configManager.Config.Language = "Chinese";
@@ -75,12 +79,23 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             //playerRecordManager.PlayerRecord.markList.Add("呜呜呜");
             //playerRecordManager.SavePlayerRecord();
             StateMachine.TransferStateTo(InitState.Instance);
+            
             //StartCoroutine(TestGetBgImage());
 
             if (isDebugMode) {
                 text.text = configManager.Config.PlayerIdentifier;
                 text.text = playerRecordManager.PlayerRecord.markList[0];
             }
+        }
+
+        private void Update() {
+            if(Input.GetKeyDown(constData.keyConfirm)) {
+                OnKeyConfirmDown();
+            }
+        }
+
+        private void OnKeyConfirmDown() {
+
         }
 
 

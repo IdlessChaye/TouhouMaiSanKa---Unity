@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageContextManager : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+namespace IdlessChaye.IdleToolkit.AVGEngine {
+    public class StageContextManager {
+        public string scriptPointerScriptName;
+        public int scriptPointerLineNumber;
+        public List<string> scriptReplaceKeys = new List<string>();
+        public List<string> scriptReplaceValues = new List<string>();
     }
 }

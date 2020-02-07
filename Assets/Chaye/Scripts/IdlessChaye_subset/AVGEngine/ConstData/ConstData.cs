@@ -6,6 +6,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
     [CreateAssetMenu(fileName = "ConstData", menuName = "AVGEngine/ConstData")]
     public class ConstData : ScriptableObject {
+        #region FileSystem
         public string AssetBundlePathInStreamingAssets = "AVGEngine/AssetBundle";
         public string AssetBundleVariant = ".unity3d";
 
@@ -88,5 +89,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public static int TEXTURE2D_WIDTH = 1366;
         public static int TEXTURE2D_HEIGHT = 768;
+        #endregion
+
+
+        public KeyCode keyConfirm = KeyCode.Z;
     }
 }

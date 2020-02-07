@@ -13,9 +13,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             InterpretPart(context);
         }
 
-        protected override void OnLateUpdate() {
-            throw new System.NotImplementedException();
-        }
+
 
         protected override void OnUpdateEngineState() {
             throw new System.NotImplementedException();
@@ -26,6 +24,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void OnUpdateStageRender() {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnLateUpdate() {
             throw new System.NotImplementedException();
         }
     }
