@@ -6,14 +6,23 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private ResourceManager resourceManager;
         private StageContextManager stageContextManager;
 
-        private string scriptPointerScriptName { set { stageContextManager.scriptPointerScriptName = value; } }
-        private int scriptPointerLineNumber { set { stageContextManager.scriptPointerLineNumber = value; } }
+        private string scriptPointerScriptName { get { return stageContextManager.scriptPointerScriptName; } set { stageContextManager.scriptPointerScriptName = value; } }
+        private int scriptPointerLineNumber { get { return stageContextManager.scriptPointerLineNumber; } set { stageContextManager.scriptPointerLineNumber = value; } }
         private List<string> scriptReplaceKeys { get { return stageContextManager.scriptReplaceKeys; } }
         private List<string> scriptReplaceValues { get { return stageContextManager.scriptReplaceValues; } }
 
 
-        private List<ScriptSentenceContext> scriptSentenceList;
         private Stack<char> charStack = new Stack<char>();
+        private bool isSecondGear = false;
+
+        private List<ScriptSentenceContext> scriptSentenceList;
+        private Stack<string> pointerScriptNameStack = new Stack<string>();
+        private Stack<int> pointerLineNumberStack = new Stack<int>();
+
+        private List<ScriptSentenceContext> secondScriptSentenceList;
+        private int secondScriptPointerLineNumber; // 第二档的脚本无名
+        private bool isAllTrue;
+        public bool IsAllTrue => isAllTrue;
 
         public ScriptManager(ResourceManager resourceManager, StageContextManager stageContextManager) {
             this.resourceManager = resourceManager;
@@ -21,31 +30,60 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
-        public void LoadScriptFile(string scriptIndex) {
-            string scriptContext = resourceManager.Get<string>(scriptIndex);
-            if (scriptContext == null) {
-                Debug.LogWarning($"Can't find script! scriptIndex: {scriptIndex}");
+
+        public bool NextSentence() {
+            if (isSecondGear)
+                return NextSecondSentence();
+            else
+                return NextFirstSentence();
+        }
+
+        public void LoadScriptFile(string scriptName, string scriptContext) {
+            isSecondGear = false;
+            if (!IsOver()) {
+                pointerScriptNameStack.Push(scriptPointerScriptName);
+                pointerLineNumberStack.Push(scriptPointerLineNumber);
             }
-            string scriptName = scriptIndex.Substring(scriptIndex.IndexOf('_') + 1);
-            Debug.Log($"LoadScriptFile scriptName: {scriptName}");
+            scriptSentenceList = ProcessScriptContext(scriptContext);
             scriptPointerScriptName = scriptName;
-            ProcessScriptContext(scriptContext);
-
-
+            scriptPointerLineNumber = 0;
         }
 
         public void LoadScriptContext(string scriptContext) {
-            ProcessScriptContext(scriptContext);
-
-
+            isSecondGear = true;
+            secondScriptSentenceList = ProcessScriptContext(scriptContext);
+            secondScriptPointerLineNumber = 0;
         }
 
-        public void ScriptReplaceAdd(string key, string value) {
+        public void UnloadSecondSentence() {
+            secondScriptSentenceList = null;
+            secondScriptPointerLineNumber = -1;
+            isSecondGear = false;
+        }
+
+
+
+        public void ScriptIfThenElse(string ifStr, string thenStr,string elseStr) {
+            isAllTrue = true;
+            LoadScriptContext(ifStr);
+            while (isAllTrue && NextSentence()) ; // isAllTrue会在Execute中改变
+            UnloadSecondSentence();
+            if(isAllTrue) {
+                LoadScriptContext(thenStr);
+            } else {
+                LoadScriptContext(elseStr);
+            }
+        }
+
+        public void ScriptReplaceAdd(string key, string value) { // 后来居上
             stageContextManager.scriptReplaceKeys.Add(key);
             stageContextManager.scriptReplaceValues.Add(value);
         }
 
-        private void ProcessScriptContext(string scriptContext) {
+
+
+
+        private List<ScriptSentenceContext> ProcessScriptContext(string scriptContext) {
             if (scriptContext == null || scriptContext.Length == 0) {
                 throw new System.Exception("传了个啥?");
             }
@@ -186,7 +224,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                             }
                             lastTailIndex = j;
                             ScriptSentenceContext scriptSentenceContext = new ScriptSentenceContext(fragmentList.ToArray());
-                            sentenceList.Add(scriptSentenceContext);
+                            if (scriptSentenceContext.IsCorrect == false) {
+                                throw new System.Exception("ScriptSentence is not right!");
+                            }
+                            string currentToken = scriptSentenceContext.CurrentToken;
+                            if (currentToken != null && !currentToken.Substring(0,2).Equals("//")) { 
+                                sentenceList.Add(scriptSentenceContext);
+                            }
                             fragmentList.Clear();
                             break;
                         case '_':
@@ -229,13 +273,66 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
 
             }
-            if(fragmentList.Count!=0) {
+            if (fragmentList.Count != 0) {
                 foreach (string s in fragmentList)
                     Debug.LogWarning(s);
                 throw new System.Exception("怎么还有剩余的?");
             }
 
-            this.scriptSentenceList = sentenceList;
+            return sentenceList;
+        }
+
+        private bool IsOver() {
+            if (scriptSentenceList == null)
+                return true;
+            int length = scriptSentenceList.Count;
+            if (scriptPointerLineNumber < length)
+                return false;
+            else
+                return true;
+        }
+
+        private bool IsSecondOver() {
+            if (secondScriptSentenceList == null)
+                return true;
+            int length = secondScriptSentenceList.Count;
+            if (secondScriptPointerLineNumber < length)
+                return false;
+            else
+                return true;
+        }
+
+        private bool NextFirstSentence() {
+            if (IsOver()) {
+                if (pointerScriptNameStack.Count == 0) {
+                    return false;
+                } else {
+                    // 恢复脚本上下文
+                    scriptPointerScriptName = pointerScriptNameStack.Pop();
+                    scriptPointerLineNumber = pointerLineNumberStack.Pop();
+                    string scriptIndex = PachiGrimoire.I.constData.ScriptIndexPrefix + "_" + scriptPointerScriptName;
+                    string scriptContext = PachiGrimoire.I.ResourceManager.Get<string>(scriptIndex);
+                    scriptSentenceList = ProcessScriptContext(scriptContext);
+                }
+            }
+            ScriptSentenceContext context = scriptSentenceList[scriptPointerLineNumber];
+            scriptPointerLineNumber = scriptPointerLineNumber + 1;
+            ExpressionRootNode rootNode = new ExpressionRootNode();
+            rootNode.Interpret(context);
+            rootNode.Execute();
+            return true;
+        }
+
+        private bool NextSecondSentence() {
+            if (IsSecondOver()) {
+                return false;
+            }
+            ScriptSentenceContext context = secondScriptSentenceList[secondScriptPointerLineNumber];
+            secondScriptPointerLineNumber = secondScriptPointerLineNumber + 1;
+            ExpressionRootNode rootNode = new ExpressionRootNode();
+            rootNode.Interpret(context);
+            rootNode.Execute();
+            return true;
         }
     }
 

@@ -1,2 +1,2 @@
-鸡鸣狗跳
-神龙野马
+Engine_Script_Replace(<Replace(>,<Engine_Script_Replace(>)
+Engine_Sctipt_LoadFile(*SC_ScriptReplace*);

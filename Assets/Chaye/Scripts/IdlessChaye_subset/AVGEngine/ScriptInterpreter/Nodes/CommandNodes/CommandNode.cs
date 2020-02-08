@@ -1,0 +1,34 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace IdlessChaye.IdleToolkit.AVGEngine {
+    public class CommandNode : BaseInterpreterNode {
+        private BaseInterpreterNode node;
+
+        public override void Interpret(ScriptSentenceContext context) {
+            string commandToken = context.CurrentToken;
+            if (!CanParse(commandToken, context))
+                throw new System.Exception("ERROR IN CommandNode! NOT DEFINDED!" + commandToken);
+        }
+
+        public override void Execute() {
+            node.Execute();
+        }
+
+        private bool CanParse(string commandToken, ScriptSentenceContext context) {
+            bool canParse = true;
+
+            if (commandToken.Equals("Engine")) {
+                node = new CommandEngineNode();
+            } else {
+                canParse = false;
+            }
+
+            if (canParse)
+                node.Interpret(context);
+
+            return canParse;
+        }
+    }
+}

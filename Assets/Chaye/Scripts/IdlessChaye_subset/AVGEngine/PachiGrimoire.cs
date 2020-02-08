@@ -40,6 +40,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public StateMachineManager StateMachine => stateMachine;
         public FileManager FileManager => fileManager;
         public ConfigManager ConfigManager => configManager;
+        public ResourceManager ResourceManager => resourceManager;
 
 
         private StateMachineManager stateMachine = new StateMachineManager(VoidState.Instance);

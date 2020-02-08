@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public abstract class BaseState {
-        public virtual uint StateID { get; }
-        public virtual string StateName => throw new System.Exception("你还没起名呢");
-        public virtual List<uint> RejectedOldStateIDList { get; }
+        public abstract uint StateID { get; }
+        public abstract string StateName { get; }
+        public abstract List<uint> RejectedOldStateIDList { get; }
 
         public virtual void OnEnter(BaseState oldState) {
             Debug.Log("OldStateID : " + oldState.StateName);
@@ -33,7 +33,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "VoidState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 9, 10};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -59,7 +59,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "InitState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -140,7 +140,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunWaitState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 5 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 5 ,11};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -218,7 +218,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunNextState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 ,11};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -244,7 +244,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunAnimateState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10, 11 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -271,6 +271,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public override string StateName => "SleepState";
 
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 9, 10 };
+        public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
+
+        public override void OnEnter(BaseState oldState) {
+            Debug.Log("OldState: " + oldState.StateName);
+        }
+
+        public override void OnExit(BaseState newState) {
+            Debug.Log("NewState: " + newState.StateName);
+        }
+    }
+
+    public class ChoiceWaitState : BaseState {
+        private static ChoiceWaitState instance = new ChoiceWaitState();
+
+        public static ChoiceWaitState Instance {
+            get {
+                return instance;
+            }
+        }
+
+        private readonly uint stateID = 11;
+        public override uint StateID => stateID;
+
+        public override string StateName => "ChoiceWaitState";
+
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 5 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
