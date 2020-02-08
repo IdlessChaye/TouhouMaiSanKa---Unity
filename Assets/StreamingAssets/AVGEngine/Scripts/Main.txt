@@ -1,2 +1,5 @@
-Engine_Script_Replace(<Replace(>,<Engine_Script_Replace(>)
-Engine_Sctipt_LoadFile(*SC_ScriptReplace*);
+Engine_ScriptReplace(<Replace(>,<Engine_ScriptReplace(>)
+Engine_ScriptReplace(<);
+>,<)
+>)
+Engine_ScriptLoadFile(*SC_ScriptReplace*)

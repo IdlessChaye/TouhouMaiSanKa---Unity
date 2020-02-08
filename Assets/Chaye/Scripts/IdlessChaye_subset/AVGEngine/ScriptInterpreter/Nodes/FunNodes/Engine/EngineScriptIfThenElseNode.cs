@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class EngineScriptReplaceNode : FunNode {
-        public EngineScriptReplaceNode() {
-            
-        }
+    public class EngineScriptIfThenElseNode : FunNode {
 
         public override void Interpret(ScriptSentenceContext context) {
-            //context.SkipToken("Initial");
+            context.SkipToken("IfThenElse");
             InterpretPart(context);
         }
 
 
 
         protected override void OnUpdateEngineState() {
-            throw new System.NotImplementedException();
+            
         }
 
         protected override void OnUpdateStageContext() {
-            throw new System.NotImplementedException();
+            if (paraList.Count != 3)
+                throw new System.Exception("EngineScriptIfThenElseNode");
+            PachiGrimoire.I.ScriptManager.ScriptIfThenElse(paraList[0], paraList[1], paraList[2]);
         }
 
         protected override void OnUpdateStageRender() {
-            throw new System.NotImplementedException();
+            
         }
 
         protected override void OnLateUpdate() {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

@@ -41,21 +41,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public FileManager FileManager => fileManager;
         public ConfigManager ConfigManager => configManager;
         public ResourceManager ResourceManager => resourceManager;
-
+        public ScriptManager ScriptManager => scriptManager;
+        public StageRenderManager StageRenderManager => stageRenderManager;
 
         private StateMachineManager stateMachine = new StateMachineManager(VoidState.Instance);
-
         private FileManager fileManager;
-
         private ConfigManager configManager = new ConfigManager();
-
         private PlayerRecordManager playerRecordManager = new PlayerRecordManager();
-
         private ResourceManager resourceManager = new ResourceManager();
-
         private StageContextManager stageContextManager = new StageContextManager();
-
+        private PastScriptManager pastScriptManager = new PastScriptManager();
         private ScriptManager scriptManager;
+        private StageRenderManager stageRenderManager;
+        private MarkManager markManager;
 
         IEnumerator TestGetBgImage() {
             yield return new WaitForSeconds(1f);
@@ -72,7 +70,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if(isShutDown)
                 return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
-            scriptManager = new ScriptManager(resourceManager, stageContextManager);
+            scriptManager = new ScriptManager(resourceManager, stageContextManager, pastScriptManager);
+            stageRenderManager = new StageRenderManager(stageContextManager);
+            markManager = new MarkManager(playerRecordManager);
 
             //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             //configManager.Config.Language = "Chinese";
@@ -90,7 +90,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void Update() {
-            if(Input.GetKeyDown(constData.keyConfirm)) {
+            if(Input.GetKeyDown(constData.KeyConfirm)) {
                 OnKeyConfirmDown();
             }
         }

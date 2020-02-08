@@ -92,6 +92,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
-        public KeyCode keyConfirm = KeyCode.Z;
+        public KeyCode KeyConfirm = KeyCode.Z;
     }
 }

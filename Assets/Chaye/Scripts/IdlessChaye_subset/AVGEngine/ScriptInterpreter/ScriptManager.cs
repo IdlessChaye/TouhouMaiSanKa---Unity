@@ -5,6 +5,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class ScriptManager {
         private ResourceManager resourceManager;
         private StageContextManager stageContextManager;
+        private PastScriptManager pastScriptManager;
 
         private string scriptPointerScriptName { get { return stageContextManager.scriptPointerScriptName; } set { stageContextManager.scriptPointerScriptName = value; } }
         private int scriptPointerLineNumber { get { return stageContextManager.scriptPointerLineNumber; } set { stageContextManager.scriptPointerLineNumber = value; } }
@@ -24,9 +25,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private bool isAllTrue;
         public bool IsAllTrue => isAllTrue;
 
-        public ScriptManager(ResourceManager resourceManager, StageContextManager stageContextManager) {
+        public ScriptManager(ResourceManager resourceManager, StageContextManager stageContextManager,PastScriptManager pastScriptManager) {
             this.resourceManager = resourceManager;
             this.stageContextManager = stageContextManager;
+            this.pastScriptManager = pastScriptManager;
         }
 
 
@@ -39,6 +41,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void LoadScriptFile(string scriptName, string scriptContext) {
+            if (scriptName == null || scriptContext == null || scriptName.Equals(string.Empty) || scriptContext.Equals(string.Empty))
+                throw new System.Exception("LoadScriptFile");
             isSecondGear = false;
             if (!IsOver()) {
                 pointerScriptNameStack.Push(scriptPointerScriptName);

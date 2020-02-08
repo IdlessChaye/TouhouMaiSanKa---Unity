@@ -2,7 +2,7 @@
 // 注释只能在行首用//标记
 // 下边一行测试空行跳过功能
 
-Replace(<if > , <Engine_Script_IfThenElse(>) 
+Replace(<if > , <Engine_ScriptIfThenElse(>) 
 Replace(< then
 	>,<,>)
 Replace(<

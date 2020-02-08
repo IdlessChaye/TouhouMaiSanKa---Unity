@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PastScriptManager : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace IdlessChaye.IdleToolkit.AVGEngine {
+    public class PastScriptManager {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

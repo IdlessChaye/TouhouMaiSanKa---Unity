@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageRenderManager : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace IdlessChaye.IdleToolkit.AVGEngine {
+    public class StageRenderManager {
+        private StageContextManager contextManager;
+        private BacklogManager backlogManager;
+        public BacklogManager BacklogManager => backlogManager;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public StageRenderManager(StageContextManager contextManager) {
+            this.contextManager = contextManager;
+            this.backlogManager = new BacklogManager();
+        }
     }
 }
