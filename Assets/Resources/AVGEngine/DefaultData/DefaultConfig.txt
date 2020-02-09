@@ -1,1 +1,1 @@
-{"PlayerIdentifier":"0xFFFFFFFF"}
+{"Language":"Chinese","PlayerIdentifier":"0xFFFFFFFF"}

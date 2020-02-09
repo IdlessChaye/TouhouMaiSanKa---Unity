@@ -5,10 +5,9 @@ using System.IO;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class PlayerRecordManager {
-        private PlayerRecord playerRecord = new PlayerRecord();
-        private List<StoryRecord> storyRecordList = new List<StoryRecord>();
-        public PlayerRecord PlayerRecord => playerRecord;
-        public List<StoryRecord> StoryRecordList => storyRecordList;
+        public PlayerRecord PlayerRecord { get; set; } = new PlayerRecord();
+        public Dictionary<int, StoryRecord> StoryRecordDict { get; set; } = new Dictionary<int, StoryRecord>(100);
+
 
         public bool LoadPlayerRecordContext(string playerRecordJSON) {
             if (playerRecordJSON == null) {
@@ -16,12 +15,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 SavePlayerRecord();
                 return false;
             }
-            JsonUtility.FromJsonOverwrite(playerRecordJSON, playerRecord);
+            JsonUtility.FromJsonOverwrite(playerRecordJSON, PlayerRecord);
             return true;
         }
 
         public void SavePlayerRecord() {
-            string configJSON = JsonUtility.ToJson(playerRecord);
+            string configJSON = JsonUtility.ToJson(PlayerRecord);
             PachiGrimoire.I.FileManager.SavePlayerRecord(configJSON);
         }
 
@@ -29,6 +28,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (fileInfoList == null || fileInfoList.Count == 0) {
                 return false;
             }
+
+            StoryRecordDict.Clear();
             string saveDataCommonPrefixName = PachiGrimoire.I.constData.SaveDataCommonPrefixName;
             for (int i = 0; i < fileInfoList.Count; i++) {
                 FileInfo fileInfo = fileInfoList[i];
@@ -40,10 +41,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                         string json = PachiGrimoire.I.FileManager.LoadStoryRecordContext(filePath);
 
                         // Json可以Overwrite
-                        if (storyRecordList[indexOfSaveData] == null)
-                            storyRecordList[indexOfSaveData] = new StoryRecord();
-
-                        JsonUtility.FromJsonOverwrite(json, storyRecordList[indexOfSaveData]);
+                        StoryRecord storyRecord = new StoryRecord();
+                        JsonUtility.FromJsonOverwrite(json, storyRecord);
+                        StoryRecordDict.Add(indexOfSaveData, storyRecord);
                     }
                 }
             }
@@ -52,7 +52,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void SaveStoryRecord(int indexOfRecord) {
             if (indexOfRecord >= 0 && indexOfRecord < PachiGrimoire.I.constData.SaveDataMaxCount) {
-                StoryRecord storyRecord = storyRecordList[indexOfRecord];
+                StoryRecord storyRecord = StoryRecordDict[indexOfRecord];
                 string json = JsonUtility.ToJson(storyRecord);
                 PachiGrimoire.I.FileManager.SaveStoryRecord(json, indexOfRecord);
             } else {

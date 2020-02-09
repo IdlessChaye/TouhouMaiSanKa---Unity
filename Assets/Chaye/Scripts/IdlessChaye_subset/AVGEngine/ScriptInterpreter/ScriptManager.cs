@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class ScriptManager {
-        private ResourceManager resourceManager;
-        private StageContextManager stageContextManager;
         private PastScriptManager pastScriptManager;
 
-        private string scriptPointerScriptName { get { return stageContextManager.scriptPointerScriptName; } set { stageContextManager.scriptPointerScriptName = value; } }
-        private int scriptPointerLineNumber { get { return stageContextManager.scriptPointerLineNumber; } set { stageContextManager.scriptPointerLineNumber = value; } }
-        private List<string> scriptReplaceKeys { get { return stageContextManager.scriptReplaceKeys; } }
-        private List<string> scriptReplaceValues { get { return stageContextManager.scriptReplaceValues; } }
+        public string ScriptPointerScriptName { get; set; }
+        public int ScriptPointerLineNumber { get; set; }
+        public List<string> ScriptReplaceKeys { get; set; }
+        public List<string> ScriptReplaceValues { get; set; }
 
 
         private Stack<char> charStack = new Stack<char>();
@@ -25,9 +23,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private bool isAllTrue;
         public bool IsAllTrue => isAllTrue;
 
-        public ScriptManager(ResourceManager resourceManager, StageContextManager stageContextManager,PastScriptManager pastScriptManager) {
-            this.resourceManager = resourceManager;
-            this.stageContextManager = stageContextManager;
+        public ScriptManager(PastScriptManager pastScriptManager) {
             this.pastScriptManager = pastScriptManager;
         }
 
@@ -41,16 +37,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void LoadScriptFile(string scriptName, string scriptContext) {
-            if (scriptName == null || scriptContext == null || scriptName.Equals(string.Empty) || scriptContext.Equals(string.Empty))
+            if (string.IsNullOrEmpty(scriptContext) || string.IsNullOrEmpty(scriptName))
                 throw new System.Exception("LoadScriptFile");
             isSecondGear = false;
             if (!IsOver()) {
-                pointerScriptNameStack.Push(scriptPointerScriptName);
-                pointerLineNumberStack.Push(scriptPointerLineNumber);
+                pointerScriptNameStack.Push(ScriptPointerScriptName);
+                pointerLineNumberStack.Push(ScriptPointerLineNumber);
             }
             scriptSentenceList = ProcessScriptContext(scriptContext);
-            scriptPointerScriptName = scriptName;
-            scriptPointerLineNumber = 0;
+            ScriptPointerScriptName = scriptName;
+            ScriptPointerLineNumber = 0;
         }
 
         public void LoadScriptContext(string scriptContext) {
@@ -67,12 +63,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        public void ScriptIfThenElse(string ifStr, string thenStr,string elseStr) {
+        public void ScriptIfThenElse(string ifStr, string thenStr, string elseStr) {
             isAllTrue = true;
             LoadScriptContext(ifStr);
             while (isAllTrue && NextSentence()) ; // isAllTrue会在Execute中改变
             UnloadSecondSentence();
-            if(isAllTrue) {
+            if (isAllTrue) {
                 LoadScriptContext(thenStr);
             } else {
                 LoadScriptContext(elseStr);
@@ -80,8 +76,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void ScriptReplaceAdd(string key, string value) { // 后来居上
-            stageContextManager.scriptReplaceKeys.Add(key);
-            stageContextManager.scriptReplaceValues.Add(value);
+            ScriptReplaceKeys.Add(key);
+            ScriptReplaceValues.Add(value);
         }
 
 
@@ -191,10 +187,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
                 // 宏替换
                 string str = tempList[i];
-                for (int j = scriptReplaceKeys.Count - 1; j >= 0; j--) {
-                    string key = scriptReplaceKeys[j];
+                for (int j = ScriptReplaceKeys.Count - 1; j >= 0; j--) {
+                    string key = ScriptReplaceKeys[j];
                     if (str.Contains(key)) {
-                        string value = scriptReplaceValues[j];
+                        string value = ScriptReplaceValues[j];
                         str = str.Replace(key, value);
                     }
                 }
@@ -232,7 +228,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                                 throw new System.Exception("ScriptSentence is not right!");
                             }
                             string currentToken = scriptSentenceContext.CurrentToken;
-                            if (currentToken != null && !currentToken.Substring(0,2).Equals("//")) { 
+                            if (currentToken != null && !currentToken.Substring(0, 2).Equals("//")) {
                                 sentenceList.Add(scriptSentenceContext);
                             }
                             fragmentList.Clear();
@@ -290,7 +286,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (scriptSentenceList == null)
                 return true;
             int length = scriptSentenceList.Count;
-            if (scriptPointerLineNumber < length)
+            if (ScriptPointerLineNumber < length)
                 return false;
             else
                 return true;
@@ -312,15 +308,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     return false;
                 } else {
                     // 恢复脚本上下文
-                    scriptPointerScriptName = pointerScriptNameStack.Pop();
-                    scriptPointerLineNumber = pointerLineNumberStack.Pop();
-                    string scriptIndex = PachiGrimoire.I.constData.ScriptIndexPrefix + "_" + scriptPointerScriptName;
+                    ScriptPointerScriptName = pointerScriptNameStack.Pop();
+                    ScriptPointerLineNumber = pointerLineNumberStack.Pop();
+                    string scriptIndex = PachiGrimoire.I.constData.ScriptIndexPrefix + "_" + ScriptPointerScriptName;
                     string scriptContext = PachiGrimoire.I.ResourceManager.Get<string>(scriptIndex);
                     scriptSentenceList = ProcessScriptContext(scriptContext);
                 }
             }
-            ScriptSentenceContext context = scriptSentenceList[scriptPointerLineNumber];
-            scriptPointerLineNumber = scriptPointerLineNumber + 1;
+            // 得到当前语句
+            ScriptSentenceContext context = scriptSentenceList[ScriptPointerLineNumber];
+            // 更新已读文本
+            pastScriptManager.UpdatePastScript(ScriptPointerScriptName, ScriptPointerLineNumber);
+            // 更新指针
+            ScriptPointerLineNumber = ScriptPointerLineNumber + 1;
+            // 开始翻译
             ExpressionRootNode rootNode = new ExpressionRootNode();
             rootNode.Interpret(context);
             rootNode.Execute();

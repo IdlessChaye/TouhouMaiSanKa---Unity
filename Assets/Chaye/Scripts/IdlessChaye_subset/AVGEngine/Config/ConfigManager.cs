@@ -4,18 +4,17 @@ using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class ConfigManager {
-        private Config config = new Config();
-        public Config Config => config;
+        public Config Config { get; set; } = new Config();
 
         public bool LoadConfigContext(string configJSON) {
             if (configJSON == null)
                 return false;
-            JsonUtility.FromJsonOverwrite(configJSON, config);
+            JsonUtility.FromJsonOverwrite(configJSON, Config);
             return true;
         }
 
         public void SaveConfigContext() {
-            string configJSON = JsonUtility.ToJson(config);
+            string configJSON = JsonUtility.ToJson(Config);
             PachiGrimoire.I.FileManager.SaveConfig(configJSON);
         }
     }

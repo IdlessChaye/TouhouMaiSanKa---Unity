@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
+    [RequireComponent(typeof(StageRenderManager))]
     public sealed class PachiGrimoire : MonoBehaviour {
         #region Singleton
         private static PachiGrimoire instance;
@@ -37,23 +38,34 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public ConstData constData;
+        #region Public Manager Properties
         public StateMachineManager StateMachine => stateMachine;
         public FileManager FileManager => fileManager;
-        public ConfigManager ConfigManager => configManager;
         public ResourceManager ResourceManager => resourceManager;
+        public ConfigManager ConfigManager => configManager;
+        public PlayerRecordManager PlayerRecordManager => playerRecordManager;
+        public StageContextManager StageContextManager => stageContextManager;
+        public MarkManager MarkManager => markManager;
+        public PastScriptManager PastScriptManager => pastScriptManager;
+        public BacklogManager BacklogManager => backlogManager;
         public ScriptManager ScriptManager => scriptManager;
         public StageRenderManager StageRenderManager => stageRenderManager;
-
+        #endregion
+        #region Private Manager Properties
         private StateMachineManager stateMachine = new StateMachineManager(VoidState.Instance);
         private FileManager fileManager;
+        private ResourceManager resourceManager = new ResourceManager();
         private ConfigManager configManager = new ConfigManager();
         private PlayerRecordManager playerRecordManager = new PlayerRecordManager();
-        private ResourceManager resourceManager = new ResourceManager();
         private StageContextManager stageContextManager = new StageContextManager();
+        private MarkManager markManager = new MarkManager();
         private PastScriptManager pastScriptManager = new PastScriptManager();
+        private BacklogManager backlogManager = new BacklogManager();
         private ScriptManager scriptManager;
         private StageRenderManager stageRenderManager;
-        private MarkManager markManager;
+        #endregion
+
+
 
         IEnumerator TestGetBgImage() {
             yield return new WaitForSeconds(1f);
@@ -67,20 +79,21 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void Initialize() {
-            if(isShutDown)
+            if (isShutDown)
                 return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
-            scriptManager = new ScriptManager(resourceManager, stageContextManager, pastScriptManager);
-            stageRenderManager = new StageRenderManager(stageContextManager);
-            markManager = new MarkManager(playerRecordManager);
+            scriptManager = new ScriptManager(pastScriptManager);
+            stageRenderManager = GetComponent<StageRenderManager>() ?? gameObject.AddComponent<StageRenderManager>();
+
 
             //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             //configManager.Config.Language = "Chinese";
             //configManager.SaveConfigContext();
-            //playerRecordManager.PlayerRecord.markList.Add("呜呜呜");
+            //playerRecordManager.PlayerRecord.markList = new List<string>();
+            //playerRecordManager.PlayerRecord.markList.Add("呜呜呜~~");
             //playerRecordManager.SavePlayerRecord();
             StateMachine.TransferStateTo(InitState.Instance);
-            
+
             //StartCoroutine(TestGetBgImage());
 
             if (isDebugMode) {
@@ -90,7 +103,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void Update() {
-            if(Input.GetKeyDown(constData.KeyConfirm)) {
+            if (Input.GetKeyDown(constData.KeyConfirm)) {
                 OnKeyConfirmDown();
             }
         }
