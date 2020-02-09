@@ -60,7 +60,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private StageContextManager stageContextManager = new StageContextManager();
         private MarkManager markManager = new MarkManager();
         private PastScriptManager pastScriptManager = new PastScriptManager();
-        private BacklogManager backlogManager = new BacklogManager();
+        private BacklogManager backlogManager;
         private ScriptManager scriptManager;
         private StageRenderManager stageRenderManager;
         #endregion
@@ -84,7 +84,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
             scriptManager = new ScriptManager(pastScriptManager);
             stageRenderManager = GetComponent<StageRenderManager>() ?? gameObject.AddComponent<StageRenderManager>();
-
+            backlogManager = new BacklogManager(constData.BacklogCapacity);
 
             //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             //configManager.Config.Language = "Chinese";
@@ -103,14 +103,28 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void Update() {
+            #region Input
             if (Input.GetKeyDown(constData.KeyConfirm)) {
                 OnKeyConfirmDown();
             }
+            #endregion
+
+            #region State
+            BaseState state = stateMachine.CurrentState;
+            if (state == RunScriptState.Instance) {
+                scriptManager.NextSentence();
+            }
+            #endregion
         }
 
         private void OnKeyConfirmDown() {
-
+            BaseState state = stateMachine.CurrentState;
+            if (state == RunWaitState.Instance) {
+                stateMachine.TransferStateTo(RunScriptState.Instance);
+            }
         }
+
+
 
 
     }

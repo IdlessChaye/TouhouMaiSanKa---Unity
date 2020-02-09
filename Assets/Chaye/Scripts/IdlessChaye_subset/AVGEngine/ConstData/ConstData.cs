@@ -93,5 +93,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public KeyCode KeyConfirm = KeyCode.Z;
+
+        public int BacklogCapacity = 100;
     }
 }
