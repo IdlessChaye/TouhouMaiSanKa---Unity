@@ -23,7 +23,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public bool IsMarkExist(string mark) {
+        public bool GetMark(string mark) {
             return markList.Contains(mark);
         }
 

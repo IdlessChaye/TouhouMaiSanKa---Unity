@@ -78,7 +78,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public void Initialize() {
+        private void Initialize() {
             if (isShutDown)
                 return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
