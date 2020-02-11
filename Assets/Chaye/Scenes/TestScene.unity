@@ -275,14 +275,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 1008
+  mWidth: 1026
   mHeight: 44
   mDepth: 1
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 22.90909
+  aspectRatio: 23.318182
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -671,8 +671,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIAtlas: {fileID: 8463519728776644658, guid: ce5c6a318456c014d9de368931ee955f, type: 3}
-  canvas: {fileID: 1980651155}
   material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  canvas: {fileID: 1980651155}
   text: {fileID: 714611566}
   label: {fileID: 661234594}
 --- !u!4 &1305398352

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using System;
 public class TestDoTween : MonoBehaviour {
 
 
@@ -21,12 +22,38 @@ public class TestDoTween : MonoBehaviour {
     UISprite pritee;
     int index = -1;
 
-   
+    Action action;
+
 
     private void Start() {
         text.text = "";
+        sequence = DOTween.Sequence();
+        sequence.AppendCallback(() => Debug.Log("!!"));
+        sequence.OnComplete(() => action.Invoke());
+        action += () => Debug.Log("???");
+        action = null;
+        action -= WAWA;
+        action += WAWA;
+        action -= WAWA;
+        action += WAWA; action -= WAWA;
+        action += WAWA; action -= WAWA;
+        action += WAWA; action -= WAWA;
+        action += WAWA; action -= WAWA;
+        action += WAWA; action += WAWA; action += WAWA; action += WAWA; action += WAWA;
+        sequence.OnComplete(() => action.Invoke());
+        action += () => Debug.Log("???");
+        //action = null;
+        sequence.OnComplete(() => action.Invoke());
+        action += () => {
+            for(int i = 0;i < 12;i++)
+                Debug.Log("!!! " + i);
+        };
+        sequence.Complete();
     }
 
+    private void WAWA() {
+        Debug.Log("WAWA");
+    }
     private void Update() {
         label.text = text.text;
         if (state.Equals(RunScript)) {
@@ -94,9 +121,6 @@ public class TestDoTween : MonoBehaviour {
         tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
             .OnUpdate(() => { sprite.alpha = value; })
             .OnComplete(() => state = RunScript);
-
-
-        UITexture uITexture;
         
         
 

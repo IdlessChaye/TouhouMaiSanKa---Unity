@@ -89,6 +89,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public static int TEXTURE2D_WIDTH = 1280;
         public static int TEXTURE2D_HEIGHT = 720;
+        public static int TEXTURE2D_SCREEN_WIDTH = 1280;
+        public static int TEXTURE2D_SCREEN_HEIGHT = 720;
+        public static int TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH = 135;
+        public static int TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT = 150;
         #endregion
 
 

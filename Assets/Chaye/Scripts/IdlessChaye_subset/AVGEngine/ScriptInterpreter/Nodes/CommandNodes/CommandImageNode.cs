@@ -31,8 +31,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             BaseInterpreterNode node = null;
             if (token.Equals("BackgroundImageChange")) {
                 node = new ImageBackgroundImageChangeNode();
-            } else if (token.Equals("BackgroundImageChangeBlack")) {
-                node = new ImageBackgroundImageChangeBlackNode();
+            } else if (token.Equals("BackgroundImageClear")) {
+                node = new ImageBackgroundImageClearNode();
+            } else if (token.Equals("ConsoleShow")) {
+                node = new ImageConsoleShowNode();
+            } else if (token.Equals("ConsoleHide")) {
+                node = new ImageConsoleHideNode();
+            } else if (token.Equals("SmallFigureImageChange")) {
+                node = new ImageSmallFigureImageChangeNode();
+            } else if (token.Equals("SmallFigureImageClear")) {
+                node = new ImageSmallFigureImageClearNode();
+            } else if (token.Equals("FigureImageAdd")) {
+                node = new ImageFigureImageAddNode();
+            } else if (token.Equals("FigureImageRemove")) {
+                node = new ImageFigureImageRemoveNode();
             } else {
                 canParse = false;
             }

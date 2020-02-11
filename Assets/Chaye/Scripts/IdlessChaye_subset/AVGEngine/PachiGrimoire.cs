@@ -112,7 +112,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        private void Update() {
+        private void LateUpdate() {
 
 
             #region State
