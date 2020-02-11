@@ -25,8 +25,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 node = new CommandMusicNode();
             } else if(commandToken.Equals("Text")) {
                 node = new CommandTextNode();
-            }
-            else {
+            } else if(commandToken.Equals("Image")) {
+                node = new CommandImageNode();
+            } else {
                 canParse = false;
             }
 

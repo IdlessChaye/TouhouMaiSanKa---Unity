@@ -87,8 +87,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public int SaveDataMaxCount => SaveDataNormalMaxCount + SaveDataQuickMaxCount;
 
 
-        public static int TEXTURE2D_WIDTH = 1366;
-        public static int TEXTURE2D_HEIGHT = 768;
+        public static int TEXTURE2D_WIDTH = 1280;
+        public static int TEXTURE2D_HEIGHT = 720;
         #endregion
 
 

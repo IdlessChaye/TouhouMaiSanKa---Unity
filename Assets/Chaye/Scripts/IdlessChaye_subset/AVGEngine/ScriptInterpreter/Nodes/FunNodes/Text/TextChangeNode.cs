@@ -9,9 +9,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             InterpretPart(context);
         }
 
-        protected override void OnUpdateEngineState() {
 
-        }
+
 
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 2 && paraList.Count != 1)
@@ -28,13 +27,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             } 
         }
 
-        protected override void OnUpdateStageRender() {
-
-        }
-
-        protected override void OnLateUpdate() {
-
-        }
 
     }
 }

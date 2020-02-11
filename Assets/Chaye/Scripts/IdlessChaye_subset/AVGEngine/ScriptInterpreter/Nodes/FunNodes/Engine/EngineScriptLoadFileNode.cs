@@ -10,11 +10,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
-
-        protected override void OnUpdateEngineState() {
-            
-        }
-
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 1)
                 throw new System.Exception("EngineScriptLoadFileNode");
@@ -22,14 +17,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             string scriptName = fileIndex.Substring(fileIndex.IndexOf('_') + 1);
             string scriptContext = PachiGrimoire.I.ResourceManager.Get<string>(fileIndex);
             PachiGrimoire.I.ScriptManager.LoadScriptFile(scriptName,scriptContext);
-        }
-
-        protected override void OnUpdateStageRender() {
-            
-        }
-
-        protected override void OnLateUpdate() {
-            
         }
 
     }

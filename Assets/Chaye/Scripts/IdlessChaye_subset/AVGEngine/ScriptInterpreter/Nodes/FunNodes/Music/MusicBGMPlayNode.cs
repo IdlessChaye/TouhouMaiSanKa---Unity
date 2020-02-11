@@ -11,9 +11,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        protected override void OnUpdateEngineState() {
-
-        }
 
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 1)
@@ -23,13 +20,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             PachiGrimoire.I.MusicManager.BGMPlay(bgmClip,bgmIndex);
         }
 
-        protected override void OnUpdateStageRender() {
-
-        }
-
-        protected override void OnLateUpdate() {
-
-        }
-
+ 
     }
 }

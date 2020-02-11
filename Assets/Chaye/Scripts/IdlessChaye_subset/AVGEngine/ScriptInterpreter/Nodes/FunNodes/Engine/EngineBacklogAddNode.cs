@@ -12,10 +12,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        protected override void OnUpdateEngineState() {
-
-        }
-
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 0)
                 throw new System.Exception("EngineBacklogAddNode");
@@ -26,12 +22,5 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             PachiGrimoire.I.BacklogManager.Push(voiceIndex, contextIndex, null, name);
         }
 
-        protected override void OnUpdateStageRender() {
-
-        }
-
-        protected override void OnLateUpdate() {
-
-        }
     }
 }

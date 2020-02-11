@@ -113,11 +113,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void Update() {
-            #region Input
-            if (Input.GetKeyDown(constData.KeyConfirm)) {
-                OnKeyConfirmDown();
-            }
-            #endregion
+
 
             #region State
             BaseState state = stateMachine.CurrentState;
@@ -127,12 +123,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             #endregion
         }
 
-        private void OnKeyConfirmDown() {
-            BaseState state = stateMachine.CurrentState;
-            if (state == RunWaitState.Instance) {
-                stateMachine.TransferStateTo(RunScriptState.Instance);
-            }
-        }
 
 
 

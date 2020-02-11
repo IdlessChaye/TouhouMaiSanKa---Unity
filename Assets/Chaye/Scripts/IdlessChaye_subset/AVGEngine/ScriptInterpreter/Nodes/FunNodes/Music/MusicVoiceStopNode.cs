@@ -11,23 +11,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        protected override void OnUpdateEngineState() {
-
-        }
-
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 0)
                 throw new System.Exception("MusicVoicePlayNode");
             PachiGrimoire.I.MusicManager.VoiceStop();
         }
 
-        protected override void OnUpdateStageRender() {
-
-        }
-
-        protected override void OnLateUpdate() {
-
-        }
 
     }
 }
