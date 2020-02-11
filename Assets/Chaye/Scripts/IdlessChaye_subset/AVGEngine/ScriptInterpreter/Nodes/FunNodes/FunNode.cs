@@ -17,9 +17,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public override void Execute() {
-            OnUpdateEngineState();
             OnUpdateStageContext();
             OnUpdateStageRender();
+            OnUpdateEngineState();
             OnLateUpdate();
         }
 

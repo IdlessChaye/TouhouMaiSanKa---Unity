@@ -7,8 +7,8 @@ public class TestDoTween : MonoBehaviour {
 
 
     public UIAtlas UIAtlas;
-    public GameObject canvas;
     public Material material;
+    public GameObject canvas;
     public Text text;
     public UILabel label;
 
@@ -94,6 +94,16 @@ public class TestDoTween : MonoBehaviour {
         tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
             .OnUpdate(() => { sprite.alpha = value; })
             .OnComplete(() => state = RunScript);
+
+
+        UITexture uITexture;
+        
+        
+
+
         return tweener;
+
+
+
     }
 }

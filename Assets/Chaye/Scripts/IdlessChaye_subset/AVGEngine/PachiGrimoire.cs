@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
+
     [RequireComponent(typeof(StageRenderManager))]
+    [RequireComponent(typeof(MusicManager))]
     public sealed class PachiGrimoire : MonoBehaviour {
         #region Singleton
         private static PachiGrimoire instance;
@@ -12,7 +14,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 if (instance == null) {
                     instance = FindObjectOfType(typeof(PachiGrimoire)) as PachiGrimoire;
                     if (instance == null) {
-                        instance = ((GameObject)Instantiate(Resources.Load<GameObject>("AVGEngine/PachiGrimoire"))).GetComponent<PachiGrimoire>();
+                        GameObject go = Instantiate(Resources.Load<GameObject>("AVGEngine/PachiGrimoire"));
+                        go.name = "AVGEngine";
+                        go.transform.position = Vector3.zero; 
+                        instance = go.GetComponent<PachiGrimoire>();
                     }
                 }
                 return instance;
@@ -24,7 +29,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (instance == null) {
                 instance = this;
             } else {
-                Destroy(gameObject);
+                if(instance != this) {
+                    Debug.Log("????");
+                    Destroy(gameObject);
+                }
             }
 
             Initialize();
@@ -34,7 +42,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public bool isDebugMode;
         public UnityEngine.UI.Text text;
         public UITexture t;
-
 
 
         public ConstData constData;
@@ -50,6 +57,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public BacklogManager BacklogManager => backlogManager;
         public ScriptManager ScriptManager => scriptManager;
         public StageRenderManager StageRenderManager => stageRenderManager;
+        public MusicManager MusicManager => musicManager;
         #endregion
         #region Private Manager Properties
         private StateMachineManager stateMachine = new StateMachineManager(VoidState.Instance);
@@ -63,6 +71,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private BacklogManager backlogManager;
         private ScriptManager scriptManager;
         private StageRenderManager stageRenderManager;
+        private MusicManager musicManager;
         #endregion
 
 
@@ -83,8 +92,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return;
             fileManager = new FileManager(configManager, playerRecordManager, resourceManager, constData);
             scriptManager = new ScriptManager(pastScriptManager);
-            stageRenderManager = GetComponent<StageRenderManager>() ?? gameObject.AddComponent<StageRenderManager>();
             backlogManager = new BacklogManager(constData.BacklogCapacity);
+            stageRenderManager = GetComponent<StageRenderManager>() ?? gameObject.AddComponent<StageRenderManager>();
+            musicManager = GetComponent<MusicManager>() ?? gameObject.AddComponent<MusicManager>();
 
             //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             //configManager.Config.Language = "Chinese";

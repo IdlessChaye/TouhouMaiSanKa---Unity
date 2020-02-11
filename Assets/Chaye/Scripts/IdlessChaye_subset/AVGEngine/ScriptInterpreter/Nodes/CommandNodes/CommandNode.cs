@@ -21,7 +21,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             if (commandToken.Equals("Engine")) {
                 node = new CommandEngineNode();
-            } else {
+            } else if (commandToken.Equals("Music")) {
+                node = new CommandMusicNode();
+            } else if(commandToken.Equals("Text")) {
+                node = new CommandTextNode();
+            }
+            else {
                 canParse = false;
             }
 

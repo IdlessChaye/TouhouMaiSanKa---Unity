@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class CommandEngineNode : BaseInterpreterNode {
+    public class CommandMusicNode : BaseInterpreterNode {
         private List<BaseInterpreterNode> nodeList = new List<BaseInterpreterNode>();
 
         public override void Interpret(ScriptSentenceContext context) {
-            context.SkipToken("Engine");
+            context.SkipToken("Music");
             while (true) {
                 string funcToken = context.CurrentToken;
                 if (funcToken == null)
@@ -29,14 +29,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             bool canParse = true;
 
             BaseInterpreterNode node = null;
-            if (token.Equals("ScriptReplace")) {
-                node = new EngineScriptReplaceAddNode();
-            } else if (token.Equals("ScriptIfThenElse")) {
-                node = new EngineScriptIfThenElseNode();
-            } else if (token.Equals("ScriptLoadFile")) {
-                node = new EngineScriptLoadFileNode();
-            } else if (token.Equals("BacklogAdd")) {
-                node = new EngineBacklogAddNode();
+            if (token.Equals("VoicePlay")) {
+                node = new MusicVoicePlayNode();
+            } else if (token.Equals("VoiceStop")) {
+                node = new MusicVoiceStopNode();
+            } else if (token.Equals("BGMPlay")) {
+                node = new MusicBGMPlayNode();
+            } else if (token.Equals("BGMPlay")) {
+                node = new MusicBGMStopNode();
             } else {
                 canParse = false;
             }

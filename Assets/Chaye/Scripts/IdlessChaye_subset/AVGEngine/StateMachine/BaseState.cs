@@ -114,7 +114,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunScriptState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -166,7 +166,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunSkipState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -192,7 +192,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunAutoState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -218,7 +218,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunNextState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10 ,11};
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 ,11};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -244,7 +244,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunAnimateState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 9, 10, 11 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3,5, 9};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -270,7 +270,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "SleepState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 9, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 10 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {

@@ -99,26 +99,33 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public TValue Get<TValue>(string index) where TValue : class {
+            if(string.IsNullOrEmpty(index)) {
+                throw new System.Exception("ResourceManager Get");
+            }
             string subName;
             string typeName = GetTypeNameOfIndex(index, out subName);
+            TValue value = null;
             if (typeName.Equals(ConstData.ScriptIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetScript(subName) as TValue;
+                value = GetScript(subName) as TValue;
             } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetBgImage(subName) as TValue;
+                value = GetBgImage(subName) as TValue;
             } else if (typeName.Equals(ConstData.FgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetFgImage(subName) as TValue; 
+                value = GetFgImage(subName) as TValue; 
             } else if (typeName.Equals(ConstData.BGMIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetBGM(subName) as TValue;
+                value = GetBGM(subName) as TValue;
             } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetSound(subName) as TValue; 
+                value = GetSound(subName) as TValue; 
             } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetVoice(subName) as TValue; 
+                value = GetVoice(subName) as TValue; 
             } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetVideo(subName) as TValue; 
+                value = GetVideo(subName) as TValue; 
             } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
-                return GetDialog(subName) as TValue; 
+                value = GetDialog(subName) as TValue; 
             }
-            return null;
+            if(value == null) {
+                throw new System.Exception($"ResourceManager Get. index: {index}, subName: {subName}, typeName: {typeName}");
+            }
+            return value;
         }
 
 
