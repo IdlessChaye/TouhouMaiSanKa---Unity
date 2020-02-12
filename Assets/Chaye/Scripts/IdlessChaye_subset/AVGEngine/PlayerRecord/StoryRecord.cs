@@ -8,6 +8,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public string currentStateName;
         public string LastStateName;
 
+        public string bgmIndex;
+        public string voiceIndex;
+        public string voiceCharacterName;
+
         public string scriptPointerScriptName;
         public int scriptPointerLineNumber;
         public List<string> scriptReplaceKeys = new List<string>();
@@ -35,7 +39,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public int count;
         public int head;
 
-        public List<string> pastScriptNameList;
-        public List<KeyValuePair<int, int>> pastScriptRangeList; // SaveData 用
+
     }
 }

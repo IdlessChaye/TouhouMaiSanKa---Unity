@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class StageRenderManager : MonoBehaviour, IRecordable {
+    public class StageRenderManager : MonoBehaviour {
         #region Instance
         private static StageRenderManager instance;
         public static StageRenderManager I => instance;
@@ -68,7 +68,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Console
         public GameObject console;
         private bool isConsoleShow;
-        private List<ChoiceItem> choiceItemList;
+        private List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
         #endregion
 
 
@@ -121,7 +121,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 } else {
                     ConsoleShow();
                 }
-            } else if(state == ChoiceWaitState.Instance) {
+            } else if (state == ChoiceWaitState.Instance) {
                 if (isConsoleShow) {
                     ConsoleHide();
                 } else {
@@ -136,7 +136,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         private void OnMouseScrollWheelZoomIn() {
-            
+
         }
         private void OnKeyConfirmDown() {
             BaseState state = stateMachine.CurrentState;
@@ -181,7 +181,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             characterName = null;
         }
 
-        public void TextChange(string dialogContextIndex, string characterName = null) {
+        public void TextChange(string dialogContextIndex, string characterName = null, bool hasEffect = true) {
             if (string.IsNullOrEmpty(dialogContextIndex)) {
                 throw new System.Exception("StageRenderManager TextChange");
             }
@@ -189,77 +189,84 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             this.dialogContextIndex = dialogContextIndex;
             this.characterName = characterName;
 
-            string context = resourceManager.Get<string>(dialogContextIndex);
-            float messageSpeed = config.MessageSpeed;
-            float textShowTime = dialogContextIndex.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
-            float textDelayTime = 0;
-            if (characterName != null) {
-                textDelayTime = characterName.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
-                Tweener tweenerName = textNameContainer.DOText(characterName, textDelayTime).
-                    OnUpdate(() => nameLabel.text = textNameContainer.text);
-                JoinTweenAniamte(tweenerName);
-            }
-            Tweener tweenerContext = textContextContainer.DOText(context, textShowTime)
-                .SetDelay(textDelayTime)
-                .OnUpdate(() => contextLabel.text = textContextContainer.text);
-            JoinTweenAniamte(tweenerContext);
+            if (hasEffect) {
+                string context = resourceManager.Get<string>(dialogContextIndex);
+                float messageSpeed = config.MessageSpeed;
+                float textShowTime = dialogContextIndex.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
+                float textDelayTime = 0;
+                if (characterName != null) {
+                    textDelayTime = characterName.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
+                    Tweener tweenerName = textNameContainer.DOText(characterName, textDelayTime).
+                        OnUpdate(() => nameLabel.text = textNameContainer.text);
+                    JoinTweenAniamte(tweenerName);
+                }
+                Tweener tweenerContext = textContextContainer.DOText(context, textShowTime)
+                    .SetDelay(textDelayTime)
+                    .OnUpdate(() => contextLabel.text = textContextContainer.text);
+                JoinTweenAniamte(tweenerContext);
 
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            }
         }
         #endregion
 
 
         #region BackgroundImage
-        public void BackgroundImageChange(string index) {
+        public void BackgroundImageChange(string index, bool hasEffect = true) {
             if (string.IsNullOrEmpty(index)) {
                 throw new System.Exception("StageRenderManager BackgroundImageChange");
             }
             backgroundImageIndex = index;
 
-            Texture2D backgroundTexture2D = resourceManager.Get<Texture2D>(index);
-            backgroundUITexture.mainTexture = backgroundTexture2D;
-            backgroundUITexture.width = ConstData.TEXTURE2D_WIDTH;
-            backgroundUITexture.height = ConstData.TEXTURE2D_HEIGHT;
-            backgroundUITexture.alpha = 0f;
-
-            Tweener tweenerDisappear = DoTextureAlpha(backgroundUITextureTop, 1f, 0f);
-            JoinTweenAniamte(tweenerDisappear);
-            Tweener tweenerAppear = DoTextureAlpha(backgroundUITexture, 0f, 1f);
-            JoinTweenAniamte(tweenerAppear);
-
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate += () => {
-                backgroundUITextureTop.mainTexture = backgroundTexture2D;
-                backgroundUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
-                backgroundUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
-                backgroundUITextureTop.alpha = 1f;
-                backgroundUITexture.mainTexture = null;
+            if (hasEffect) {
+                Texture2D backgroundTexture2D = resourceManager.Get<Texture2D>(index);
+                backgroundUITexture.mainTexture = backgroundTexture2D;
+                backgroundUITexture.width = ConstData.TEXTURE2D_WIDTH;
+                backgroundUITexture.height = ConstData.TEXTURE2D_HEIGHT;
                 backgroundUITexture.alpha = 0f;
-            };
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+
+                Tweener tweenerDisappear = DoTextureAlpha(backgroundUITextureTop, 1f, 0f);
+                JoinTweenAniamte(tweenerDisappear);
+                Tweener tweenerAppear = DoTextureAlpha(backgroundUITexture, 0f, 1f);
+                JoinTweenAniamte(tweenerAppear);
+
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate += () => {
+                    backgroundUITextureTop.mainTexture = backgroundTexture2D;
+                    backgroundUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
+                    backgroundUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
+                    backgroundUITextureTop.alpha = 1f;
+                    backgroundUITexture.mainTexture = null;
+                    backgroundUITexture.alpha = 0f;
+                };
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            }
         }
 
-        public void BackgroundImageClear() {
+        public void BackgroundImageClear(bool hasEffect = true) {
             backgroundImageIndex = null;
-            if (backgroundUITextureTop.mainTexture == null) {
-                Debug.LogWarning("StageRenderManager BackgroundImageClear");
-                return;
-            }
-            Tweener tweener = DoTextureAlpha(backgroundUITextureTop, 1f, 0f);
-            JoinTweenAniamte(tweener);
 
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate += () => {
-                backgroundUITextureTop.mainTexture = null;
-                backgroundUITextureTop.width = ConstData.TEXTURE2D_SCREEN_WIDTH;
-                backgroundUITextureTop.height = ConstData.TEXTURE2D_SCREEN_HEIGHT;
-                backgroundUITextureTop.alpha = 1f;
-            };
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+            if (hasEffect) {
+                if (backgroundUITextureTop.mainTexture == null) {
+                    Debug.LogWarning("StageRenderManager BackgroundImageClear");
+                    return;
+                }
+                Tweener tweener = DoTextureAlpha(backgroundUITextureTop, 1f, 0f);
+                JoinTweenAniamte(tweener);
+
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate += () => {
+                    backgroundUITextureTop.mainTexture = null;
+                    backgroundUITextureTop.width = ConstData.TEXTURE2D_SCREEN_WIDTH;
+                    backgroundUITextureTop.height = ConstData.TEXTURE2D_SCREEN_HEIGHT;
+                    backgroundUITextureTop.alpha = 1f;
+                };
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            }
         }
 
         private Tweener DoTextureAlpha(UITexture uiTexture, float fromValue, float toValue, float duration = 0.5f) {
@@ -278,7 +285,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region FigureImage
         public void FigureImageAdd(string uiKey, string fiIndex,
             float pos_x, float pos_y,
-            float scale_x = 1f, float scale_y = 1f) {
+            float scale_x = 1f, float scale_y = 1f, bool hasEffect = true) {
             if (string.IsNullOrEmpty(uiKey) || string.IsNullOrEmpty(fiIndex) || figureImageDict.ContainsKey(uiKey)) {
                 throw new System.Exception("StageRenderManager FigureImageAdd");
             }
@@ -294,92 +301,106 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             uiTexture.height = (int)(height * scale_y);
             go.transform.position = new Vector3(pos_x, pos_y, 0);
             go.transform.SetParent(uiRoot.transform, false);
-
-            uiTexture.alpha = 0f;
-            Tweener tweener = DoTextureAlpha(uiTexture, 0f, 1f);
-            JoinTweenAniamte(tweener);
-
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
-
             KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
             figureImageDict.Add(uiKey, pair);
+
+            if(hasEffect) { 
+                uiTexture.alpha = 0f;
+                Tweener tweener = DoTextureAlpha(uiTexture, 0f, 1f);
+                JoinTweenAniamte(tweener);
+
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            } else {
+                uiTexture.alpha = 1f;
+            }
         }
 
-        public void FigureImageRemove(string uiKey) {
+        public void FigureImageRemove(string uiKey,bool hasEffect = true) {
             if (string.IsNullOrEmpty(uiKey) || !figureImageDict.ContainsKey(uiKey)) {
                 throw new System.Exception("StageRenderManager FigureImageRemove");
             }
 
             UITexture uiTexture = figureImageDict[uiKey].Value;
             GameObject go = uiTexture.gameObject;
+            figureImageDict.Remove(uiKey);
 
-            uiTexture.alpha = 1f;
-            Tweener tweener = DoTextureAlpha(uiTexture, 1f, 0f);
-            JoinTweenAniamte(tweener);
+            if(hasEffect) { 
+                uiTexture.alpha = 1f;
+                Tweener tweener = DoTextureAlpha(uiTexture, 1f, 0f);
+                JoinTweenAniamte(tweener);
 
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate += () => {
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate += () => {
+                    uiTexture.mainTexture = null;
+                    Destroy(go);
+                };
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            } else {
+                uiTexture.alpha = 0f;
                 uiTexture.mainTexture = null;
                 Destroy(go);
-            };
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+            }
 
-            figureImageDict.Remove(uiKey);
         }
 
 
-        public void SmallFigureImageChange(string index) {
+        public void SmallFigureImageChange(string index , bool hasEffect = true) {
             if (string.IsNullOrEmpty(index)) {
                 throw new System.Exception("StageRenderManager SmallFigureImageChange");
             }
             smallFigureImageIndex = index;
 
-            Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(index);
-            smallFigureImageUITexture.mainTexture = smallFigureTexture2D;
-            smallFigureImageUITexture.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
-            smallFigureImageUITexture.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
-            smallFigureImageUITexture.alpha = 0f;
-
-            Tweener tweenerDisappear = DoTextureAlpha(smallFigureImageUITextureTop, 1f, 0f);
-            JoinTweenAniamte(tweenerDisappear);
-            Tweener tweenerAppear = DoTextureAlpha(smallFigureImageUITexture, 0f, 1f);
-            JoinTweenAniamte(tweenerAppear);
-
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate += () => {
-                smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
-                smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
-                smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
-                smallFigureImageUITextureTop.alpha = 1f;
-                smallFigureImageUITexture.mainTexture = null;
+            if(hasEffect) { 
+                Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(index);
+                smallFigureImageUITexture.mainTexture = smallFigureTexture2D;
+                smallFigureImageUITexture.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
+                smallFigureImageUITexture.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
                 smallFigureImageUITexture.alpha = 0f;
-            };
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+
+                Tweener tweenerDisappear = DoTextureAlpha(smallFigureImageUITextureTop, 1f, 0f);
+                JoinTweenAniamte(tweenerDisappear);
+                Tweener tweenerAppear = DoTextureAlpha(smallFigureImageUITexture, 0f, 1f);
+                JoinTweenAniamte(tweenerAppear);
+
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate += () => {
+                    smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
+                    smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
+                    smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
+                    smallFigureImageUITextureTop.alpha = 1f;
+                    smallFigureImageUITexture.mainTexture = null;
+                    smallFigureImageUITexture.alpha = 0f;
+                };
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            }
         }
 
 
-        public void SmallFigureImageClear() {
+        public void SmallFigureImageClear(bool hasEffect = true) {
             smallFigureImageIndex = null;
-            if (smallFigureImageUITextureTop.mainTexture == null) {
-                Debug.LogWarning("StageRenderManager SmallFigureImageClear");
-                return;
-            }
-            Tweener tweener = DoTextureAlpha(smallFigureImageUITextureTop, 1f, 0f);
-            JoinTweenAniamte(tweener);
 
-            sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-            actionAnimate += () => {
-                smallFigureImageUITextureTop.mainTexture = null;
-                smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
-                smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
-                smallFigureImageUITextureTop.alpha = 1f;
-            };
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+            if(hasEffect) { 
+                if (smallFigureImageUITextureTop.mainTexture == null) {
+                    Debug.LogWarning("StageRenderManager SmallFigureImageClear");
+                    return;
+                }
+                Tweener tweener = DoTextureAlpha(smallFigureImageUITextureTop, 1f, 0f);
+                JoinTweenAniamte(tweener);
+
+                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
+                actionAnimate += () => {
+                    smallFigureImageUITextureTop.mainTexture = null;
+                    smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
+                    smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
+                    smallFigureImageUITextureTop.alpha = 1f;
+                };
+                actionAnimate -= StateQuitAnimate;
+                actionAnimate += StateQuitAnimate;
+            }
         }
 
 
@@ -387,28 +408,34 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Console
-        public void ConsoleShow() {
+        public void ConsoleShow(bool hasEffect = true) {
             if (isConsoleShow) {
                 return;
             }
-            console.transform.position = Vector3.zero;
             isConsoleShow = true;
+            if (hasEffect)
+                console.transform.position = Vector3.zero;
         }
 
-        public void ConsoleHide() {
+        public void ConsoleHide(bool hasEffect = true) {
             if (!isConsoleShow) {
                 return;
             }
-            console.transform.position = Vector3.up * -1000;
             isConsoleShow = false;
+            if (hasEffect)
+                console.transform.position = Vector3.up * -1000;
         }
 
-        public void ChoiceCreate(List<ChoiceItem> choiceItemList) {
-            if(choiceItemList == null || choiceItemList.Count == 0) {
+        public void ChoiceCreate(List<ChoiceItem> choiceItemList) { // 不管是Run Auto Skip Next总有渲染效果
+            if (choiceItemList == null || choiceItemList.Count == 0) {
                 throw new System.Exception("StageRenderManager ChoiceCreate");
             }
             this.choiceItemList = choiceItemList;
             // Do something
+            int count = choiceItemList.Count;
+            // 得到各个选项的文本
+            // 不能选择的用不能选的图片渲染，能选的检查mark 是否有已经选过的，选过的用别的选项图片渲染
+            // 给每个选项添加回调函数 要有mark和script信息，还要返回到LastState,还要处理choiceItemList
         }
 
         #endregion
@@ -416,12 +443,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        public void LoadPlayerData() {
-            throw new System.NotImplementedException();
-        }
-
         public void LoadStoryData() {
-            throw new System.NotImplementedException();
+
         }
     }
 }

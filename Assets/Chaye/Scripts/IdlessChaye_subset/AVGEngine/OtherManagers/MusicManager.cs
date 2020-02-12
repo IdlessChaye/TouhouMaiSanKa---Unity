@@ -7,10 +7,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class MusicManager : MonoBehaviour {
         // 要管理BGM单例、Voice单例、各种声音
 
-        private Config config;
-
-        public string VoiceIndex => voiceIndex;
         public string BGMIndex => bgmIndex;
+        public string VoiceIndex => voiceIndex;
+        public string CharacterName => characterName;
+
+
+        private Config config;
 
         #region BGM
         private string bgmIndex;
@@ -39,52 +41,78 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (voiceAudioSource == null) {
                 voiceAudioSource = gameObject.AddComponent<AudioSource>();
                 bgmAudioSource.playOnAwake = false;
-                bgmAudioSource.loop = true;
+                bgmAudioSource.loop = false;
             }
         }
 
-        public void BGMPlay(AudioClip clip, string bgmIndex) {
+        public void BGMPlay(AudioClip clip, string bgmIndex, bool hasEffect = true) {
             if (clip == null)
                 throw new System.Exception("MusicManager BGMPlay");
+
+            this.bgmIndex = bgmIndex;
             bgmAudioSource.clip = clip;
             float volume = config.SystemVolume;
             volume *= config.BGMVolume;
             bgmAudioSource.volume = volume;
-            bgmAudioSource.Play();
-            this.bgmIndex = bgmIndex;
+            if (hasEffect) {
+                bgmAudioSource.Play();
+            }
         }
 
-        public void BGMStop() {
-            bgmAudioSource.Stop();
+
+        public void BGMStop(bool hasEffect = true) {
             bgmIndex = null;
+            if (hasEffect) {
+                bgmAudioSource.Stop();
+            }
         }
 
-        public void VoicePlay(string characterName, AudioClip clip, string voiceIndex) {
-            if (clip == null)
+
+        public void VoicePlay(string characterName, AudioClip clip, string voiceIndex, bool hasEffect = true) {
+            if (string.IsNullOrEmpty(characterName)) {
                 throw new System.Exception("MusicManager VoicePlay");
+            };
+            this.characterName = characterName;
+            this.voiceIndex = voiceIndex;
             voiceAudioSource.clip = clip;
-            // 音量控制
             float volume = config.SystemVolume;
             volume *= config.VoiceVolume;
-            this.characterName = characterName;
-            if (string.IsNullOrEmpty(characterName) || config.CharacterNameList == null) {
+            int index = config.CharacterNameList.IndexOf(characterName);
+            if (index == -1) {
                 throw new System.Exception("MusicManager VoicePlay");
             } else {
-                int index = config.CharacterNameList.IndexOf(characterName);
-                if (index == -1) {
-                    throw new System.Exception("MusicManager VoicePlay");
-                } else {
-                    volume *= config.VoiceVolumeValueList[index];
-                }
+                volume *= config.VoiceVolumeValueList[index];
             }
             voiceAudioSource.volume = volume;
-            voiceAudioSource.Play();
-            this.voiceIndex = voiceIndex;
+            if (hasEffect) {
+                voiceAudioSource.Play();
+            }
         }
 
-        public void VoiceStop() {
-            voiceAudioSource.Stop();
+
+        public void VoiceStop(bool hasEffect = true) {
             voiceIndex = null;
+            characterName = null;
+            if(hasEffect) {
+                voiceAudioSource.Stop();
+            }
+        }
+
+
+        public void LoadStoryRecord(string bgmIndex, string voiceIndex, string characterName) {
+            if(bgmIndex != null) {
+                AudioClip bgmClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(bgmIndex);
+                BGMPlay(bgmClip, bgmIndex);
+            } else {
+                this.bgmIndex = null;
+            }
+            if(voiceIndex != null && characterName != null) {
+                AudioClip voiceClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(voiceIndex);
+                VoicePlay(characterName, voiceClip, voiceIndex, false);
+            } else {
+                this.characterName = null;
+                this.voiceIndex = null;
+            }
         }
 
 

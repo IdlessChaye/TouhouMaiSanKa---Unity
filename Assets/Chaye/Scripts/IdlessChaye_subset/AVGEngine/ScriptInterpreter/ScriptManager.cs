@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class ScriptManager :IRecordable{
+    public class ScriptManager {
         private PastScriptManager pastScriptManager;
 
         public string ScriptPointerScriptName { get; private set; }
@@ -345,13 +345,31 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
+        public void LoadStoryRecord(string name, int number,
+            List<string> keys, List<string> values,
+            List<string> nameStack, List<int> numberStack) {
+            ScriptPointerScriptName = name;
+            string scriptIndex = PachiGrimoire.I.constData.ScriptIndexPrefix + "_" + name;
+            string scriptContext = PachiGrimoire.I.ResourceManager.Get<string>(scriptIndex);
+            scriptSentenceList = ProcessScriptContext(scriptContext);
+            ScriptPointerLineNumber = number;
+            if (keys != null)
+                ScriptReplaceKeys = new List<string>(keys);
+            else
+                ScriptReplaceKeys.Clear();
+            if (values != null)
+                ScriptReplaceValues = new List<string>(values);
+            else
+                ScriptReplaceValues.Clear();
+            if (nameStack != null)
+                pointerScriptNameStack = new Stack<string>(nameStack);
+            else
+                pointerScriptNameStack.Clear();
+            if (numberStack != null)
+                pointerLineNumberStack = new Stack<int>(numberStack);
+            else
+                pointerLineNumberStack.Clear();
 
-        public void LoadPlayerData() {
-            throw new System.NotImplementedException();
-        }
-
-        public void LoadStoryData() {
-            throw new System.NotImplementedException();
         }
     }
 

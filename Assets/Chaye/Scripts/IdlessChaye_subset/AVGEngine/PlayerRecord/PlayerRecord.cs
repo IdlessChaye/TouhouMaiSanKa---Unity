@@ -8,5 +8,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public List<string> markPlayerList = new List<string>();
         public List<string> varPlayerNameList = new List<string>();
         public List<float> varPlayerValueList = new List<float>();
+
+        public List<string> pastScriptNameList;
+        public List<KeyValuePair<int, int>> pastScriptRangeList; // SaveData 用
     }
 }

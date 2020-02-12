@@ -3,22 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class PastScriptManager : IRecordable{
+    public class PastScriptManager {
         public Dictionary<string, KeyValuePair<int, int>> PastScriptDict => pastScriptDict; // SaveData 用
 
         private Dictionary<string, KeyValuePair<int, int>> pastScriptDict = new Dictionary<string, KeyValuePair<int, int>>();
-
-        public void LoadData(List<string> scriptNameList,List<KeyValuePair<int,int>> keyValuePairList) {
-            if((scriptNameList== null && keyValuePairList == null) || scriptNameList?.Count == keyValuePairList?.Count) {
-                if (scriptNameList == null)
-                    return;
-                for(int i = 0;i<scriptNameList.Count;i++) {
-                    pastScriptDict.Add(scriptNameList[i], keyValuePairList[i]);
-                }
-            } else {
-                throw new System.Exception("PastScriptManager LoadData");
-            }
-        }
 
 
         public void UpdatePastScript(string scriptName, int endLineNumber, int startLineNumber = 0) {
@@ -30,15 +18,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public int GetStartLineNumber(string scriptName) { return pastScriptDict[scriptName].Key; }
-        public int GetEndLineNumber(string scriptName) { return pastScriptDict[scriptName].Value; }
+        public int GetStartLineNumber(string scriptName) => pastScriptDict[scriptName].Key;
+        public int GetEndLineNumber(string scriptName) => pastScriptDict[scriptName].Value;
 
-        public void LoadPlayerData() {
-            throw new System.NotImplementedException();
-        }
 
-        public void LoadStoryData() {
-            throw new System.NotImplementedException();
+        public void LoadPlayerRecord(List<string> pastScriptNameList, List<KeyValuePair<int, int>> pastScriptRangeList) {
+            if (pastScriptNameList != null) {
+                pastScriptDict.Clear();
+                for (int i = 0; i < pastScriptNameList.Count; i++) {
+                    pastScriptDict.Add(pastScriptNameList[i], pastScriptRangeList[i]);
+                }
+            } else {
+                pastScriptDict.Clear();
+            }
         }
     }
 }

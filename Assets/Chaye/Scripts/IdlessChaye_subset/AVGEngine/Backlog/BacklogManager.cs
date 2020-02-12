@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class BacklogManager :IRecordable{
+    public class BacklogManager {
         public List<BacklogItem> BacklogItemList { get; private set; }
         public int Capacity => capacity;
         public int Count => count;
@@ -50,12 +50,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return index % count;
         }
 
-        public void LoadPlayerData() {
-            throw new System.NotImplementedException();
-        }
-
-        public void LoadStoryData() {
-            throw new System.NotImplementedException();
+        public void LoadStoryRecord(List<BacklogItem> bs, int head, int capa, int count) {
+            if(bs != null) {
+                BacklogItemList = new List<BacklogItem>(bs);
+            } else {
+                BacklogItemList.Clear();
+            }
+            this.head = head;
+            this.capacity = capa;
+            this.count = count;
         }
 
         //private void Foreach() {

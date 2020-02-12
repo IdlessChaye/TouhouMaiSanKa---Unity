@@ -7,6 +7,14 @@ public class TestListToArray : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        List<string> a = new List<string>(null);
+        print(a);
+        print(a.Count);
+    }
+
+    // Update is called once per frame
+    void Updatae()
+    {
         List<string> a = new List<string>();
         a.Add("所应国足三潜艇");
         a.Add("二五风月也无情");
@@ -18,11 +26,5 @@ public class TestListToArray : MonoBehaviour
         print(b[0]);
         b[0] = "??";
         print(c[0]);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

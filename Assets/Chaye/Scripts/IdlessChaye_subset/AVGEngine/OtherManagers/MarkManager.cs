@@ -78,7 +78,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
-        public void LoadPlayerData(List<string> markPlayerList,List<string>varNamePlayerList,List<float>varValuePlayerList) {
+        public void LoadPlayerRecord(List<string> markPlayerList,List<string>varNamePlayerList,List<float>varValuePlayerList) {
             this.markPlayerList = new List<string>(markPlayerList);
             this.valuePlayerDict = new Dictionary<string, float>();
             for(int i = 0;i < varNamePlayerList.Count;i++) {
@@ -86,8 +86,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public void LoadStoryData() {
-            throw new System.NotImplementedException();
+        public void LoadStoryRecord(List<string> markList,List<string> names,List<float> values) {
+            if (markList != null)
+                this.markStoryList = new List<string>(markList);
+            else
+                this.markStoryList.Clear();
+            if(names!= null) {
+                valueStoryDict.Clear();
+                for(int i = 0; i < names.Count;i++) {
+                    valueStoryDict.Add(names[i], values[i]);
+                }
+            } else {
+                valueStoryDict.Clear();
+            }
         }
 
     }
