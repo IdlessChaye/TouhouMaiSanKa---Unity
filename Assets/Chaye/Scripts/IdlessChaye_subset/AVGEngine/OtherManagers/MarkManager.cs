@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class MarkManager : IRecordable {
+    public class MarkManager {
 
         public List<string> MarkPlayerList => markPlayerList;
         public Dictionary<string, float> ValuePlayerDict => valuePlayerDict;
@@ -78,12 +78,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
-        public void LoadPlayerData() {
-            throw new System.NotImplementedException();
+        public void LoadPlayerData(List<string> markPlayerList,List<string>varNamePlayerList,List<float>varValuePlayerList) {
+            this.markPlayerList = new List<string>(markPlayerList);
+            this.valuePlayerDict = new Dictionary<string, float>();
+            for(int i = 0;i < varNamePlayerList.Count;i++) {
+                valuePlayerDict.Add(varNamePlayerList[i], varValuePlayerList[i]);
+            }
         }
 
         public void LoadStoryData() {
             throw new System.NotImplementedException();
         }
+
     }
 }

@@ -7,8 +7,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public string ScriptPointerScriptName { get; private set; }
         public int ScriptPointerLineNumber { get; private set; }
-        public List<string> ScriptReplaceKeys { get; private set; }
-        public List<string> ScriptReplaceValues { get; private set; }
+        public List<string> ScriptReplaceKeys { get; private set; } = new List<string>();
+        public List<string> ScriptReplaceValues { get; private set; } = new List<string>();
+        public Stack<string> PointerScriptNameStack => pointerScriptNameStack;
+        public Stack<int> PointerLineNumberStack => pointerLineNumberStack;
 
 
         private Stack<char> charStack = new Stack<char>();

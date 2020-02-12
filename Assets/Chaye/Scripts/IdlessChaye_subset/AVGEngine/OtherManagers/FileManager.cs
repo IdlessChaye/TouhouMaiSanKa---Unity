@@ -60,14 +60,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void LoadPlayerRecord() {
             string playerRecordContext = null;
             playerRecordContext = ReadSingleTXTFileInPersistentFolder(constData.DataSubFolderPathInPersistentFolderName, constData.PlayerRecordFileName);
-            bool isSuccess = playerRecordManager.LoadPlayerRecordContext(playerRecordContext); // 后续处理由PlayerRecordManager实现
+            bool isSuccess = playerRecordManager.LoadPlayerRecordData(playerRecordContext); // 后续处理由PlayerRecordManager实现
         }
 
         public void LoadStoryRecords() {
             List<FileInfo> fileInfoList = new List<FileInfo>();
             string folderPath = Application.persistentDataPath + "/" + constData.SaveDataSubFolderPathInPersistentFolderName;
             GetAllFilesOfFolderPath(folderPath, fileInfoList, new string[] { "txt" });
-            bool isSuccess = playerRecordManager.LoadStoryRecordContext(fileInfoList); // 后续处理由PlayerRecordManager实现
+            bool isSuccess = playerRecordManager.LoadStoryRecordData(fileInfoList); // 后续处理由PlayerRecordManager实现
         }
 
         public string LoadStoryRecordContext(string path) {

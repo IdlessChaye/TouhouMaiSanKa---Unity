@@ -5,10 +5,40 @@ using System.IO;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class PlayerRecordManager {
-        public PlayerRecord PlayerRecord { get; private set; } = new PlayerRecord();
-        public Dictionary<int, StoryRecord> StoryRecordDict { get; private set; } = new Dictionary<int, StoryRecord>(100);
+        public PlayerRecord PlayerRecord { get; private set; }
+        public Dictionary<int, StoryRecord> StoryRecordDict { get;private set; }
 
-        public bool LoadPlayerRecordContext(string playerRecordJSON) {
+
+        public void SavePlayerRecord(PlayerRecord newPlayerRecord) {
+            if(newPlayerRecord == null) {
+                throw new System.Exception("PlayerRecordManager SavePlayerRecord");
+            }
+            string json = JsonUtility.ToJson(newPlayerRecord);
+            PlayerRecord = new PlayerRecord();
+            JsonUtility.FromJsonOverwrite(json, PlayerRecord);
+            PachiGrimoire.I.FileManager.SavePlayerRecord(json);
+        }
+        public void SaveStoryRecord(int indexOfRecord, StoryRecord newStoryRecord) {
+            if(newStoryRecord == null) {
+                throw new System.Exception("PlayerRecordManager SaveStoryRecord");
+            }
+            if (indexOfRecord >= 0 && indexOfRecord < PachiGrimoire.I.constData.SaveDataMaxCount) {
+                string json = JsonUtility.ToJson(newStoryRecord);
+                StoryRecord storyRecord = new StoryRecord();
+                JsonUtility.FromJsonOverwrite(json, storyRecord);
+                if(StoryRecordDict.ContainsKey(indexOfRecord)) {
+                    StoryRecordDict[indexOfRecord] = storyRecord;
+                } else {
+                    StoryRecordDict.Add(indexOfRecord, storyRecord);
+                }
+                PachiGrimoire.I.FileManager.SaveStoryRecord(json, indexOfRecord);
+            } else {
+                throw new System.Exception("保存storyRecord时，index不得劲!" + indexOfRecord);
+            }
+        }
+
+        public bool LoadPlayerRecordData(string playerRecordJSON) {
+            PlayerRecord = new PlayerRecord();
             if (playerRecordJSON == null) {
                 // 保存一个默认的玩家记录数据
                 SavePlayerRecord(PlayerRecord);
@@ -18,20 +48,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return true;
         }
 
-        public void SavePlayerRecord(PlayerRecord newPlayerRecord) {
-            if (newPlayerRecord != PlayerRecord) {
-                PlayerRecord = newPlayerRecord;
-            }
-            string configJSON = JsonUtility.ToJson(newPlayerRecord);
-            PachiGrimoire.I.FileManager.SavePlayerRecord(configJSON);
-        }
-
-        public bool LoadStoryRecordContext(List<FileInfo> fileInfoList) { // 规定保存记录的文件命名格式是固定的   
+        public bool LoadStoryRecordData(List<FileInfo> fileInfoList) { // 规定保存记录的文件命名格式是固定的   
             if (fileInfoList == null || fileInfoList.Count == 0) {
                 return false;
             }
 
             StoryRecordDict.Clear();
+            StoryRecordDict = new Dictionary<int, StoryRecord>(PachiGrimoire.I.constData.SaveDataMaxCount);
             string saveDataCommonPrefixName = PachiGrimoire.I.constData.SaveDataCommonPrefixName;
             for (int i = 0; i < fileInfoList.Count; i++) {
                 FileInfo fileInfo = fileInfoList[i];
@@ -60,18 +83,5 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             return true;
         }
 
-        public void SaveStoryRecord(int indexOfRecord, StoryRecord newStoryRecord) {
-            if (indexOfRecord >= 0 && indexOfRecord < PachiGrimoire.I.constData.SaveDataMaxCount) {
-                if (StoryRecordDict.ContainsKey(indexOfRecord)) {
-                    StoryRecordDict[indexOfRecord] = newStoryRecord;
-                } else {
-                    StoryRecordDict.Add(indexOfRecord, newStoryRecord);
-                }
-                string json = JsonUtility.ToJson(newStoryRecord);
-                PachiGrimoire.I.FileManager.SaveStoryRecord(json, indexOfRecord);
-            } else {
-                throw new System.Exception("保存storyRecord时，index不得劲!" + indexOfRecord);
-            }
-        }
     }
 }

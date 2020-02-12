@@ -4,3 +4,4 @@ Save/Load System
 Choice System
 UI Design
 Document
+Json中记录的变量名取短点

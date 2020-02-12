@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class PastScriptManager {
+    public class PastScriptManager : IRecordable{
+        public Dictionary<string, KeyValuePair<int, int>> PastScriptDict => pastScriptDict; // SaveData 用
+
         private Dictionary<string, KeyValuePair<int, int>> pastScriptDict = new Dictionary<string, KeyValuePair<int, int>>();
 
-        public Dictionary<string, KeyValuePair<int, int>> PastScriptDict => pastScriptDict; // SaveData 用
         public void LoadData(List<string> scriptNameList,List<KeyValuePair<int,int>> keyValuePairList) {
             if((scriptNameList== null && keyValuePairList == null) || scriptNameList?.Count == keyValuePairList?.Count) {
                 if (scriptNameList == null)
@@ -31,5 +32,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public int GetStartLineNumber(string scriptName) { return pastScriptDict[scriptName].Key; }
         public int GetEndLineNumber(string scriptName) { return pastScriptDict[scriptName].Value; }
+
+        public void LoadPlayerData() {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoadStoryData() {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -65,9 +65,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private ResourceManager resourceManager = new ResourceManager();
         private ConfigManager configManager = new ConfigManager();
         private PlayerRecordManager playerRecordManager = new PlayerRecordManager();
-        private StageContextManager stageContextManager = new StageContextManager();
         private MarkManager markManager = new MarkManager();
         private PastScriptManager pastScriptManager = new PastScriptManager();
+        private StageContextManager stageContextManager;
         private BacklogManager backlogManager;
         private ScriptManager scriptManager;
         private StageRenderManager stageRenderManager;
@@ -95,6 +95,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             backlogManager = new BacklogManager(constData.BacklogCapacity);
             stageRenderManager = GetComponent<StageRenderManager>() ?? gameObject.AddComponent<StageRenderManager>();
             musicManager = GetComponent<MusicManager>() ?? gameObject.AddComponent<MusicManager>();
+            stageContextManager = new StageContextManager();
+
+
 
             //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
             //configManager.Config.Language = "Chinese";
@@ -108,7 +111,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             if (isDebugMode) {
                 text.text = configManager.Config.PlayerIdentifier;
-                text.text = playerRecordManager.PlayerRecord.markPlayerList[0];
+                //text.text = playerRecordManager.PlayerRecord.markPlayerList[0];
             }
         }
 

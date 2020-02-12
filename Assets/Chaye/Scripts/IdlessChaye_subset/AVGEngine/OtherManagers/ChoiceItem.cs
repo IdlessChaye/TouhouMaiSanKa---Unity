@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
+    [System.Serializable]
     public struct ChoiceItem {
 
         public string Mark => mark;

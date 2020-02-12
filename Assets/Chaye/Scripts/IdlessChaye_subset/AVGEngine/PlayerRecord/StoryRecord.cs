@@ -8,8 +8,34 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public string currentStateName;
         public string LastStateName;
 
+        public string scriptPointerScriptName;
+        public int scriptPointerLineNumber;
+        public List<string> scriptReplaceKeys = new List<string>();
+        public List<string> scriptReplaceValues = new List<string>();
+        public List<string> pointerScriptNameStack = new List<string>();
+        public List<int> pointerLineNumberStack = new List<int>();
+
+
         public List<string> markStoryList = new List<string>();
         public List<string> varStoryNameList = new List<string>();
         public List<float> varStoryValueList = new List<float>();
+
+        public string dialogContextIndex;
+        public string characterName;
+        public string backgroundImageIndex;
+        public List<string> figureImageKeyList = new List<string>();
+        public List<string> figureImageFIIndexList = new List<string>();
+        public List<KeyValuePair<float, float>> figureImagePosList = new List<KeyValuePair<float, float>>();
+        public List<KeyValuePair<float, float>> figureImageScaleList = new List<KeyValuePair<float, float>>();
+        public string smallFigureImageIndex;
+        public List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
+
+        public List<BacklogItem> backlogItemList;
+        public int capacity;
+        public int count;
+        public int head;
+
+        public List<string> pastScriptNameList;
+        public List<KeyValuePair<int, int>> pastScriptRangeList; // SaveData 用
     }
 }

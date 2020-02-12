@@ -67,6 +67,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             PachiGrimoire.I.FileManager.LoadPlayerRecord();
             PachiGrimoire.I.FileManager.LoadStoryRecords();
             PachiGrimoire.I.FileManager.LoadResource();
+
+            PachiGrimoire.I.StageContextManager.LoadPlayerRecord();
         }
 
         public override void OnExit(BaseState newState) {
