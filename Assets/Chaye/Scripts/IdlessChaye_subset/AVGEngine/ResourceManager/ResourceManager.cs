@@ -113,13 +113,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 value = GetFgImage(subName) as TValue; 
             } else if (typeName.Equals(ConstData.BGMIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
                 value = GetBGM(subName) as TValue;
-            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+            } else if (typeName.Equals(ConstData.SoundIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
                 value = GetSound(subName) as TValue; 
-            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+            } else if (typeName.Equals(ConstData.VoiceIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
                 value = GetVoice(subName) as TValue; 
-            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+            } else if (typeName.Equals(ConstData.VideoIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
                 value = GetVideo(subName) as TValue; 
-            } else if (typeName.Equals(ConstData.BgImageIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
+            } else if (typeName.Equals(ConstData.DialogIndexPrefix, System.StringComparison.OrdinalIgnoreCase)) {
                 value = GetDialog(subName) as TValue; 
             }
             if(value == null) {

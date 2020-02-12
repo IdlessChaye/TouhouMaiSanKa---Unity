@@ -5,8 +5,8 @@ using System;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     [Serializable]
     public class PlayerRecord {
-        public List<string> markList = new List<string>();
-        public List<string> varNameList = new List<string>();
-        public List<int> varValueList = new List<int>();
+        public List<string> markPlayerList = new List<string>();
+        public List<string> varPlayerNameList = new List<string>();
+        public List<float> varPlayerValueList = new List<float>();
     }
 }

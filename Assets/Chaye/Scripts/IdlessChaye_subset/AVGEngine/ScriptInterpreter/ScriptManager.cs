@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class ScriptManager {
+    public class ScriptManager :IRecordable{
         private PastScriptManager pastScriptManager;
 
-        public string ScriptPointerScriptName { get; set; }
-        public int ScriptPointerLineNumber { get; set; }
-        public List<string> ScriptReplaceKeys { get; set; }
-        public List<string> ScriptReplaceValues { get; set; }
+        public string ScriptPointerScriptName { get; private set; }
+        public int ScriptPointerLineNumber { get; private set; }
+        public List<string> ScriptReplaceKeys { get; private set; }
+        public List<string> ScriptReplaceValues { get; private set; }
 
 
         private Stack<char> charStack = new Stack<char>();
@@ -21,7 +21,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private List<ScriptSentenceContext> secondScriptSentenceList;
         private int secondScriptPointerLineNumber; // 第二档的脚本无名
         private bool isAllTrue;
-        public bool IsAllTrue => isAllTrue;
+        public bool IsAllTrue {
+            get { return isAllTrue; }
+            set { isAllTrue = isAllTrue && value; }
+        }
 
         public ScriptManager(PastScriptManager pastScriptManager) {
             this.pastScriptManager = pastScriptManager;
@@ -60,7 +63,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             secondScriptPointerLineNumber = -1;
             isSecondGear = false;
         }
-
 
 
         public void ScriptIfThenElse(string ifStr, string thenStr, string elseStr) {
@@ -338,6 +340,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             rootNode.Interpret(context);
             rootNode.Execute();
             return true;
+        }
+
+
+
+        public void LoadPlayerData() {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoadStoryData() {
+            throw new System.NotImplementedException();
         }
     }
 

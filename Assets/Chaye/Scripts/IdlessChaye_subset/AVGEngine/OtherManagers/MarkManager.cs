@@ -3,51 +3,87 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class MarkManager {
+    public class MarkManager : IRecordable {
 
-        private List<string> markList = new List<string>();
-        private List<string> varNameList = new List<string>();
-        private List<int> varValueList = new List<int>();
+        public List<string> MarkPlayerList => markPlayerList;
+        public Dictionary<string, float> ValuePlayerDict => valuePlayerDict;
+        public List<string> MarkStoryList => markStoryList;
+        public Dictionary<string, float> ValueStoryDict => valueStoryDict;
 
-        public void LoadData(List<string> markList, List<string> varNameList, List<int> varValueList) {
-            if((varNameList ==null && varValueList == null) || varNameList?.Count == varValueList?.Count) {
-                if(varNameList != null) {
-                    this.varNameList = varNameList;
-                    this.varValueList = varValueList;
-                }
+
+        private List<string> markPlayerList = new List<string>();
+        private Dictionary<string, float> valuePlayerDict = new Dictionary<string, float>();
+
+        private List<string> markStoryList = new List<string>();
+        private Dictionary<string, float> valueStoryDict = new Dictionary<string, float>();
+
+
+        #region Player Functions
+        public bool MarkPlayerGet(string mark) {
+            return markPlayerList.Contains(mark);
+        }
+
+        public void MarkPlayerSet(string mark) {
+            if (!markPlayerList.Contains(mark)) {
+                markPlayerList.Add(mark);
+            }
+        }
+
+        public float ValuePlayerGet(string varName) {
+            if (valuePlayerDict.ContainsKey(varName)) {
+                return valuePlayerDict[varName];
             } else {
-                throw new System.Exception("MarkManager LoadData");
-            }
-            if(markList != null) {
-                this.markList = markList;
+                throw new System.Exception($"MarkManager ValuePlayerGet {varName}");
             }
         }
 
-        public bool GetMark(string mark) {
-            return markList.Contains(mark);
-        }
-
-        public void SetMark(string mark) {
-            if(!markList.Contains(mark)) {
-                markList.Add(mark);
-            }
-        }
-
-        public int GetValue(string varName) {
-            if (varName.Contains(varName)) {
-                return varValueList[varNameList.IndexOf(varName)];
+        public void ValuePlayerSet(string varName, float value) {
+            if (valuePlayerDict.ContainsKey(varName)) {
+                valuePlayerDict[varName] = value;
             } else {
-                throw new System.Exception($"MarkManager GetValue varName: {varName}");
+                valuePlayerDict.Add(varName, value);
             }
         }
 
-        public void SetValue(string varName, int value) {
-            if (varNameList.Contains(varName)) {
-                varValueList[varNameList.IndexOf(varName)] = value;
-            } else {
-                varNameList.Add(varName);
-                varValueList.Add(value);
+        #endregion
+
+
+        #region Story Functions
+        public bool MarkStoryGet(string mark) {
+            return markStoryList.Contains(mark);
+        }
+
+        public void MarkStorySet(string mark) {
+            if (!markStoryList.Contains(mark)) {
+                markStoryList.Add(mark);
             }
+        }
+
+        public float ValueStoryGet(string varName) {
+            if (valueStoryDict.ContainsKey(varName)) {
+                return valueStoryDict[varName];
+            } else {
+                throw new System.Exception($"MarkManager ValueStoryGet {varName}");
+            }
+        }
+
+        public void ValueStorySet(string varName, float value) {
+            if (valueStoryDict.ContainsKey(varName)) {
+                valueStoryDict[varName] = value;
+            } else {
+                valueStoryDict.Add(varName, value);
+            }
+        }
+
+        #endregion
+
+
+        public void LoadPlayerData() {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoadStoryData() {
+            throw new System.NotImplementedException();
         }
     }
 }

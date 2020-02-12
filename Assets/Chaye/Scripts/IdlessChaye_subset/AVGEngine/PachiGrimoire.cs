@@ -108,7 +108,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             if (isDebugMode) {
                 text.text = configManager.Config.PlayerIdentifier;
-                text.text = playerRecordManager.PlayerRecord.markList[0];
+                text.text = playerRecordManager.PlayerRecord.markPlayerList[0];
             }
         }
 

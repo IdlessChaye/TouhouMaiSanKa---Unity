@@ -41,6 +41,24 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 node = new EngineSystemChangeStateToAnimate();
             } else if (token.Equals("SystemChangeStateToWait")) {
                 node = new EngineSystemChangeStateToWait();
+            } else if (token.Equals("MarkPlayerGet")) {
+                node = new EngineMarkPlayerGetNode();
+            } else if (token.Equals("MarkPlayerSet")) {
+                node = new EngineMarkPlayerSetNode();
+            } else if (token.Equals("MarkStoryGet")) {
+                node = new EngineMarkStoryGetNode();
+            } else if (token.Equals("MarkStorySet")) {
+                node = new EngineMarkStorySetNode();
+            } else if (token.Equals("ValuePlayerGet")) {
+                node = new EngineValuePlayerGetNode();
+            } else if (token.Equals("ValuePlayerSet")) {
+                node = new EngineValuePlayerSetNode();
+            } else if (token.Equals("ValueStoryGet")) {
+                node = new EngineValueStoryGetNode();
+            } else if (token.Equals("ValueStorySet")) {
+                node = new EngineValueStorySetNode();
+            } else if (token.Equals("ChoiceCreate")) {
+                node = new EngineChoiceCreateNode();
             } else {
                 canParse = false;
             }

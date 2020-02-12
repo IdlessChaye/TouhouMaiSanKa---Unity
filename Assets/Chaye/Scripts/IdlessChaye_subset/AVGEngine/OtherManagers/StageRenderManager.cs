@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class StageRenderManager : MonoBehaviour {
+    public class StageRenderManager : MonoBehaviour, IRecordable {
         #region Instance
         private static StageRenderManager instance;
         public static StageRenderManager I => instance;
@@ -18,11 +18,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             Initialize();
         }
         #endregion
-        public string ScriptContextIndex => scriptContextIndex;
+
+        public string DialogContextIndex => dialogContextIndex;
         public string CharacterName => characterName;
         public string BackgroundImageIndex => backgroundImageIndex;
         public Dictionary<string, KeyValuePair<string, UITexture>> FigureImageDict => figureImageDict;
         public string SmallFigureImageIndex => smallFigureImageIndex;
+        public List<ChoiceItem> ChoiceItemList => choiceItemList;
 
 
         public GameObject uiRoot;
@@ -31,9 +33,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private Config config;
         private StateMachineManager stateMachine;
         private ResourceManager resourceManager;
-
         private float messageSpeedLowest;
         private float messageSpeedHighest;
+
 
         #region Animate
         private Sequence sequenceAnimate;
@@ -46,7 +48,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public Text textNameContainer;
         public UILabel contextLabel;
         public UILabel nameLabel;
-        private string scriptContextIndex;
+        private string dialogContextIndex;
         private string characterName;
         #endregion
 
@@ -66,6 +68,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Console
         public GameObject console;
         private bool isConsoleShow;
+        private List<ChoiceItem> choiceItemList;
         #endregion
 
 
@@ -133,7 +136,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         private void OnMouseScrollWheelZoomIn() {
-
+            
         }
         private void OnKeyConfirmDown() {
             BaseState state = stateMachine.CurrentState;
@@ -174,21 +177,21 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             textNameContainer.text = "";
             nameLabel.text = "";
             contextLabel.text = "";
-            scriptContextIndex = null;
+            dialogContextIndex = null;
             characterName = null;
         }
 
-        public void TextChange(string scriptContextIndex, string characterName = null) {
-            if (string.IsNullOrEmpty(scriptContextIndex)) {
+        public void TextChange(string dialogContextIndex, string characterName = null) {
+            if (string.IsNullOrEmpty(dialogContextIndex)) {
                 throw new System.Exception("StageRenderManager TextChange");
             }
             TextClear();
-            this.scriptContextIndex = scriptContextIndex;
+            this.dialogContextIndex = dialogContextIndex;
             this.characterName = characterName;
 
-            string context = resourceManager.Get<string>(scriptContextIndex);
+            string context = resourceManager.Get<string>(dialogContextIndex);
             float messageSpeed = config.MessageSpeed;
-            float textShowTime = scriptContextIndex.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
+            float textShowTime = dialogContextIndex.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
             float textDelayTime = 0;
             if (characterName != null) {
                 textDelayTime = characterName.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
@@ -399,6 +402,26 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             console.transform.position = Vector3.up * -1000;
             isConsoleShow = false;
         }
+
+        public void ChoiceCreate(List<ChoiceItem> choiceItemList) {
+            if(choiceItemList == null || choiceItemList.Count == 0) {
+                throw new System.Exception("StageRenderManager ChoiceCreate");
+            }
+            this.choiceItemList = choiceItemList;
+            // Do something
+        }
+
         #endregion
+
+
+
+
+        public void LoadPlayerData() {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoadStoryData() {
+            throw new System.NotImplementedException();
+        }
     }
 }

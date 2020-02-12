@@ -98,6 +98,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             string fileName = indexOfRecord == 0 ?
                 constData.SaveDataQuickPrefixName + constData.SaveDataCommonPrefixName + indexOfRecord :
                 constData.SaveDataCommonPrefixName + indexOfRecord;
+            fileName = fileName + ".txt";
+            Debug.Log("SaveStoryRecord " + fileName);
             WriteSingleTXTFileInPersistentFolder(constData.SaveDataSubFolderPathInPersistentFolderName, fileName, storyRecordContext);
         }
 #endregion

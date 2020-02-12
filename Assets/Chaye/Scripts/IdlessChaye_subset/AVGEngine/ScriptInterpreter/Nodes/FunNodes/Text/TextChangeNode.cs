@@ -16,14 +16,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (paraList.Count != 2 && paraList.Count != 1)
                 throw new System.Exception("TextChangeNode");
             // 文本Index，角色名(可选)
-            string scriptContextIndex = paraList[0];
+            string dialogContextIndex = paraList[0];
             string characterName;
 
             if (paraList.Count == 1) {
-                StageRenderManager.I.TextChange(scriptContextIndex);
+                StageRenderManager.I.TextChange(dialogContextIndex);
             } else if (paraList.Count == 2) {
                 characterName = paraList[1];
-                StageRenderManager.I.TextChange(scriptContextIndex, characterName);
+                StageRenderManager.I.TextChange(dialogContextIndex, characterName);
             } 
         }
 

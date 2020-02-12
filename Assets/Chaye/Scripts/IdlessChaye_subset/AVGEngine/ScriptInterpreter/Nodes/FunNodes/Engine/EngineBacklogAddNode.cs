@@ -16,7 +16,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (paraList.Count != 0)
                 throw new System.Exception("EngineBacklogAddNode");
             string voiceIndex = PachiGrimoire.I.MusicManager.VoiceIndex;
-            string contextIndex = StageRenderManager.I.ScriptContextIndex;
+            string contextIndex = StageRenderManager.I.DialogContextIndex;
             //string imageIndex = ;
             string name = StageRenderManager.I.CharacterName;
             PachiGrimoire.I.BacklogManager.Push(voiceIndex, contextIndex, null, name);
