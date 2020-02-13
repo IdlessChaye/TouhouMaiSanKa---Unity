@@ -95,12 +95,40 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public static int TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT = 150;
         #endregion
 
+        #region InputSystem
 
         public KeyCode KeyConfirm = KeyCode.Z;
+
+        #endregion
+
+
+        #region RenderSystem
 
         public int BacklogCapacity = 100;
 
         public float MessageSpeedLowest = 4;
         public float MessageSpeedHighest = 30;
+
+        public float ChoiceWidth = 900;
+        public float ChoiceHeight = 60;
+
+        public float ChoicePosX_0of23 = -50;
+        public float ChoicePosY_0of23 = 140;
+        public float ChoicePosX_1of23 = 38;
+        public float ChoicePosY_1of23 = 62;
+        public float ChoicePosX_2of23 = 126;
+        public float ChoicePosY_2of23 = -16;
+        public float ChoicePosX_3of23 = 214;
+        public float ChoicePosY_3of23 = -94;
+        public float ChoicePosX_0of4 = -152;
+        public float ChoicePosY_0of4 = 214;
+        public float ChoicePosX_1of4 = -58;
+        public float ChoicePosY_1of4 = 137;
+        public float ChoicePosX_2of4 = 36;
+        public float ChoicePosY_2of4 = 60;
+        public float ChoicePosX_3of4 = 130;
+        public float ChoicePosY_3of4 = -17;
+
+        #endregion
     }
 }

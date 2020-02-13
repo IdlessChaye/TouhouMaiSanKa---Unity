@@ -28,6 +28,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public GameObject uiRoot;
+        public GameObject choice0;
+        public GameObject choice1;
+        public GameObject choice2;
+        public GameObject choice3;
+        private List<GameObject> choiceList = new List<GameObject>();
         private PachiGrimoire pachiGrimoire;
         private ConstData constData;
         private Config config;
@@ -68,6 +73,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Console
         public GameObject console;
         private bool isConsoleShow;
+        private string choosenDLIndex;
         private List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
         #endregion
 
@@ -304,7 +310,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
             figureImageDict.Add(uiKey, pair);
 
-            if(hasEffect) { 
+            if (hasEffect) {
                 uiTexture.alpha = 0f;
                 Tweener tweener = DoTextureAlpha(uiTexture, 0f, 1f);
                 JoinTweenAniamte(tweener);
@@ -317,7 +323,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public void FigureImageRemove(string uiKey,bool hasEffect = true) {
+        public void FigureImageRemove(string uiKey, bool hasEffect = true) {
             if (string.IsNullOrEmpty(uiKey) || !figureImageDict.ContainsKey(uiKey)) {
                 throw new System.Exception("StageRenderManager FigureImageRemove");
             }
@@ -326,7 +332,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             GameObject go = uiTexture.gameObject;
             figureImageDict.Remove(uiKey);
 
-            if(hasEffect) { 
+            if (hasEffect) {
                 uiTexture.alpha = 1f;
                 Tweener tweener = DoTextureAlpha(uiTexture, 1f, 0f);
                 JoinTweenAniamte(tweener);
@@ -347,13 +353,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
-        public void SmallFigureImageChange(string index , bool hasEffect = true) {
+        public void SmallFigureImageChange(string index, bool hasEffect = true) {
             if (string.IsNullOrEmpty(index)) {
                 throw new System.Exception("StageRenderManager SmallFigureImageChange");
             }
             smallFigureImageIndex = index;
 
-            if(hasEffect) { 
+            if (hasEffect) {
                 Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(index);
                 smallFigureImageUITexture.mainTexture = smallFigureTexture2D;
                 smallFigureImageUITexture.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
@@ -383,7 +389,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void SmallFigureImageClear(bool hasEffect = true) {
             smallFigureImageIndex = null;
 
-            if(hasEffect) { 
+            if (hasEffect) {
                 if (smallFigureImageUITextureTop.mainTexture == null) {
                     Debug.LogWarning("StageRenderManager SmallFigureImageClear");
                     return;
@@ -426,16 +432,104 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 console.transform.position = Vector3.up * -1000;
         }
 
-        public void ChoiceCreate(List<ChoiceItem> choiceItemList) { // 不管是Run Auto Skip Next总有渲染效果
+        public void ChoiceCreate(List<ChoiceItem> choiceItemList) { // 不管是Run Auto Skip 总有渲染效果
             if (choiceItemList == null || choiceItemList.Count == 0) {
                 throw new System.Exception("StageRenderManager ChoiceCreate");
             }
             this.choiceItemList = choiceItemList;
-            // Do something
+
             int count = choiceItemList.Count;
             // 得到各个选项的文本
             // 不能选择的用不能选的图片渲染，能选的检查mark 是否有已经选过的，选过的用别的选项图片渲染
-            // 给每个选项添加回调函数 要有mark和script信息，还要返回到LastState,还要处理choiceItemList
+            // 给每个选项添加回调函数 要有mark和script信息
+            choiceList.Clear();
+            choiceList.Add(choice0);
+            choiceList.Add(choice1);
+            if (count >= 3) {
+                choiceList.Add(choice2);
+                if (count >= 4) {
+                    choiceList.Add(choice3);
+                    if (count > 4) {
+                        throw new System.Exception("Only 4 choices!");
+                    }
+                }
+            }
+            for (int i = 0; i < choiceList.Count; i++) {
+                ChoiceItem choiceItem = choiceItemList[i];
+                string dlIndex = choiceItem.DLIndex;
+                bool canBeSelected = choiceItem.CanBeSelected;
+                string choiceContext = resourceManager.Get<string>(dlIndex);
+                GameObject choice = choiceList[i];
+                choice.SetActive(true);
+                if (count <= 3) {
+                    if (i == 0)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_0of23, constData.ChoicePosY_0of23, 0f);
+                    else if (i == 1)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_1of23, constData.ChoicePosY_1of23, 0f);
+                    else if (i == 2)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_2of23, constData.ChoicePosY_2of23, 0f);
+                } else if (count == 4) {
+                    if (i == 0)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_0of4, constData.ChoicePosY_0of4, 0f);
+                    else if (i == 1)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_1of4, constData.ChoicePosY_1of4, 0f);
+                    else if (i == 2)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_2of4, constData.ChoicePosY_2of4, 0f);
+                    else if (i == 3)
+                        choice.transform.position = new Vector3(constData.ChoicePosX_3of4, constData.ChoicePosY_3of4, 0f);
+                }
+                UIButton uiButton = choice.GetComponent<UIButton>();
+                UILabel uiLabel = choice.GetComponentInChildren<UILabel>();
+                UIEventListener listener = UIEventListener.Get(choice);
+
+                uiLabel.text = choiceContext; // 文本
+                if (canBeSelected) { // 颜色 和 点击事件
+                    uiButton.hover = uiButton.pressed;
+                    listener.onClick += OnChoiceButtonClick;
+                } else {
+                    uiButton.hover = uiButton.disabledColor;
+                }
+            }
+        }
+
+        private void OnChoiceButtonClick(GameObject go) { // 不知道怎么编能更好
+            string name = go.name;
+            int number = int.Parse(name[6].ToString());
+            ChoiceItem choiceItem = choiceItemList[number];
+            choosenDLIndex = choiceItem.DLIndex;
+            string mark = choiceItem.Mark;
+            string scriptContext = choiceItem.OnSelectedScirptContext;
+            PachiGrimoire.I.MarkManager.MarkStorySet(mark);
+            PachiGrimoire.I.MarkManager.MarkPlayerSet(mark);
+            PachiGrimoire.I.ScriptManager.LoadScriptContext(scriptContext);
+
+            OnChoiceButtonClickHelper();
+        }
+
+        private void OnChoiceButtonClickHelper() {
+            for (int i = 0; i < choiceList.Count; i++) { // 还原Choice Gameobjects 状态
+                GameObject go = choiceList[i];
+                UIButton button = go.GetComponent<UIButton>();
+                button.onClick = null;
+                UITexture texture = go.GetComponent<UITexture>();
+                UILabel label = go.GetComponentInChildren<UILabel>();
+                Tweener tweener = DoTextureAlpha(texture, 1f, 0f).OnComplete(() => {
+                    button.hover = button.pressed;
+                    label.text = "";
+                    texture.alpha = 1f;
+                    go.SetActive(false);
+                });
+                JoinTweenAniamte(tweener);
+            }
+            BaseState lastState = stateMachine.LastState;
+
+            sequenceAnimate.OnComplete(() => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
+                choiceItemList.Clear();
+                choiceList.Clear();
+                BacklogItem backlogItem = new BacklogItem(null, choosenDLIndex, null, "Choice"); // 选项的backlog name是 Choice
+                PachiGrimoire.I.BacklogManager.Push(backlogItem);
+                stateMachine.TransferStateTo(stateMachine.LastState);
+            });
         }
 
         #endregion

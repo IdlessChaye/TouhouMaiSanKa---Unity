@@ -44,8 +44,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     break;
                 }
             }
-            
+        }
 
+        public void SetLastState(string lastStateName) {
+            for (int i = 0; i < stateArray.Length; i++) {
+                BaseState state = stateArray[i];
+                if (state.StateName.Equals(lastStateName)) {
+                    LastState = state;
+                    break;
+                }
+            }
         }
     }
 

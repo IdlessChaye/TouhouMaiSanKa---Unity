@@ -18,19 +18,22 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             StateMachineManager stateMachine = PachiGrimoire.I.StateMachine;
             stateMachine.TransferStateTo(ChoiceWaitState.Instance);
+            BaseState lastState = stateMachine.LastState;
+            if(lastState == RunNextState.Instance) {
+                stateMachine.SetLastState(RunWaitState.Instance.StateName);
+            }
 
             List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
             string mark;
             string dlIndex;
             bool canBeSelected;
             string onSelectedScirptContext;
-            int number = 0;
             for (int i = 0; i < paraList.Count; i += 4) {
                 mark = paraList[i];
                 dlIndex = paraList[i + 1];
                 canBeSelected = bool.Parse(paraList[i + 2]);
                 onSelectedScirptContext = paraList[i + 3];
-                ChoiceItem choiceItem = new ChoiceItem(mark, dlIndex, canBeSelected, onSelectedScirptContext,number++);
+                ChoiceItem choiceItem = new ChoiceItem(mark, dlIndex, canBeSelected, onSelectedScirptContext);
                 choiceItemList.Add(choiceItem);
             }
             StageRenderManager.I.ChoiceCreate(choiceItemList);

@@ -427,7 +427,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519753139}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ae764e971d2d044286c838f9fd94908, type: 3}
   m_Name: 
@@ -942,7 +942,7 @@ Transform:
   m_GameObject: {fileID: 2019584757}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0012150669, y: 0.0012150669, z: 0.0012150669}
+  m_LocalScale: {x: 0.0027777778, y: 0.0027777778, z: 0.0027777778}
   m_Children:
   - {fileID: 267377151}
   - {fileID: 1598523587}
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3005
+  startingRenderQueue: 3007
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -1051,26 +1051,6 @@ PrefabInstance:
       propertyPath: t
       value: 
       objectReference: {fileID: 1598523586}
-    - target: {fileID: 2744480891444656698, guid: bd1e38ec5b38e74489919f1ac7d2617e,
-        type: 3}
-      propertyPath: mWidth
-      value: 135
-      objectReference: {fileID: 0}
-    - target: {fileID: 2744480891444656698, guid: bd1e38ec5b38e74489919f1ac7d2617e,
-        type: 3}
-      propertyPath: aspectRatio
-      value: 0.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8812937805109576180, guid: bd1e38ec5b38e74489919f1ac7d2617e,
-        type: 3}
-      propertyPath: mWidth
-      value: 135
-      objectReference: {fileID: 0}
-    - target: {fileID: 8812937805109576180, guid: bd1e38ec5b38e74489919f1ac7d2617e,
-        type: 3}
-      propertyPath: aspectRatio
-      value: 0.9
-      objectReference: {fileID: 0}
     - target: {fileID: 8812937806374715658, guid: bd1e38ec5b38e74489919f1ac7d2617e,
         type: 3}
       propertyPath: m_LocalPosition.x
