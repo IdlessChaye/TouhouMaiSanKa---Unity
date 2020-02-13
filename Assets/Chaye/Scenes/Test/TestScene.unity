@@ -275,7 +275,7 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 1026
+  mWidth: 1008
   mHeight: 44
   mDepth: 1
   mMat: {fileID: 0}

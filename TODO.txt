@@ -1,7 +1,8 @@
 AVGEngine
-为了让图片能够被DXT5压缩，更改sprite大小
-Save/Load System
-Choice System
-UI Design
-Document
 Json中记录的变量名取短点
+为了让图片能够被DXT5压缩，更改sprite大小
+Document
+
+Save/Load System
+UI Design
+Script Design

@@ -13,7 +13,7 @@ public class TestChoiceButton : MonoBehaviour
     {
         sequence = DOTween.Sequence();
         // 得到各个选项的文本
-        // 不能选择的用不能选的图片渲染，能选的检查mark 是否有已经选过的，选过的用别的选项图片渲染
+        // 不能选择的用不能选的图片渲染，能选的检查mark 是否有已经选过的不开Box
         UIEventListener.Get(uiTexture.gameObject).needsActiveCollider = false;
         UIEventListener.Get(uiTexture.gameObject).onHover += OnMyHover;
         UIEventListener.Get(uiTexture.gameObject).onClick += OnMyClick;

@@ -44,6 +44,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Animate
         private Sequence sequenceAnimate;
+        private Sequence sequenceUI;
         private System.Action actionAnimate;
         #endregion
 
@@ -73,8 +74,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Console
         public GameObject console;
         private bool isConsoleShow;
+        #endregion
+
+        #region Choice
         private string choosenDLIndex;
         private List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
+        #endregion
+
+        #region Backlog
+
+        private BacklogRenderManager backlogRenderManager;
+        private bool isBacklogShow;
+
         #endregion
 
 
@@ -84,9 +95,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             config = pachiGrimoire.ConfigManager.Config;
             stateMachine = pachiGrimoire.StateMachine;
             resourceManager = pachiGrimoire.ResourceManager;
+            backlogRenderManager = GetComponent<BacklogRenderManager>();
+
             messageSpeedLowest = constData.MessageSpeedLowest;
             messageSpeedHighest = constData.MessageSpeedHighest;
-
             textContextContainer.text = "";
             textNameContainer.text = "";
             nameLabel.text = "";
@@ -100,6 +112,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Input
         private void FixedUpdate() {
+            if (isBacklogShow) { 
+                return;
+            }
             if (Input.GetMouseButtonDown(0)) {
                 OnMouseLeftDown();
             } else if (Input.GetMouseButtonDown(1)) {
@@ -142,7 +157,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         private void OnMouseScrollWheelZoomIn() {
-
+            BaseState state = stateMachine.CurrentState;
+            if(state == RunAnimateState.Instance) {
+                sequenceAnimate.Pause();
+                BacklogShow();
+            } else if(state == RunWaitState.Instance) {
+                BacklogShow();
+            }
         }
         private void OnKeyConfirmDown() {
             BaseState state = stateMachine.CurrentState;
@@ -174,6 +195,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void StateQuitAnimate() {
             stateMachine.TransferStateTo(stateMachine.LastState);
         }
+
+
         #endregion
 
 
@@ -535,6 +558,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
+        #region Backlog
+        public void BacklogShow() {
+            isBacklogShow = true;
+            backlogRenderManager.BacklogShow();
+        }
+
+        public void BacklogHide() {
+            isBacklogShow = false;
+        }
+
+        #endregion
 
 
         public void LoadStoryData() {
