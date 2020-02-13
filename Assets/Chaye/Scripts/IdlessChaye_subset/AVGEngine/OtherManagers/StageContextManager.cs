@@ -136,6 +136,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             markManager.LoadStoryRecord(sr.markStoryList, sr.varStoryNameList, sr.varStoryValueList);
             backlogManager.LoadStoryRecord(sr.backlogItemList, sr.head, sr.capacity, sr.count);
             //renderManager.LoadStoryData 负责Choice Backlog Image Text
+            renderManager.LoadStoryRecord(sr);
         }
 
 

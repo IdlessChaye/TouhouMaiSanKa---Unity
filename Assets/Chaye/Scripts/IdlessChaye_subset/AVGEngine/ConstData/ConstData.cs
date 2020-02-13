@@ -105,6 +105,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region RenderSystem
 
         public int BacklogCapacity = 100;
+        public string ChoiceBacklogItemName = "Choice";
 
         public float MessageSpeedLowest = 4;
         public float MessageSpeedHighest = 30;

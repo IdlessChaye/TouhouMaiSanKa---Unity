@@ -38,7 +38,5 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public int capacity;
         public int count;
         public int head;
-
-
     }
 }

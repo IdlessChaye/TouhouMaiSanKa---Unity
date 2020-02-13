@@ -38,8 +38,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager = PachiGrimoire.I.ResourceManager;
             musicManager = PachiGrimoire.I.MusicManager;
             renderManager = GetComponent<StageRenderManager>();
-
-            
         }
 
         #region Input
@@ -47,7 +45,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void FixedUpdate() {
             if (!isWorking)
                 return;
-            if(!isBacklogShow)
+            if (!isBacklogShow)
                 return;
             if (Input.GetMouseButtonDown(0)) {
                 OnMouseLeftDown();
@@ -70,18 +68,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             BacklogHide();
         }
         private void OnMouseScrollWheelZoomOut() {
-            BacklogScrollUp(1);
+            BacklogScrollDown(1);
         }
 
         private void OnMouseScrollWheelZoomIn() {
-            BacklogScrollDown(1);
+            BacklogScrollUp(1);
         }
 
         private void OnKeyConfirmDown() {
 
         }
 
-#endregion
+        #endregion
 
 
         private void JoinTween(Tweener tweener) {
@@ -138,9 +136,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void LoadBacklogData() {
             backlogItemList.Clear();
             int index = head;
-            string name = null, contextIndex=null, viIndex = null;
+            string name = null, contextIndex = null, viIndex = null;
             string context = null;
             BacklogItem item = null;
+
             if (index >= count) {
                 voice0.SetActive(false);
                 name0.text = "";
@@ -157,8 +156,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voice0.SetActive(false);
             else
                 voice0.SetActive(true);
-            name0.text = name == null ? "" : name;
-            context0.text = context;
+            name0.text = name == null || name.Equals(constData.ChoiceBacklogItemName) ? "" : name;
+            if (name != null && name.Equals(constData.ChoiceBacklogItemName)) {
+                context0.text = "<color=magenta>" + context + "</color>";
+            } else {
+                context0.text = context;
+            }
 
             index++;
             if (index >= count) {
@@ -177,8 +180,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voice1.SetActive(false);
             else
                 voice1.SetActive(true);
-            name1.text = name == null ? "" : name;
-            context1.text = context;
+            name1.text = name == null || name.Equals(constData.ChoiceBacklogItemName) ? "" : name;
+            if (name != null && name.Equals(constData.ChoiceBacklogItemName)) {
+                context1.text = "<color=magenta>" + context + "</color>";
+            } else {
+                context1.text = context;
+            }
 
             index++;
             if (index >= count) {
@@ -197,8 +204,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voice2.SetActive(false);
             else
                 voice2.SetActive(true);
-            name2.text = name == null ? "" : name;
-            context2.text = context;
+            name2.text = name == null || name.Equals(constData.ChoiceBacklogItemName) ? "" : name;
+            if (name != null && name.Equals(constData.ChoiceBacklogItemName)) {
+                context2.text = "<color=magenta>" + context + "</color>";
+            } else {
+                context2.text = context;
+            }
         }
 
 
@@ -216,7 +227,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void BacklogScrollDown(int amount) {
-            if(amount <= 0) {
+            if (amount <= 0) {
                 throw new System.Exception("BacklogRenderManager BacklogScrollDown");
             }
 

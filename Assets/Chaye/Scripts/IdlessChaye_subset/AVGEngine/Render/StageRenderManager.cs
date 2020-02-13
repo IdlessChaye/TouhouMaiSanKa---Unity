@@ -22,8 +22,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public string DialogContextIndex => dialogContextIndex;
         public string CharacterName => characterName;
         public string BackgroundImageIndex => backgroundImageIndex;
-        public Dictionary<string, KeyValuePair<string, UITexture>> FigureImageDict => figureImageDict;
         public string SmallFigureImageIndex => smallFigureImageIndex;
+        public Dictionary<string, KeyValuePair<string, UITexture>> FigureImageDict => figureImageDict;
         public List<ChoiceItem> ChoiceItemList => choiceItemList;
 
 
@@ -112,7 +112,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Input
         private void FixedUpdate() {
-            if (isBacklogShow) { 
+            if (isBacklogShow) {
                 return;
             }
             if (Input.GetMouseButtonDown(0)) {
@@ -158,10 +158,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
         private void OnMouseScrollWheelZoomIn() {
             BaseState state = stateMachine.CurrentState;
-            if(state == RunAnimateState.Instance) {
+            if (state == RunAnimateState.Instance) {
                 sequenceAnimate.Pause();
                 BacklogShow();
-            } else if(state == RunWaitState.Instance) {
+            } else if (state == RunWaitState.Instance) {
                 BacklogShow();
             }
         }
@@ -375,6 +375,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         }
 
+        private void FigureImageClear() {
+            foreach(var pair in figureImageDict.Values) {
+                UITexture texture = pair.Value;
+                GameObject go = texture.gameObject;
+                texture.mainTexture = null;
+                Destroy(go);
+            }
+            figureImageDict.Clear();
+        }
 
         public void SmallFigureImageChange(string index, bool hasEffect = true) {
             if (string.IsNullOrEmpty(index)) {
@@ -549,7 +558,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             sequenceAnimate.OnComplete(() => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
                 choiceItemList.Clear();
                 choiceList.Clear();
-                BacklogItem backlogItem = new BacklogItem(null, choosenDLIndex, null, "Choice"); // 选项的backlog name是 Choice
+                BacklogItem backlogItem = new BacklogItem(null, choosenDLIndex, null, constData.ChoiceBacklogItemName); // 选项的backlog name是 Choice
                 PachiGrimoire.I.BacklogManager.Push(backlogItem);
                 stateMachine.TransferStateTo(stateMachine.LastState);
             });
@@ -571,8 +580,84 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
-        public void LoadStoryData() {
+        public void LoadStoryRecord(StoryRecord sr) {
+             dialogContextIndex = sr.dialogContextIndex;
+             characterName = sr.characterName;
+             backgroundImageIndex = sr.backgroundImageIndex;
+             smallFigureImageIndex = sr.smallFigureImageIndex;
+            List<string> figureImageKeyList = new List<string>(sr.figureImageKeyList);
+            List<string> figureImageFIIndexList = new List<string>(sr.figureImageFIIndexList);
+            List<KeyValuePair<float, float>> figureImagePosList = new List<KeyValuePair<float, float>>(sr.figureImagePosList);
+            List<KeyValuePair<float, float>> figureImageScaleList = new List<KeyValuePair<float, float>>(sr.figureImageScaleList);
+            choiceItemList = new List<ChoiceItem>(sr.choiceItemList);
 
+            if(dialogContextIndex != null) { 
+                string context = resourceManager.Get<string>(dialogContextIndex);
+                contextLabel.text = context;
+            } else {
+                contextLabel.text = "";
+            }
+
+            nameLabel.text = characterName == null ? "" : characterName;
+
+            if (backgroundImageIndex != null) {
+                Texture2D backgroundTexture2D = resourceManager.Get<Texture2D>(backgroundImageIndex);
+                backgroundUITextureTop.mainTexture = backgroundTexture2D;
+                backgroundUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
+                backgroundUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
+                backgroundUITextureTop.alpha = 1f;
+            } else {
+                backgroundUITextureTop.mainTexture = null;
+            }
+            backgroundUITexture.mainTexture = null;
+            backgroundUITexture.width = ConstData.TEXTURE2D_WIDTH;
+            backgroundUITexture.height = ConstData.TEXTURE2D_HEIGHT;
+            backgroundUITexture.alpha = 1f;
+
+            if(smallFigureImageIndex != null) { 
+                Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(smallFigureImageIndex);
+                smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
+                smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
+                smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
+                smallFigureImageUITextureTop.alpha = 1f;
+            } else {
+                smallFigureImageUITextureTop.mainTexture = null;
+            }
+            smallFigureImageUITexture.mainTexture = null;
+            smallFigureImageUITexture.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
+            smallFigureImageUITexture.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
+            smallFigureImageUITexture.alpha = 1f;
+
+            FigureImageClear();
+            if(figureImageKeyList.Count != 0) { 
+                for (int i = 0; i < figureImageKeyList.Count;i++) {
+                    string uiKey = figureImageKeyList[i];
+                    string fiIndex = figureImageFIIndexList[i];
+                    float scale_x = figureImageScaleList[i].Key;
+                    float scale_y = figureImageScaleList[i].Value;
+                    float pos_x = figureImagePosList[i].Key;
+                    float pos_y = figureImagePosList[i].Value;
+                    Texture2D texture2D = resourceManager.Get<Texture2D>(fiIndex);
+                    float width = texture2D.width;
+                    float height = texture2D.height;
+
+                    GameObject go = new GameObject(uiKey);
+                    UITexture uiTexture = go.AddComponent<UITexture>();
+                    uiTexture.mainTexture = texture2D;
+                    uiTexture.width = (int)(width * scale_x);
+                    uiTexture.height = (int)(height * scale_y);
+                    go.transform.position = new Vector3(pos_x, pos_y, 0);
+                    go.transform.SetParent(uiRoot.transform, false);
+                    KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
+                    figureImageDict.Add(uiKey, pair);
+                }
+            }
+
+            if(choiceItemList.Count != 0) {
+                ChoiceCreate(choiceItemList);
+            }
         }
+
+
     }
 }
