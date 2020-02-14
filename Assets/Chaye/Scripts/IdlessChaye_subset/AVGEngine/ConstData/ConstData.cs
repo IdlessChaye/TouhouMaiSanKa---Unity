@@ -110,6 +110,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public float MessageSpeedLowest = 4;
         public float MessageSpeedHighest = 30;
+        public float AutoMessageSpeedLowest = 4.5f;
+        public float AutoMessageSpeedHighest = 0.5f;
 
         public float ChoiceWidth = 900;
         public float ChoiceHeight = 60;

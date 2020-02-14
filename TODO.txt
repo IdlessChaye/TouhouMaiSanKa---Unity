@@ -3,6 +3,7 @@ Json中记录的变量名取短点
 为了让图片能够被DXT5压缩，更改sprite大小
 Document
 
+明确状态系统过渡流程
 实现Config系统各个参数功能
 确定剧本人物，完成CharacterNameList和VoiceVolumeValueList的设定
 完成主界面、LoadSave界面、角色语音设置界面的功能

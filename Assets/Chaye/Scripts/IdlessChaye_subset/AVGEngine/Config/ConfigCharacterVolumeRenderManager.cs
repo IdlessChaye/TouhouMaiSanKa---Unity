@@ -17,7 +17,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private ConstData constData;
         private ConfigRenderManager configRenderManager;
         private bool isWorking;
-        private bool isCharacterVoiceConfigCharacterShow;
 
 
         private void Awake() {
@@ -33,9 +32,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Input
 
         private void FixedUpdate() {
-            if (!isWorking)
+            if (!isConfigCharacterShow)
                 return;
-            if (!isCharacterVoiceConfigCharacterShow)
+            // interrupt animation
+            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
+                CompleteAnimate();
+            }
+            if (!isWorking)
                 return;
             if (Input.GetMouseButtonDown(0)) {
                 OnMouseLeftDown();
@@ -81,6 +84,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             sequence.Join(tweener);
         }
 
+        public void CompleteAnimate() {
+            sequence.Complete();
+        }
 
         private Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 0.5f) {
             if (uiPanel == null) {
@@ -95,6 +101,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void ConfigCharacterShow() {
+            isConfigCharacterShow = true;
             isWorking = false;
             configCharacterRoot.SetActive(true);
             panel.alpha = 0f;
@@ -114,6 +121,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             JoinTween(tweener);
 
             sequence.OnComplete(() => {
+                isConfigCharacterShow = false;
                 configCharacterRoot.SetActive(false);
                 configRenderManager.ConfigCharacterHide();
             });

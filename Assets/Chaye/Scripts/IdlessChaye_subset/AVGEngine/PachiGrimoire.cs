@@ -74,6 +74,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private MusicManager musicManager;
         #endregion
 
+        private bool isFirstInRunAutoState;
+        private float autoWaitTime;
+        private float autoStartTime;
+
 
 
         IEnumerator TestGetBgImage() {
@@ -117,11 +121,28 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private void LateUpdate() {
 
-
             #region State
+
+
             BaseState state = stateMachine.CurrentState;
+            if(state != RunAutoState.Instance) {
+                isFirstInRunAutoState = false;
+            }
+
             if (state == RunScriptState.Instance) {
                 scriptManager.NextSentence();
+            } else if(state == RunAutoState.Instance) {
+                if(isFirstInRunAutoState == false) {
+                    isFirstInRunAutoState = true;
+                    float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
+                    float highest = constData.AutoMessageSpeedHighest;
+                    float lowest = constData.AutoMessageSpeedLowest;
+                    autoWaitTime = (highest - lowest) * autoMessageSpeed + lowest;
+                    autoStartTime = Time.time;
+                }
+                if(Time.time - autoStartTime >= autoWaitTime) {
+                    scriptManager.NextSentence();
+                }
             }
             #endregion
         }
