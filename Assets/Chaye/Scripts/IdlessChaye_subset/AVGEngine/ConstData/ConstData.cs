@@ -94,6 +94,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public static int TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH = 135;
         public static int TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT = 150;
         #endregion
+        
 
         #region InputSystem
 
@@ -129,6 +130,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public float ChoicePosY_2of4 = 60;
         public float ChoicePosX_3of4 = 130;
         public float ChoicePosY_3of4 = -17;
+
+
+        // Config Default Data
+        public float DefaultSystemVolume; 
+        public float DefaultBGMVolume;
+        public float DefaultSEVolume; 
+        public float DefaultMessageSpeed; 
+        public float DefaultAutoMessageSpeed; 
+        public bool DefaultIsReadSkipOrAllSkipNot; 
+        public float DefaultVoiceVolume; 
+        public List<float> DefaultVoiceVolumeValueList = new List<float>(); 
+        public bool DefaultIsPlayingVoiceAfterChangeLine; 
+        public bool DefaultHasAnimationEffect; 
+        public float DefaultAlphaOfConsole; 
 
         #endregion
     }

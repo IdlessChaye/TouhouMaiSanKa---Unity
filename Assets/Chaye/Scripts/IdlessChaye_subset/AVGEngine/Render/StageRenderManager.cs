@@ -48,7 +48,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private System.Action actionAnimate;
         #endregion
 
-
         #region Text
         public Text textContextContainer;
         public Text textNameContainer;
@@ -88,6 +87,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #endregion
 
+        #region Config
+
+        private ConfigRenderManager configRenderManager;
+        private bool isConfigShow;
+
+        #endregion
+
 
         private void Initialize() {
             pachiGrimoire = PachiGrimoire.I;
@@ -96,6 +102,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             stateMachine = pachiGrimoire.StateMachine;
             resourceManager = pachiGrimoire.ResourceManager;
             backlogRenderManager = GetComponent<BacklogRenderManager>();
+            configRenderManager = GetComponent<ConfigRenderManager>();
 
             messageSpeedLowest = constData.MessageSpeedLowest;
             messageSpeedHighest = constData.MessageSpeedHighest;
@@ -107,12 +114,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             backgroundUITextureTop.mainTexture = null;
             smallFigureImageUITexture.mainTexture = null;
             smallFigureImageUITextureTop.mainTexture = null;
+            choice0.SetActive(false);
+            choice1.SetActive(false);
+            choice2.SetActive(false);
+            choice3.SetActive(false);
         }
 
 
         #region Input
         private void FixedUpdate() {
-            if (isBacklogShow) {
+            if (isBacklogShow || isConfigShow) {
                 return;
             }
             if (Input.GetMouseButtonDown(0)) {
@@ -376,7 +387,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void FigureImageClear() {
-            foreach(var pair in figureImageDict.Values) {
+            foreach (var pair in figureImageDict.Values) {
                 UITexture texture = pair.Value;
                 GameObject go = texture.gameObject;
                 texture.mainTexture = null;
@@ -580,18 +591,30 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
+        #region Config
+        public void ConfigShow() {
+            isConfigShow = true;
+            configRenderManager.ConfigShow();
+        }
+
+        public void ConfigHide() {
+            isConfigShow = false;
+        }
+        #endregion
+
+
         public void LoadStoryRecord(StoryRecord sr) {
-             dialogContextIndex = sr.dialogContextIndex;
-             characterName = sr.characterName;
-             backgroundImageIndex = sr.backgroundImageIndex;
-             smallFigureImageIndex = sr.smallFigureImageIndex;
+            dialogContextIndex = sr.dialogContextIndex;
+            characterName = sr.characterName;
+            backgroundImageIndex = sr.backgroundImageIndex;
+            smallFigureImageIndex = sr.smallFigureImageIndex;
             List<string> figureImageKeyList = new List<string>(sr.figureImageKeyList);
             List<string> figureImageFIIndexList = new List<string>(sr.figureImageFIIndexList);
             List<KeyValuePair<float, float>> figureImagePosList = new List<KeyValuePair<float, float>>(sr.figureImagePosList);
             List<KeyValuePair<float, float>> figureImageScaleList = new List<KeyValuePair<float, float>>(sr.figureImageScaleList);
             choiceItemList = new List<ChoiceItem>(sr.choiceItemList);
 
-            if(dialogContextIndex != null) { 
+            if (dialogContextIndex != null) {
                 string context = resourceManager.Get<string>(dialogContextIndex);
                 contextLabel.text = context;
             } else {
@@ -614,7 +637,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             backgroundUITexture.height = ConstData.TEXTURE2D_HEIGHT;
             backgroundUITexture.alpha = 1f;
 
-            if(smallFigureImageIndex != null) { 
+            if (smallFigureImageIndex != null) {
                 Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(smallFigureImageIndex);
                 smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
                 smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
@@ -629,8 +652,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             smallFigureImageUITexture.alpha = 1f;
 
             FigureImageClear();
-            if(figureImageKeyList.Count != 0) { 
-                for (int i = 0; i < figureImageKeyList.Count;i++) {
+            if (figureImageKeyList.Count != 0) {
+                for (int i = 0; i < figureImageKeyList.Count; i++) {
                     string uiKey = figureImageKeyList[i];
                     string fiIndex = figureImageFIIndexList[i];
                     float scale_x = figureImageScaleList[i].Key;
@@ -653,7 +676,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
             }
 
-            if(choiceItemList.Count != 0) {
+            if (choiceItemList.Count != 0) {
                 ChoiceCreate(choiceItemList);
             }
         }

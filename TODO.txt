@@ -3,6 +3,6 @@ Json中记录的变量名取短点
 为了让图片能够被DXT5压缩，更改sprite大小
 Document
 
-Save/Load System
+设置Config系统
 UI Design
 Script Design

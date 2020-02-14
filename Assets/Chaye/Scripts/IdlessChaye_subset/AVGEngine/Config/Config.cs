@@ -5,24 +5,26 @@ using System;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     [Serializable]
     public class Config {
-        public string Language;
-        public string PlayerIdentifier;
+        public string Language; // Set by system
 
-        public List<string> CharacterNameList;
+        public List<string> CharacterNameList; // Default
 
-        public float SystemVolume;
-        public float BGMVolume;
-        public float VoiceVolume;
-        public List<float> VoiceVolumeValueList;
+        public float SystemVolume; // Slider
+        public float BGMVolume; // Slider
+        public float SEVolume; // Slider
 
-        public bool IsPlayingVoiceAfterChangeLine;
+        public float MessageSpeed; // Slider
+        public float AutoMessageSpeed; // Slider
+        public bool IsReadSkipOrAllSkipNot; // Toggle
+        
 
-        public float MessageSpeed;
-        public float AutoMessageSpeed;
-        public bool IsReadSkipOrAllSkipNot;
+        public float VoiceVolume; // Slider
+        public List<float> VoiceVolumeValueList; // Sliders
+        public bool IsPlayingVoiceAfterChangeLine; // Toggle
 
-        public bool HasAnimationEffect;
+        public bool HasAnimationEffect; // Toggle
 
-        public float AlphaOfConsole;
+        public float AlphaOfConsole; // Slider
+
     }
 }

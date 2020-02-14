@@ -424,7 +424,7 @@ public class UIDrawCall : MonoBehaviour
 			}
 			else if (mClipCount != 0)
 			{
-				//Debug.LogError(shaderName + " shader doesn't have a clipped shader version for " + mClipCount + " clip regions");
+				Debug.LogError(shaderName + " shader doesn't have a clipped shader version for " + mClipCount + " clip regions");
 			}
 		}
 		else

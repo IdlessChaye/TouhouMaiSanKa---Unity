@@ -111,9 +111,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             storyRecord.count = backlogManager.Count;
             storyRecord.head = backlogManager.Head;
 
-
-
-
             recordManager.SaveStoryRecord(indexOfRecord, storyRecord);
         }
 

@@ -110,7 +110,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             //StartCoroutine(TestGetBgImage());
 
             if (isDebugMode) {
-                text.text = configManager.Config.PlayerIdentifier;
+                text.text = configManager.Config.Language;
                 //text.text = playerRecordManager.PlayerRecord.markPlayerList[0];
             }
         }
