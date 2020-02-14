@@ -29,9 +29,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private Config config;
         private ConstData constData;
         private StageRenderManager renderManager;
-        private ResourceManager resourceManager;
+        private ConfigCharacterVolumeRenderManager configCharacterVolumeRenderManager;
         private bool isWorking;
-        private bool isCharacterVoicePanelShow;
+        private bool isConfigCharacterShow;
 
 
         private void Awake() {
@@ -40,8 +40,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             configManager = PachiGrimoire.I.ConfigManager;
             config = configManager.Config;
             constData = PachiGrimoire.I.constData;
-            resourceManager = PachiGrimoire.I.ResourceManager;
             renderManager = GetComponent<StageRenderManager>();
+            configCharacterVolumeRenderManager = GetComponent<ConfigCharacterVolumeRenderManager>();
         }
 
         #region Input
@@ -51,7 +51,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return;
             if (!isConfigShow)
                 return;
-            if (isCharacterVoicePanelShow)
+            if (isConfigCharacterShow)
                 return;
             if (Input.GetMouseButtonDown(0)) {
                 OnMouseLeftDown();
@@ -123,6 +123,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void ConfigHide() {
+            configManager.SaveConfigContext();
             isWorking = false;
             panel.alpha = 1f;
             Tweener tweener = DoPanelAlpha(panel, 1f, 0f);
@@ -167,12 +168,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             config.MessageSpeed = constData.DefaultMessageSpeed;
             config.AutoMessageSpeed = constData.DefaultAutoMessageSpeed;
             config.IsReadSkipOrAllSkipNot = constData.DefaultIsPlayingVoiceAfterChangeLine;
-            config.VoiceVolumeValueList = constData.DefaultVoiceVolumeValueList;
             config.VoiceVolume = constData.DefaultVoiceVolume;
             config.IsPlayingVoiceAfterChangeLine = constData.DefaultIsPlayingVoiceAfterChangeLine;
             config.HasAnimationEffect = constData.DefaultHasAnimationEffect;
             config.AlphaOfConsole = constData.DefaultAlphaOfConsole;
             LoadConfigData();
+            configManager.SaveConfigContext();
         }
 
 
@@ -229,7 +230,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnPressedButtonVoiceVolumeList() {
-            isCharacterVoicePanelShow = true;
+            ConfigCharacterShow();
+        }
+        #endregion
+
+
+        #region CharacterVoiceConfig
+        public void ConfigCharacterShow() {
+            configManager.SaveConfigContext();
+            isConfigCharacterShow = true;
+            configCharacterVolumeRenderManager.ConfigCharacterShow();
+        }
+
+        public void ConfigCharacterHide() {
+            isConfigCharacterShow = false;
         }
         #endregion
 

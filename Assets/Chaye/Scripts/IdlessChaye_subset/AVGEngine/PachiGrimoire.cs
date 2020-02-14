@@ -126,7 +126,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             #endregion
         }
 
+        //public void OnPressedButtonStartGame() {
 
+        //}
+
+        //public void OnPressedButtonLoadGame() {
+
+        //}
 
 
 
