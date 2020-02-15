@@ -4,18 +4,20 @@ using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class StateMachineManager {
+
         public BaseState LastState { get; private set; }
         public BaseState CurrentState { get; private set; }
+        public StateBuff StateBuff { get; private set; }
 
         private readonly BaseState[] stateArray = {
             VoidState.Instance , InitState.Instance, IdleState.Instance,
-            RunScriptState.Instance, RunWaitState.Instance,RunSkipState.Instance,
-            RunAutoState.Instance,RunNextState.Instance,RunAnimateState.Instance,
-            SleepState.Instance,ChoiceWaitState.Instance
+            RunScriptState.Instance, RunWaitState.Instance ,RunAnimateState.Instance,
+            ChoiceWaitState.Instance,SleepState.Instance
         };
 
         public StateMachineManager(BaseState currentState) {
             this.CurrentState = currentState;
+            StateBuff = StateBuff.Normal;
         }
 
         public void TransferStateTo(BaseState newState) {
@@ -29,7 +31,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public void LoadStoryRecord(string currentStateName,string lastStateName) {
+        public void SetStateBuff(StateBuff stateBuff) {
+            StateBuff = stateBuff;
+        }
+
+        public void LoadStoryRecord(string currentStateName,string lastStateName, StateBuff stateBuff) {
+            StateBuff = stateBuff;
             for(int i = 0;i<stateArray.Length;i++) {
                 BaseState state = stateArray[i];
                 if(state.StateName.Equals(currentStateName)) {

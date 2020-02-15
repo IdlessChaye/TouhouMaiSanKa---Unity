@@ -18,9 +18,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             StateMachineManager stateMachine = PachiGrimoire.I.StateMachine;
             stateMachine.TransferStateTo(ChoiceWaitState.Instance);
-            BaseState lastState = stateMachine.LastState;
-            if(lastState == RunNextState.Instance) {
-                stateMachine.SetLastState(RunWaitState.Instance.StateName);
+            StateBuff stateBuff = stateMachine.StateBuff;
+            if(stateBuff == StateBuff.Next) {
+                stateMachine.SetStateBuff(StateBuff.Normal);
             }
 
             List<ChoiceItem> choiceItemList = new List<ChoiceItem>();

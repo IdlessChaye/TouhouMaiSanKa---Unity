@@ -126,6 +126,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (isBacklogShow || isConfigShow) {
                 return;
             }
+
+            BaseState state = stateMachine.CurrentState;
+            if (state == SleepState.Instance) {
+                return;
+            }
+
+            StateBuff stateBuff = stateMachine.StateBuff; // Skip Animation
+            if(stateBuff == StateBuff.Skip) {
+                if(state == RunAnimateState.Instance) {
+                    CompleteAnimate();
+                }
+            }
+
             if (Input.GetMouseButtonDown(0)) {
                 OnMouseLeftDown();
             } else if (Input.GetMouseButtonDown(1)) {
@@ -141,39 +154,70 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private void OnMouseLeftDown() {
             BaseState state = stateMachine.CurrentState;
-            if (state == RunAnimateState.Instance) {
-                CompleteAnimate();
+            StateBuff buff = stateMachine.StateBuff;
+            if(buff == StateBuff.Normal) { 
+                if (state == RunAnimateState.Instance) {
+                    CompleteAnimate();
+                }
+            } else if(buff == StateBuff.Auto) {
+                stateMachine.SetStateBuff(StateBuff.Normal);
+            } else if(buff == StateBuff.Skip) {
+                stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
         private void OnMouseRightDown() {
             BaseState state = stateMachine.CurrentState;
-            if (state == RunWaitState.Instance) {
-                if (isConsoleShow) {
-                    ConsoleHide();
-                } else {
-                    ConsoleShow();
+            StateBuff buff = stateMachine.StateBuff;
+            if(buff == StateBuff.Normal) { 
+                if (state == RunWaitState.Instance) {
+                    if (isConsoleShow) {
+                        ConsoleHide();
+                    } else {
+                        ConsoleShow();
+                    }
+                } else if (state == ChoiceWaitState.Instance) {
+                    if (isConsoleShow) {
+                        ConsoleHide();
+                    } else {
+                        ConsoleShow();
+                    }
                 }
-            } else if (state == ChoiceWaitState.Instance) {
-                if (isConsoleShow) {
-                    ConsoleHide();
-                } else {
-                    ConsoleShow();
-                }
+            } else if(buff == StateBuff.Auto) {
+                stateMachine.SetStateBuff(StateBuff.Normal);
+            } else if(buff == StateBuff.Skip) {
+                stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
         private void OnMouseScrollWheelZoomOut() {
             BaseState state = stateMachine.CurrentState;
-            if (state == RunAnimateState.Instance) {
-                CompleteAnimate();
+            StateBuff buff = stateMachine.StateBuff;
+            if (buff == StateBuff.Normal) {
+                if (state == RunAnimateState.Instance) {
+                    CompleteAnimate();
+                }
+            } else if(buff == StateBuff.Auto) {
+                if (state == RunAnimateState.Instance) {
+                    CompleteAnimate();
+                }
             }
         }
         private void OnMouseScrollWheelZoomIn() {
             BaseState state = stateMachine.CurrentState;
-            if (state == RunAnimateState.Instance) {
-                sequenceAnimate.Pause();
-                BacklogShow();
-            } else if (state == RunWaitState.Instance) {
-                BacklogShow();
+            StateBuff buff = stateMachine.StateBuff;
+            if (buff == StateBuff.Normal) {
+                if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
+                    BacklogShow();
+                }
+            } else if(buff == StateBuff.Auto) {
+                if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
+                    stateMachine.SetStateBuff(StateBuff.Normal);
+                    BacklogShow();
+                }
+            } else if(buff==StateBuff.Skip) {
+                if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
+                    stateMachine.SetStateBuff(StateBuff.Normal);
+                    BacklogShow();
+                }
             }
         }
         private void OnKeyConfirmDown() {
@@ -200,11 +244,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void CompleteAnimate() {
-            sequenceAnimate.Complete();
+            sequenceAnimate?.Complete();
+        }
+
+        public void PauseAnimate() {
+            sequenceAnimate?.Pause();
+        }
+
+        public void PlayAnimate() {
+            sequenceAnimate?.Play();
         }
 
         private void StateQuitAnimate() {
-            stateMachine.TransferStateTo(stateMachine.LastState);
+            sequenceAnimate?.Kill();
+            stateMachine.TransferStateTo(RunScriptState.Instance);
         }
 
 
@@ -374,6 +427,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
                 actionAnimate += () => {
                     uiTexture.mainTexture = null;
+                    Destroy(uiTexture);
                     Destroy(go);
                 };
                 actionAnimate -= StateQuitAnimate;
@@ -381,15 +435,27 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             } else {
                 uiTexture.alpha = 0f;
                 uiTexture.mainTexture = null;
+                Destroy(uiTexture);
                 Destroy(go);
             }
 
         }
 
-        private void FigureImageClear() {
+        public void FigureImageClear(bool hasEffect = true) {
+            if(hasEffect) {
+                foreach(string key in figureImageDict.Keys) {
+                    FigureImageRemove(key);
+                }
+            } else {
+                FigureImageDataClear();
+            }
+        }
+
+        private void FigureImageDataClear() {
             foreach (var pair in figureImageDict.Values) {
                 UITexture texture = pair.Value;
                 GameObject go = texture.gameObject;
+                texture.alpha = 0f;
                 texture.mainTexture = null;
                 Destroy(go);
             }
@@ -566,13 +632,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             BaseState lastState = stateMachine.LastState;
 
-            sequenceAnimate.OnComplete(() => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
+            sequenceAnimate.OnComplete(()=>actionAnimate.Invoke());
+            actionAnimate += () => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
                 choiceItemList.Clear();
                 choiceList.Clear();
                 BacklogItem backlogItem = new BacklogItem(null, choosenDLIndex, null, constData.ChoiceBacklogItemName); // 选项的backlog name是 Choice
                 PachiGrimoire.I.BacklogManager.Push(backlogItem);
-                stateMachine.TransferStateTo(stateMachine.LastState);
-            });
+            };
+            actionAnimate -= StateQuitAnimate;
+            actionAnimate += StateQuitAnimate;
         }
 
         #endregion
@@ -580,12 +648,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Backlog
         public void BacklogShow() {
+            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
+            PauseAnimate();
             isBacklogShow = true;
             backlogRenderManager.BacklogShow();
         }
 
         public void BacklogHide() {
             isBacklogShow = false;
+            PlayAnimate();
+            stateMachine.TransferStateTo(stateMachine.LastState); // Sleep Back
         }
 
         #endregion
@@ -593,12 +665,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Config
         public void ConfigShow() {
+            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
+            PauseAnimate();
             isConfigShow = true;
             configRenderManager.ConfigShow();
         }
 
         public void ConfigHide() {
             isConfigShow = false;
+            PlayAnimate();
+            stateMachine.TransferStateTo(stateMachine.LastState); // Sleep Back
         }
         #endregion
 
@@ -651,7 +727,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             smallFigureImageUITexture.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
             smallFigureImageUITexture.alpha = 1f;
 
-            FigureImageClear();
+            FigureImageDataClear();
             if (figureImageKeyList.Count != 0) {
                 for (int i = 0; i < figureImageKeyList.Count; i++) {
                     string uiKey = figureImageKeyList[i];

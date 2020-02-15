@@ -74,7 +74,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private MusicManager musicManager;
         #endregion
 
-        private bool isFirstInRunAutoState;
+        private bool isFirstInAutoBuff;
         private float autoWaitTime;
         private float autoStartTime;
 
@@ -122,26 +122,26 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void LateUpdate() {
 
             #region State
-
-
             BaseState state = stateMachine.CurrentState;
-            if(state != RunAutoState.Instance) {
-                isFirstInRunAutoState = false;
+            if(state != RunWaitState.Instance) {
+                isFirstInAutoBuff = false;
             }
-
             if (state == RunScriptState.Instance) {
                 scriptManager.NextSentence();
-            } else if(state == RunAutoState.Instance) {
-                if(isFirstInRunAutoState == false) {
-                    isFirstInRunAutoState = true;
-                    float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
-                    float highest = constData.AutoMessageSpeedHighest;
-                    float lowest = constData.AutoMessageSpeedLowest;
-                    autoWaitTime = (highest - lowest) * autoMessageSpeed + lowest;
-                    autoStartTime = Time.time;
-                }
-                if(Time.time - autoStartTime >= autoWaitTime) {
-                    scriptManager.NextSentence();
+            } else if(state == RunWaitState.Instance) {
+                StateBuff stateBuff = stateMachine.StateBuff;
+                if(stateBuff == StateBuff.Auto) { 
+                    if(isFirstInAutoBuff == false) {
+                        isFirstInAutoBuff = true;
+                        float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
+                        float highestTime = constData.AutoMessageSpeedHighest;
+                        float lowestTime = constData.AutoMessageSpeedLowest;
+                        autoWaitTime = (lowestTime - highestTime) * autoMessageSpeed + highestTime;
+                        autoStartTime = Time.time;
+                    }
+                    if(Time.time - autoStartTime >= autoWaitTime) {
+                        scriptManager.NextSentence();
+                    }
                 }
             }
             #endregion

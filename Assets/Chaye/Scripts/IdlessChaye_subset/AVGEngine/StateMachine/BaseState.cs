@@ -3,7 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
+    [System.Serializable]
+    public enum StateBuff {
+        Normal,
+        Auto,
+        Skip,
+        Next
+    }
     public abstract class BaseState {
+        
         public abstract uint StateID { get; }
         public abstract string StateName { get; }
         public abstract List<uint> RejectedOldStateIDList { get; }
@@ -33,7 +41,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "VoidState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 9, 10};
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -59,16 +67,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "InitState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 2 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
-            PachiGrimoire.I.FileManager.LoadConfig();
-            PachiGrimoire.I.FileManager.LoadPlayerRecord();
-            PachiGrimoire.I.FileManager.LoadStoryRecords();
-            PachiGrimoire.I.FileManager.LoadResource();
+            if (oldState == VoidState.Instance) { 
+                PachiGrimoire.I.FileManager.LoadConfig();
+                PachiGrimoire.I.FileManager.LoadPlayerRecord();
+                PachiGrimoire.I.FileManager.LoadStoryRecords();
+                PachiGrimoire.I.FileManager.LoadResource();
 
-            PachiGrimoire.I.StageContextManager.LoadPlayerRecord();
+                PachiGrimoire.I.StageContextManager.LoadPlayerRecord();
+            }
         }
 
         public override void OnExit(BaseState newState) {
@@ -90,7 +100,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "IdleState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 3, 4, 6, 7, 8, 9 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 3 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -116,7 +126,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunScriptState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 4 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -142,85 +152,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "RunWaitState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 5 ,11};
-        public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
-
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
-
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
-    }
-
-    public class RunSkipState : BaseState {
-        private static RunSkipState instance = new RunSkipState();
-
-        public static RunSkipState Instance {
-            get {
-                return instance;
-            }
-        }
-
-        private readonly uint stateID = 6;
-        public override uint StateID => stateID;
-
-        public override string StateName => "RunSkipState";
-
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 };
-        public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
-
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
-
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
-    }
-
-    public class RunAutoState : BaseState {
-        private static RunAutoState instance = new RunAutoState();
-
-        public static RunAutoState Instance {
-            get {
-                return instance;
-            }
-        }
-
-        private readonly uint stateID = 7;
-        public override uint StateID => stateID;
-
-        public override string StateName => "RunAutoState";
-
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 };
-        public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
-
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
-
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
-    }
-
-    public class RunNextState : BaseState {
-        private static RunNextState instance = new RunNextState();
-
-        public static RunNextState Instance {
-            get {
-                return instance;
-            }
-        }
-
-        private readonly uint stateID = 8;
-        public override uint StateID => stateID;
-
-        public override string StateName => "RunNextState";
-
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3, 4, 6, 7, 8, 10 ,11};
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 5};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -241,38 +173,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        private readonly uint stateID = 9;
+        private readonly uint stateID = 6;
         public override uint StateID => stateID;
 
         public override string StateName => "RunAnimateState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 3,5, 9};
-        public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
-
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
-
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
-    }
-
-    public class SleepState : BaseState {
-        private static SleepState instance = new SleepState();
-
-        public static SleepState Instance {
-            get {
-                return instance;
-            }
-        }
-
-        private readonly uint stateID = 10;
-        public override uint StateID => stateID;
-
-        public override string StateName => "SleepState";
-
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 4, 6, 7, 8, 10 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 6 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -293,12 +199,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        private readonly uint stateID = 11;
+        private readonly uint stateID = 7;
         public override uint StateID => stateID;
 
         public override string StateName => "ChoiceWaitState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 2, 5 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 7 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
@@ -309,5 +215,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             Debug.Log("NewState: " + newState.StateName);
         }
     }
+
+    public class SleepState : BaseState {
+        private static SleepState instance = new SleepState();
+
+        public static SleepState Instance {
+            get {
+                return instance;
+            }
+        }
+
+        private readonly uint stateID = 8;
+        public override uint StateID => stateID;
+
+        public override string StateName => "SleepState";
+
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 8 };
+        public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
+
+        public override void OnEnter(BaseState oldState) {
+            Debug.Log("OldState: " + oldState.StateName);
+        }
+
+        public override void OnExit(BaseState newState) {
+            Debug.Log("NewState: " + newState.StateName);
+        }
+    }
+
 }
 

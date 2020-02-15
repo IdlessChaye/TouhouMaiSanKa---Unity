@@ -7,6 +7,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class StoryRecord {
         public string currentStateName;
         public string LastStateName;
+        public StateBuff StateBuff;
 
         public string bgmIndex;
         public string voiceIndex;

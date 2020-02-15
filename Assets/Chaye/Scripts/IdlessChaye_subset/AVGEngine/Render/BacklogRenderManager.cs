@@ -43,9 +43,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Input
 
         private void FixedUpdate() {
-            if (!isWorking)
-                return;
             if (!isBacklogShow)
+                return;
+            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
+                CompleteAnimate();
+            }
+            if (!isWorking)
                 return;
             if (Input.GetMouseButtonDown(0)) {
                 OnMouseLeftDown();
@@ -93,6 +96,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             sequence.Join(tweener);
         }
 
+        public void CompleteAnimate() {
+            sequence.Complete();
+        }
 
         private Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 0.5f) {
             if (uiPanel == null) {
@@ -107,6 +113,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void BacklogShow() {
+            isBacklogShow = true;
             isWorking = false;
             backlogRoot.SetActive(true);
             panel.alpha = 0f;
@@ -127,6 +134,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             JoinTween(tweener);
 
             sequence.OnComplete(() => {
+                isBacklogShow = false;
                 backlogItemList.Clear();
                 backlogRoot.SetActive(false);
                 renderManager.BacklogHide();

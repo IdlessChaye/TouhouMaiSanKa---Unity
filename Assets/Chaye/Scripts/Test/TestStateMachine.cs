@@ -22,12 +22,6 @@ public class TestStateMachine : MonoBehaviour {
             stateMachineManager.TransferStateTo(RunWaitState.Instance);
         } else if (Input.GetKeyDown(KeyCode.F)) {
             stateMachineManager.TransferStateTo(RunScriptState.Instance);
-        } else if (Input.GetKeyDown(KeyCode.G)) {
-            stateMachineManager.TransferStateTo(RunAutoState.Instance);
-        } else if (Input.GetKeyDown(KeyCode.H)) {
-            stateMachineManager.TransferStateTo(RunSkipState.Instance);
-        } else if (Input.GetKeyDown(KeyCode.J)) {
-            stateMachineManager.TransferStateTo(RunNextState.Instance);
         } else if (Input.GetKeyDown(KeyCode.J)) {
             stateMachineManager.TransferStateTo(RunAnimateState.Instance);
         } else if (Input.GetKeyDown(KeyCode.C)) {

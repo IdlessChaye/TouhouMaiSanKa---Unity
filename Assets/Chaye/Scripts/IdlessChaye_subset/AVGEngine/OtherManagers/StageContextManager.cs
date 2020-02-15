@@ -58,6 +58,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             storyRecord.LastStateName = stateMachine.LastState.StateName;
             storyRecord.currentStateName = stateMachine.CurrentState.StateName;
+            storyRecord.StateBuff = stateMachine.StateBuff;
 
             storyRecord.bgmIndex = musicManager.BGMIndex;
             storyRecord.voiceIndex = musicManager.VoiceIndex;
@@ -125,7 +126,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             Dictionary<int, StoryRecord> storyRecordDict = recordManager.StoryRecordDict;
             StoryRecord sr = storyRecordDict[indexOfRecord];
 
-            stateMachine.LoadStoryRecord(sr.currentStateName, sr.LastStateName);
+            stateMachine.LoadStoryRecord(sr.currentStateName, sr.LastStateName, sr.StateBuff);
             musicManager.LoadStoryRecord(sr.bgmIndex, sr.voiceIndex, sr.voiceCharacterName);
             scriptManager.LoadStoryRecord(sr.scriptPointerScriptName, sr.scriptPointerLineNumber, 
                 sr.scriptReplaceKeys, sr.scriptReplaceValues, 
