@@ -12,7 +12,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 0)
                 throw new System.Exception("ImageConsoleShowNode");
-            StageRenderManager.I.ConsoleShow();
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                StageRenderManager.I.ConsoleShow(false);
+            }else {
+                StageRenderManager.I.ConsoleShow();
+            }
         }
 
     }

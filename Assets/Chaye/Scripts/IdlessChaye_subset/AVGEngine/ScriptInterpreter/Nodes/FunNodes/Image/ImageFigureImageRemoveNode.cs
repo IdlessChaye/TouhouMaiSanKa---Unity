@@ -13,7 +13,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (paraList.Count != 1)
                 throw new System.Exception("ImageFigureImageRemoveNode");
             string uiKey = paraList[0];
-            StageRenderManager.I.FigureImageRemove(uiKey);
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                StageRenderManager.I.FigureImageRemove(uiKey, false);
+            } else {
+                StageRenderManager.I.FigureImageRemove(uiKey);
+            }
         }
 
     }

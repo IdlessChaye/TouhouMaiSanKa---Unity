@@ -14,7 +14,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 0)
                 throw new System.Exception("TextClearNode");
-            StageRenderManager.I.TextClear();
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                StageRenderManager.I.TextClear(false);
+            } else {
+                StageRenderManager.I.TextClear();
+            }
         }
 
 

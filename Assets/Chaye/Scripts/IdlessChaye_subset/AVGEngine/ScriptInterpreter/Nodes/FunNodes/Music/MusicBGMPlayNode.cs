@@ -17,7 +17,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 throw new System.Exception("MusicBGMPlayNode");
             string bgmIndex = paraList[0]; // "SC_ScriptName"
             AudioClip bgmClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(bgmIndex);
-            PachiGrimoire.I.MusicManager.BGMPlay(bgmClip,bgmIndex);
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                PachiGrimoire.I.MusicManager.BGMPlay(bgmClip, bgmIndex, false);
+            } else {
+                PachiGrimoire.I.MusicManager.BGMPlay(bgmClip, bgmIndex);
+            }
         }
 
  

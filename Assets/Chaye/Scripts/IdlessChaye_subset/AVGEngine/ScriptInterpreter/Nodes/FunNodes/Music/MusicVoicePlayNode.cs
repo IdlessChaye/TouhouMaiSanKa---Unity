@@ -18,7 +18,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             string characterName = paraList[0]; // "SC_ScriptName"
             string voiceIndex = paraList[1];
             AudioClip clip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(voiceIndex);
-            PachiGrimoire.I.MusicManager.VoicePlay(characterName,clip,voiceIndex);
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                PachiGrimoire.I.MusicManager.VoicePlay(characterName, clip, voiceIndex,false);
+            } else {
+                PachiGrimoire.I.MusicManager.VoicePlay(characterName, clip, voiceIndex);
+            }
         }
 
 

@@ -14,7 +14,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 0)
                 throw new System.Exception("EngineScriptLoadFileNode");
-            PachiGrimoire.I.MusicManager.BGMStop();
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                PachiGrimoire.I.MusicManager.BGMStop(false);
+            } else {
+                PachiGrimoire.I.MusicManager.BGMStop();
+            }
         }
 
 

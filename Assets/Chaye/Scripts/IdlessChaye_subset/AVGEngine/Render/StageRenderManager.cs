@@ -153,7 +153,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
 
             StateBuff stateBuff = stateMachine.StateBuff; // Skip Animation
-            if(stateBuff == StateBuff.Skip) {
+            if(stateBuff == StateBuff.Skip || stateBuff == StateBuff.Next) {
                 if(state == RunAnimateState.Instance) {
                     CompleteAnimate();
                 }
@@ -313,7 +313,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (string.IsNullOrEmpty(dialogContextIndex)) {
                 throw new System.Exception("StageRenderManager TextChange");
             }
-            TextClear();
+            textContextContainer.text = "";
+            textNameContainer.text = "";
+            nameLabel.text = "";
+            contextLabel.text = "";
             this.dialogContextIndex = dialogContextIndex;
             this.characterName = characterName;
 

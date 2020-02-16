@@ -13,7 +13,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (paraList.Count != 1)
                 throw new System.Exception("ImageSmallFigureImageChangeNode");
             string index = paraList[0];
-            StageRenderManager.I.SmallFigureImageChange(index);
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                StageRenderManager.I.SmallFigureImageChange(index, false);
+            } else {
+                StageRenderManager.I.SmallFigureImageChange(index);
+            }
         }
 
     }

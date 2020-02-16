@@ -19,12 +19,22 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             string dialogContextIndex = paraList[0];
             string characterName;
 
-            if (paraList.Count == 1) {
-                StageRenderManager.I.TextChange(dialogContextIndex);
-            } else if (paraList.Count == 2) {
-                characterName = paraList[1];
-                StageRenderManager.I.TextChange(dialogContextIndex, characterName);
-            } 
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                if (paraList.Count == 1) {
+                    StageRenderManager.I.TextChange(dialogContextIndex, null, false);
+                } else if (paraList.Count == 2) {
+                    characterName = paraList[1];
+                    StageRenderManager.I.TextChange(dialogContextIndex, characterName, false);
+                }
+            } else {
+                if (paraList.Count == 1) {
+                    StageRenderManager.I.TextChange(dialogContextIndex);
+                } else if (paraList.Count == 2) {
+                    characterName = paraList[1];
+                    StageRenderManager.I.TextChange(dialogContextIndex, characterName);
+                }
+            }
         }
 
 

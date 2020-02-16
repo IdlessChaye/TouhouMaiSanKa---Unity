@@ -5,7 +5,7 @@ Document
 
 
 
-要给Panel分层，比如Gallery、SaveLoad、Config、ConfigCharacter
+要给Panel分层，比如SaveLoad、Config、ConfigCharacter
 
 实现Config系统各个参数功能
 角色语音设置界面（ScrollView?）的功能
@@ -15,6 +15,7 @@ Document
 
 实现SaveLoad界面
 实现SaveLoad界面的确认读取和保存功能
+从Sleep或Idle Load Record 初始化不一致，保存UI界面
 
 使游戏重复切出加载不会出问题
 

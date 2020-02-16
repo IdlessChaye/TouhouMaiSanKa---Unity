@@ -13,7 +13,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (paraList.Count != 1)
                 throw new System.Exception("ImageBackgroundImageChangeNode");
             string index = paraList[0];
-            StageRenderManager.I.BackgroundImageChange(index);
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if(stateBuff == StateBuff.Next) {
+                StageRenderManager.I.BackgroundImageChange(index, false);
+            } else { 
+                StageRenderManager.I.BackgroundImageChange(index);
+            }
+
         }
 
     }

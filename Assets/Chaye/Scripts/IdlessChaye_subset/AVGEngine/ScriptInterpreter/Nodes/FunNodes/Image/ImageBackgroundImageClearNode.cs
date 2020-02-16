@@ -12,7 +12,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void OnUpdateStageContext() {
             if (paraList.Count != 0)
                 throw new System.Exception("ImageBackgroundImageClearNode");
-            StageRenderManager.I.BackgroundImageClear();
+
+            StateBuff stateBuff = PachiGrimoire.I.StateMachine.StateBuff;
+            if (stateBuff == StateBuff.Next) {
+                StageRenderManager.I.BackgroundImageClear(false);
+            }else {
+                StageRenderManager.I.BackgroundImageClear();
+            }
         }
 
     }
