@@ -14,10 +14,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private int head;
 
         public BacklogManager(int capacity) {
-            BacklogItemList = new List<BacklogItem>(capacity);
             this.capacity = capacity;
-            this.count = 0;
-            this.head = -1;
         }
 
         public BacklogItem Seek(int offsetIndex) {
@@ -59,6 +56,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             this.head = head;
             this.capacity = capa;
             this.count = count;
+        }
+
+
+        public void InitializeStory() {
+            BacklogItemList = new List<BacklogItem>(capacity);
+            count = 0;
+            head = -1;
+        }
+
+        public void FinalizeStory() {
+            BacklogItemList = null;
+            count = 0;
+            head = -1;
         }
 
         //private void Foreach() {

@@ -115,6 +115,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
+        public void InitializeStory() {
+            voiceIndex = null;
+            characterName = null;
+            bgmIndex = null;
+        }
+
+        public void FinalizeStory() {
+            voiceIndex = null;
+            characterName = null;
+            bgmIndex = null;
+        }
 
     }
 }

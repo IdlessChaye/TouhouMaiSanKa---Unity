@@ -59,6 +59,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 node = new EngineValueStorySetNode();
             } else if (token.Equals("ChoiceCreate")) {
                 node = new EngineChoiceCreateNode();
+            } else if (token.Equals("SystemDebugLog")) {
+                node = new EngineSystemDebugLogNode();
+            } else if (token.Equals("ChapterNameSet")) {
+                node = new EngineChapterNameSetNode();
             } else {
                 canParse = false;
             }

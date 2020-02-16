@@ -35,13 +35,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         private void Awake() {
-            configRoot.SetActive(false);
             panel = configRoot.GetComponent<UIPanel>();
             configManager = PachiGrimoire.I.ConfigManager;
             config = configManager.Config;
             constData = PachiGrimoire.I.constData;
             renderManager = GetComponent<StageRenderManager>();
             configCharacterVolumeRenderManager = GetComponent<ConfigCharacterVolumeRenderManager>();
+            configRoot.SetActive(false);
         }
 
         #region Input
@@ -51,6 +51,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return;
             if (isConfigCharacterShow)
                 return;
+            if (!config.HasAnimationEffect) {
+                if (sequence.IsPlaying() == true) {
+                    CompleteAnimate();
+                }
+            }
             // interrupt animation
             if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
                 CompleteAnimate();
@@ -208,6 +213,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
         public void OnValueChangedSliderAlphaOfConsole() {
             config.AlphaOfConsole = sliderAlphaOfConsole.value;
+            PachiGrimoire.I.StageRenderManager.SetAlphaOfConsole(); 
         }
 
 

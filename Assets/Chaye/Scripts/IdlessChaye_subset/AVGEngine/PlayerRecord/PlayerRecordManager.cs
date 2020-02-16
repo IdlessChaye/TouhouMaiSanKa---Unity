@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using System;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class PlayerRecordManager {
         public PlayerRecord PlayerRecord { get; private set; }
@@ -44,6 +44,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 SavePlayerRecord(PlayerRecord);
                 return false;
             }
+
             JsonUtility.FromJsonOverwrite(playerRecordJSON, PlayerRecord);
             return true;
         }

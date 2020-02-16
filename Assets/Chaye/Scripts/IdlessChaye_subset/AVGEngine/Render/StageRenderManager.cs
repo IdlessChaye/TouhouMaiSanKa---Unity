@@ -27,24 +27,28 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public List<ChoiceItem> ChoiceItemList => choiceItemList;
 
 
-        public GameObject uiRoot;
+        public GameObject gameRoot;
+        public UITexture consoleBackgroundImageUITexture;
         public GameObject choice0;
         public GameObject choice1;
         public GameObject choice2;
         public GameObject choice3;
-        private List<GameObject> choiceList = new List<GameObject>();
+        private List<GameObject> choiceList;
         private PachiGrimoire pachiGrimoire;
         private ConstData constData;
         private Config config;
         private StateMachineManager stateMachine;
         private ResourceManager resourceManager;
+        private MusicManager musicManager;
         private float messageSpeedLowest;
         private float messageSpeedHighest;
+        private UIPanel panel;
+        private bool isGameShow;
+        private bool isWorking;
 
 
         #region Animate
         private Sequence sequenceAnimate;
-        private Sequence sequenceUI;
         private System.Action actionAnimate;
         #endregion
 
@@ -64,7 +68,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
         #region FigureImage
-        private Dictionary<string, KeyValuePair<string, UITexture>> figureImageDict = new Dictionary<string, KeyValuePair<string, UITexture>>(); // 标识符 -> <索引,对象>
+        private Dictionary<string, KeyValuePair<string, UITexture>> figureImageDict; // 标识符 -> <索引,对象>
         public UITexture smallFigureImageUITexture;
         public UITexture smallFigureImageUITextureTop;
         private string smallFigureImageIndex;
@@ -77,7 +81,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Choice
         private string choosenDLIndex;
-        private List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
+        private List<ChoiceItem> choiceItemList;
         #endregion
 
         #region Backlog
@@ -94,38 +98,54 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #endregion
 
+        #region SaveLoad
+
+        private SaveLoadRenderManager slRenderManager;
+        private bool isSLShow;
+
+        #endregion
 
         private void Initialize() {
+            panel = gameRoot.GetComponent<UIPanel>();
             pachiGrimoire = PachiGrimoire.I;
             constData = pachiGrimoire.constData;
             config = pachiGrimoire.ConfigManager.Config;
             stateMachine = pachiGrimoire.StateMachine;
             resourceManager = pachiGrimoire.ResourceManager;
+            musicManager = pachiGrimoire.MusicManager;
             backlogRenderManager = GetComponent<BacklogRenderManager>();
             configRenderManager = GetComponent<ConfigRenderManager>();
+            slRenderManager = GetComponent<SaveLoadRenderManager>();
 
             messageSpeedLowest = constData.MessageSpeedLowest;
             messageSpeedHighest = constData.MessageSpeedHighest;
-            textContextContainer.text = "";
-            textNameContainer.text = "";
-            nameLabel.text = "";
-            contextLabel.text = "";
-            backgroundUITexture.mainTexture = null;
-            backgroundUITextureTop.mainTexture = null;
-            smallFigureImageUITexture.mainTexture = null;
-            smallFigureImageUITextureTop.mainTexture = null;
-            choice0.SetActive(false);
-            choice1.SetActive(false);
-            choice2.SetActive(false);
-            choice3.SetActive(false);
+
+            InitializeStory();
         }
 
 
         #region Input
         private void FixedUpdate() {
-            if (isBacklogShow || isConfigShow) {
+            if (isBacklogShow || isConfigShow || isSLShow) {
                 return;
             }
+
+            if (!isGameShow) { 
+                return;
+            }
+
+            if(!config.HasAnimationEffect) {
+                if(sequenceAnimate.IsPlaying() == true) {
+                    CompleteAnimate();
+                }
+            }
+
+            if (isWorking == false && sequenceAnimate.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
+                CompleteAnimate();
+            }
+
+            if (!isWorking)
+                return;
 
             BaseState state = stateMachine.CurrentState;
             if (state == SleepState.Instance) {
@@ -158,6 +178,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if(buff == StateBuff.Normal) { 
                 if (state == RunAnimateState.Instance) {
                     CompleteAnimate();
+                } else if (state == RunWaitState.Instance) {
+                    stateMachine.TransferStateTo(RunScriptState.Instance);
                 }
             } else if(buff == StateBuff.Auto) {
                 stateMachine.SetStateBuff(StateBuff.Normal);
@@ -194,6 +216,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (buff == StateBuff.Normal) {
                 if (state == RunAnimateState.Instance) {
                     CompleteAnimate();
+                } else if(state == RunWaitState.Instance) {
+                    stateMachine.TransferStateTo(RunScriptState.Instance);
                 }
             } else if(buff == StateBuff.Auto) {
                 if (state == RunAnimateState.Instance) {
@@ -221,10 +245,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         private void OnKeyConfirmDown() {
-            BaseState state = stateMachine.CurrentState;
-            if (state == RunWaitState.Instance) {
-                stateMachine.TransferStateTo(RunScriptState.Instance);
-            }
+            OnMouseLeftDown();
         }
 
         #endregion
@@ -260,18 +281,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             stateMachine.TransferStateTo(RunScriptState.Instance);
         }
 
+        private Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 0.5f) {
+            if (uiPanel == null) {
+                return null;
+            }
+            uiPanel.alpha = fromValue;
+            float value = fromValue;
+            Tweener tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
+                .OnUpdate(() => uiPanel.alpha = value);
+            return tweener;
+        }
 
         #endregion
 
 
         #region Text
-        public void TextClear() {
+        public void TextClear(bool hasEffect = true) {
             textContextContainer.text = "";
             textNameContainer.text = "";
             nameLabel.text = "";
             contextLabel.text = "";
             dialogContextIndex = null;
             characterName = null;
+
+            if(!config.IsPlayingVoiceAfterChangeLine) {
+                musicManager.VoiceStop(hasEffect);
+            }
         }
 
         public void TextChange(string dialogContextIndex, string characterName = null, bool hasEffect = true) {
@@ -393,7 +428,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             uiTexture.width = (int)(width * scale_x);
             uiTexture.height = (int)(height * scale_y);
             go.transform.position = new Vector3(pos_x, pos_y, 0);
-            go.transform.SetParent(uiRoot.transform, false);
+            go.transform.SetParent(gameRoot.transform, false);
             KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
             figureImageDict.Add(uiKey, pair);
 
@@ -452,6 +487,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void FigureImageDataClear() {
+            if(figureImageDict == null) {
+                figureImageDict = new Dictionary<string, KeyValuePair<string, UITexture>>();
+                return;
+            }
             foreach (var pair in figureImageDict.Values) {
                 UITexture texture = pair.Value;
                 GameObject go = texture.gameObject;
@@ -541,6 +580,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 console.transform.position = Vector3.up * -1000;
         }
 
+        public void SetAlphaOfConsole() {
+            float alpha = config.AlphaOfConsole;
+            consoleBackgroundImageUITexture.alpha = alpha;
+        }
+
         public void ChoiceCreate(List<ChoiceItem> choiceItemList) { // 不管是Run Auto Skip 总有渲染效果
             if (choiceItemList == null || choiceItemList.Count == 0) {
                 throw new System.Exception("StageRenderManager ChoiceCreate");
@@ -551,7 +595,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             // 得到各个选项的文本
             // 不能选择的用不能选的图片渲染，能选的检查mark 是否有已经选过的，选过的用别的选项图片渲染
             // 给每个选项添加回调函数 要有mark和script信息
-            choiceList.Clear();
+            choiceList = new List<GameObject>();
             choiceList.Add(choice0);
             choiceList.Add(choice1);
             if (count >= 3) {
@@ -642,11 +686,48 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             actionAnimate -= StateQuitAnimate;
             actionAnimate += StateQuitAnimate;
         }
-
         #endregion
 
 
+
+        #region GamePanel
+        public void GameShow() {
+            isGameShow = true;
+            isWorking = false;
+            gameRoot.SetActive(true);
+            panel.alpha = 0f;
+
+            // 初始化Game
+            InitGameData();
+            Tweener tweener = DoPanelAlpha(panel, 0f, 1f);
+            JoinTweenAniamte(tweener);
+
+            sequenceAnimate.OnComplete(() => isWorking = true);
+        }
+
+        public void GameHide() {
+            isWorking = false;
+            panel.alpha = 1f;
+            Tweener tweener = DoPanelAlpha(panel, 1f, 0f);
+            JoinTweenAniamte(tweener);
+
+            sequenceAnimate.OnComplete(() => {
+                isGameShow = false;
+                gameRoot.SetActive(false);
+                //backlogItemList.Clear();
+                //renderManager.BacklogHide();
+            });
+        }
+
+        private void InitGameData() {
+            SetAlphaOfConsole();
+        }
+        #endregion
+
+
+
         #region Backlog
+
         public void BacklogShow() {
             stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
             PauseAnimate();
@@ -679,7 +760,31 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
 
+
+        #region SaveLoad
+
+        public void SLShow() {
+            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
+            PauseAnimate();
+            isSLShow = true;
+            slRenderManager.SLShow();
+        }
+        public void SLHide() {
+            isSLShow = false;
+            PlayAnimate();
+            stateMachine.TransferStateTo(stateMachine.LastState); // Sleep Back
+        }
+
+        #endregion
+
+
+
+
+
         public void LoadStoryRecord(StoryRecord sr) {
+            sequenceAnimate?.Pause();
+            sequenceAnimate = DOTween.Sequence();
+
             dialogContextIndex = sr.dialogContextIndex;
             characterName = sr.characterName;
             backgroundImageIndex = sr.backgroundImageIndex;
@@ -746,7 +851,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     uiTexture.width = (int)(width * scale_x);
                     uiTexture.height = (int)(height * scale_y);
                     go.transform.position = new Vector3(pos_x, pos_y, 0);
-                    go.transform.SetParent(uiRoot.transform, false);
+                    go.transform.SetParent(gameRoot.transform, false);
                     KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
                     figureImageDict.Add(uiKey, pair);
                 }
@@ -757,6 +862,42 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
+        public void InitializeStory() {
+            textContextContainer.text = "";
+            textNameContainer.text = "";
+            nameLabel.text = "";
+            contextLabel.text = "";
+            backgroundUITexture.mainTexture = null;
+            backgroundUITextureTop.mainTexture = null;
+            smallFigureImageUITexture.mainTexture = null;
+            smallFigureImageUITextureTop.mainTexture = null;
+            choice0.SetActive(false);
+            choice1.SetActive(false);
+            choice2.SetActive(false);
+            choice3.SetActive(false);
 
+            gameRoot.SetActive(false);
+            isGameShow = false;
+            isWorking = false;
+            sequenceAnimate = null;
+            actionAnimate = null;
+            dialogContextIndex = null;
+            characterName = null;
+            backgroundImageIndex = null;
+            figureImageDict = null;
+            smallFigureImageIndex = null;
+            isConsoleShow = false;
+            choosenDLIndex = null;
+            choiceItemList = null;
+            isBacklogShow = false;
+            isConfigShow = false;
+            isSLShow = false;
+        }
+
+        public void FinalizeStory() {
+            sequenceAnimate?.Kill();
+            FigureImageDataClear();
+            InitializeStory();
+        }
     }
 }

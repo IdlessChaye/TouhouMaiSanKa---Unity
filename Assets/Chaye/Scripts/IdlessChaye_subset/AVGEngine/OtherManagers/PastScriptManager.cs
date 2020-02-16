@@ -11,15 +11,30 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void UpdatePastScript(string scriptName, int endLineNumber, int startLineNumber = 0) {
             if (pastScriptDict.ContainsKey(scriptName)) {
-                KeyValuePair<int, int> pair = new KeyValuePair<int, int>(startLineNumber, endLineNumber);
-                pastScriptDict[scriptName] = pair;
+                int lastEndLineNumber = pastScriptDict[scriptName].Value;
+                if(lastEndLineNumber < endLineNumber) { 
+                    KeyValuePair<int, int> pair = new KeyValuePair<int, int>(startLineNumber, endLineNumber);
+                    pastScriptDict[scriptName] = pair;
+                }
             } else {
                 pastScriptDict.Add(scriptName, new KeyValuePair<int, int>(startLineNumber, endLineNumber));
             }
         }
 
-        public int GetStartLineNumber(string scriptName) => pastScriptDict[scriptName].Key;
-        public int GetEndLineNumber(string scriptName) => pastScriptDict[scriptName].Value;
+        public bool HasRead(string scriptName,int lineNumber) {
+            bool hasRead = false;
+            if(pastScriptDict.ContainsKey(scriptName)) {
+                int startLineNumber = pastScriptDict[scriptName].Key;
+                int endLineNumber = pastScriptDict[scriptName].Value;
+                if(lineNumber >= startLineNumber && lineNumber <= endLineNumber) {
+                    hasRead = true;
+                }
+            }
+            return hasRead;
+        }
+
+        //public int GetStartLineNumber(string scriptName) => pastScriptDict[scriptName].Key;
+        //public int GetEndLineNumber(string scriptName) => pastScriptDict[scriptName].Value;
 
 
         public void LoadPlayerRecord(List<string> pastScriptNameList, List<KeyValuePair<int, int>> pastScriptRangeList) {

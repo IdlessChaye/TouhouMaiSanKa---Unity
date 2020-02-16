@@ -16,7 +16,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public bool IsScriptABLoadedAllOnce = true;
         public string ScriptIndexPrefix = "SC";
         public int ScriptBufferMaxCount = 150;
-        public string MainScriptFileName = "Main.txt";
+        public string InitScriptFileNameWithoutTXT = "Init";
+        public string MainScriptFileNameWithoutTXT = "Main";
 
 
         public string BgImagesSubFolderPathInReadonlyDataFolderName = "AVGEngine/BgImages";

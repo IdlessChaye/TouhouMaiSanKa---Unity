@@ -7,8 +7,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public string ScriptPointerScriptName { get; private set; }
         public int ScriptPointerLineNumber { get; private set; }
-        public List<string> ScriptReplaceKeys { get; private set; } = new List<string>();
-        public List<string> ScriptReplaceValues { get; private set; } = new List<string>();
+        public List<string> ScriptReplaceKeys { get; private set; }
+        public List<string> ScriptReplaceValues { get; private set; }
         public Stack<string> PointerScriptNameStack => pointerScriptNameStack;
         public Stack<int> PointerLineNumberStack => pointerLineNumberStack;
 
@@ -17,8 +17,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private bool isSecondGear = false;
 
         private List<ScriptSentenceContext> scriptSentenceList;
-        private Stack<string> pointerScriptNameStack = new Stack<string>();
-        private Stack<int> pointerLineNumberStack = new Stack<int>();
+        private Stack<string> pointerScriptNameStack;
+        private Stack<int> pointerLineNumberStack;
 
         private List<ScriptSentenceContext> secondScriptSentenceList;
         private int secondScriptPointerLineNumber; // 第二档的脚本无名
@@ -370,6 +370,33 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             else
                 pointerLineNumberStack.Clear();
 
+        }
+
+        public void InitializeStory() {
+            ScriptReplaceKeys = new List<string>();
+            ScriptReplaceValues = new List<string>();
+            pointerScriptNameStack = new Stack<string>();
+            pointerLineNumberStack = new Stack<int>();
+            ConstData constData = PachiGrimoire.I.constData;
+            string mainScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.MainScriptFileNameWithoutTXT);
+            LoadScriptFile(constData.MainScriptFileNameWithoutTXT, mainScriptContext);
+            isSecondGear = false;
+            secondScriptSentenceList = null;
+            secondScriptPointerLineNumber = -1;
+        }
+
+        public void FinalizeStory() {
+            ScriptPointerScriptName = null;
+            ScriptPointerLineNumber = -1;
+            ScriptReplaceKeys = null;
+            ScriptReplaceValues = null;
+            scriptSentenceList = null;
+            pointerScriptNameStack = null;
+            pointerLineNumberStack = null;
+            
+            isSecondGear = false;
+            secondScriptSentenceList = null;
+            secondScriptPointerLineNumber = -1;
         }
     }
 

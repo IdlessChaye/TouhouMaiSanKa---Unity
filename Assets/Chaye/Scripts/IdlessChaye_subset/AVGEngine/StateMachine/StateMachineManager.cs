@@ -22,10 +22,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void TransferStateTo(BaseState newState) {
             if (newState.CanBeTransferedFrom(CurrentState)) {
-                LastState = CurrentState;
                 CurrentState.OnExit(newState);
+                newState.OnEnter(CurrentState);
+                LastState = CurrentState;
                 CurrentState = newState;
-                CurrentState.OnEnter(LastState);
             } else {
                 throw new System.Exception($"状态机切换状态失败!\n现状态 : {CurrentState.StateName}    新状态 : {newState.StateName}\n");
             }
@@ -61,6 +61,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     break;
                 }
             }
+        }
+
+        public void FinalizeStory() {
+            StateBuff = StateBuff.Normal;
         }
     }
 

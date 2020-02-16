@@ -56,6 +56,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             StoryRecord storyRecord = new StoryRecord();
 
+            storyRecord.dateTime = System.DateTime.Now.ToString();
+
             storyRecord.LastStateName = stateMachine.LastState.StateName;
             storyRecord.currentStateName = stateMachine.CurrentState.StateName;
             storyRecord.StateBuff = stateMachine.StateBuff;
@@ -79,7 +81,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             storyRecord.markStoryList = markManager.MarkStoryList;
             storyRecord.varStoryNameList = new List<string>(markManager.ValueStoryDict.Keys);
             storyRecord.varStoryValueList = new List<float>(markManager.ValueStoryDict.Values);
-
+            storyRecord.chapterName = markManager.ChapterName;
 
             storyRecord.dialogContextIndex = renderManager.DialogContextIndex;
             storyRecord.characterName = renderManager.CharacterName;
@@ -131,12 +133,29 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             scriptManager.LoadStoryRecord(sr.scriptPointerScriptName, sr.scriptPointerLineNumber, 
                 sr.scriptReplaceKeys, sr.scriptReplaceValues, 
                 sr.pointerScriptNameStack, sr.pointerLineNumberStack);
-            markManager.LoadStoryRecord(sr.markStoryList, sr.varStoryNameList, sr.varStoryValueList);
+            markManager.LoadStoryRecord(sr.markStoryList, sr.varStoryNameList, sr.varStoryValueList,sr.chapterName);
             backlogManager.LoadStoryRecord(sr.backlogItemList, sr.head, sr.capacity, sr.count);
             //renderManager.LoadStoryData 负责Choice Backlog Image Text
             renderManager.LoadStoryRecord(sr);
         }
 
 
+        public void InitializeStory() {
+            musicManager.InitializeStory();
+            scriptManager.InitializeStory();
+            markManager.InitializeStory();
+            backlogManager.InitializeStory();
+            //renderManager.LoadStoryData 负责Choice Backlog Image Text
+            renderManager.InitializeStory();
+        }
+
+        public void FinalizeStory() {
+            stateMachine.FinalizeStory();
+            musicManager.FinalizeStory();
+            scriptManager.FinalizeStory();
+            markManager.FinalizeStory();
+            backlogManager.FinalizeStory();
+            renderManager.FinalizeStory();
+        }
     }
 }

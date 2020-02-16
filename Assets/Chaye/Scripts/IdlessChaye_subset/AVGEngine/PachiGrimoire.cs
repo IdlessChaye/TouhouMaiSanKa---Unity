@@ -122,15 +122,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void LateUpdate() {
 
             #region State
+
+
             BaseState state = stateMachine.CurrentState;
-            if(state != RunWaitState.Instance) {
-                isFirstInAutoBuff = false;
-            }
-            if (state == RunScriptState.Instance) {
+
+            if (state == RunScriptState.Instance) { // RunScript State
                 scriptManager.NextSentence();
-            } else if(state == RunWaitState.Instance) {
+            } else if(state == RunWaitState.Instance) { // RunWait State
                 StateBuff stateBuff = stateMachine.StateBuff;
-                if(stateBuff == StateBuff.Auto) { 
+                if(stateBuff == StateBuff.Auto) {  // Auto Buff
                     if(isFirstInAutoBuff == false) {
                         isFirstInAutoBuff = true;
                         float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
@@ -140,22 +140,63 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                         autoStartTime = Time.time;
                     }
                     if(Time.time - autoStartTime >= autoWaitTime) {
-                        scriptManager.NextSentence();
+                        stateMachine.TransferStateTo(RunScriptState.Instance);
+                        isFirstInAutoBuff = false;
                     }
+                } else if(stateBuff == StateBuff.Skip) { // Skip Buff
+                    if(configManager.Config.IsReadSkipOrAllSkipNot) { 
+                        if(PastScriptManager.HasRead(ScriptManager.ScriptPointerScriptName,scriptManager.ScriptPointerLineNumber)) {
+                            stateMachine.TransferStateTo(RunScriptState.Instance);
+                        } else {
+                            stateMachine.SetStateBuff(StateBuff.Normal);
+                        }
+                    } else {
+                        stateMachine.TransferStateTo(RunScriptState.Instance);
+                    }
+                } else if(stateBuff == StateBuff.Next) { // Next Buff
+                    stateMachine.TransferStateTo(RunScriptState.Instance);
                 }
             }
+
+
             #endregion
         }
 
-        //public void OnPressedButtonStartGame() {
-
-        //}
-
-        //public void OnPressedButtonLoadGame() {
-
-        //}
 
 
+        #region AVGEngine Layer
+
+        public void StartGame() { // 全系统入口，初始化，还有UI管理，这个函数么有写完
+            stateMachine.TransferStateTo(RunScriptState.Instance);
+            stateMachine.SetStateBuff(StateBuff.Normal);
+            stageContextManager.InitializeStory();
+            StageRenderManager.GameShow();
+        }
+
+        public void LoadGame() { // 全系统入口，初始化，还有UI管理，这个函数么有写完
+            BaseState currentState = stateMachine.CurrentState;
+            if(currentState == IdleState.Instance) {
+                stateMachine.TransferStateTo(RunScriptState.Instance);
+                //stageContextManager.LoadStoryRecord();
+            } else if(currentState == RunWaitState.Instance||currentState == ChoiceWaitState.Instance) {
+                //stageContextManager.LoadStoryRecord();
+            }
+        }
+
+        public void ExitGame() { // 全系统出口，推出清理，还有UI管理，这个函数么有写完
+            stageContextManager.FinalizeStory();
+            stateMachine.TransferStateTo(IdleState.Instance);
+        }
+
+        #endregion
+
+
+
+        #region Commands
+        public void DebugLog(string context) {
+            Debug.Log(context);
+        }
+        #endregion
 
     }
 }

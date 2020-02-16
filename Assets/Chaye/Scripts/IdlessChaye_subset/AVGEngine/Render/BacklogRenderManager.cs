@@ -24,6 +24,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private StageRenderManager renderManager;
         private ResourceManager resourceManager;
         private MusicManager musicManager;
+        private Config config;
 
         private bool isWorking;
         private int count;
@@ -31,13 +32,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private List<BacklogItem> backlogItemList = new List<BacklogItem>();
 
         private void Awake() {
-            backlogRoot.SetActive(false);
             panel = backlogRoot.GetComponent<UIPanel>();
             backlogManager = PachiGrimoire.I.BacklogManager;
             constData = PachiGrimoire.I.constData;
             resourceManager = PachiGrimoire.I.ResourceManager;
             musicManager = PachiGrimoire.I.MusicManager;
             renderManager = GetComponent<StageRenderManager>();
+            config = PachiGrimoire.I.ConfigManager.Config;
+            backlogRoot.SetActive(false);
         }
 
         #region Input
@@ -45,6 +47,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void FixedUpdate() {
             if (!isBacklogShow)
                 return;
+            if (!config.HasAnimationEffect) {
+                if (sequence.IsPlaying() == true) {
+                    CompleteAnimate();
+                }
+            }
             if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
                 CompleteAnimate();
             }

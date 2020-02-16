@@ -5,6 +5,8 @@ using UnityEngine;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     [System.Serializable]
     public class StoryRecord {
+        public string dateTime;
+
         public string currentStateName;
         public string LastStateName;
         public StateBuff StateBuff;
@@ -24,6 +26,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public List<string> markStoryList = new List<string>();
         public List<string> varStoryNameList = new List<string>();
         public List<float> varStoryValueList = new List<float>();
+        public string chapterName;
 
         public string dialogContextIndex;
         public string characterName;

@@ -1,0 +1,5 @@
+Engine_ScriptReplace(<Replace(>,<Engine_ScriptReplace(>)
+Engine_ScriptReplace(<);
+>,<)
+>)
+Engine_ScriptLoadFile(*SC_ScriptReplace*)

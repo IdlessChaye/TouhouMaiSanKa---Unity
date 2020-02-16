@@ -130,7 +130,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
         public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
+            if(oldState == IdleState.Instance) {
+                ScriptManager scriptManager = PachiGrimoire.I.ScriptManager;
+                ConstData constData = PachiGrimoire.I.constData;
+                string initScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.InitScriptFileNameWithoutTXT);
+                scriptManager.LoadScriptFile(constData.InitScriptFileNameWithoutTXT, initScriptContext);
+                while (scriptManager.NextSentence()) ;
+            }
         }
 
         public override void OnExit(BaseState newState) {
