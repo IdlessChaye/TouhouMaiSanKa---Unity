@@ -5,7 +5,7 @@ Document
 
 
 
-要给Panel分层，比如SaveLoad、Config、ConfigCharacter
+要给Panel分层，比如SaveLoad、ConfigCharacter
 
 实现Config系统各个参数功能
 角色语音设置界面（ScrollView?）的功能

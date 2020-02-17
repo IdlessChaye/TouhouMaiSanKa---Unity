@@ -8,10 +8,17 @@ public class TestToggleAndSlider : MonoBehaviour
     public UISlider UISlider;
     public UIToggle UIToggle;
     public UIToggle UIToggle2;
+    public GameObject gameOb;
 
     private void Start() {
         UIToggle.value = true;
         UIToggle2.value = true;
+    }
+
+    private void Update() {
+        if(Input.GetKeyDown(KeyCode.A)) {
+            Instantiate(gameOb);
+        }
     }
     public void SetTrue() {
         isTrue = true;

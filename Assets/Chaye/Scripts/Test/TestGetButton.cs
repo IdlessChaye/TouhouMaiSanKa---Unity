@@ -7,6 +7,7 @@ public class TestGetButton : MonoBehaviour
     public GameObject go;
     public UISprite UISprite;
     Sequence sequence;
+    public UITexture ui;
     void Start()
     {
         UIEventListener.Get(go).onClick += (GameObject go) => Debug.Log("Whattttt?!");
@@ -22,6 +23,10 @@ public class TestGetButton : MonoBehaviour
                  .OnUpdate(() => UISprite.alpha = value));
             sequence.OnComplete(() => Debug.Log("!!"));
         });
+
+        float value1 = 0f;
+        DOTween.To(() => value1, (x) => value1 = x, 1f, 5f)
+                 .OnUpdate(() => ui.alpha = value1);
         
         
     }
