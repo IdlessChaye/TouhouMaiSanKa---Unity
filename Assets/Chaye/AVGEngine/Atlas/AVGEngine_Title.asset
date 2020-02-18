@@ -1,0 +1,356 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 125b9f6e6906d6e4897a443b3c12729c, type: 3}
+  m_Name: AVGEngine_Title
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 900d7b96384767143abcff62a78b53c8, type: 2}
+  mSprites:
+  - name: Cishibishi_Hover
+    x: 0
+    y: 127
+    width: 212
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 23
+    paddingRight: 21
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Cishibishi_Normal
+    x: 490
+    y: 61
+    width: 212
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 23
+    paddingRight: 21
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Config_Title
+    x: 0
+    y: 205
+    width: 244
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 5
+    paddingRight: 7
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Config_Title_Hover
+    x: 245
+    y: 135
+    width: 244
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 5
+    paddingRight: 7
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Douhao_Hover
+    x: 981
+    y: 419
+    width: 41
+    height: 44
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 91
+    paddingRight: 124
+    paddingTop: 129
+    paddingBottom: 83
+  - name: Douhao_Normal
+    x: 981
+    y: 377
+    width: 39
+    height: 41
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 109
+    paddingRight: 108
+    paddingTop: 132
+    paddingBottom: 83
+  - name: Exit_Title
+    x: 602
+    y: 362
+    width: 143
+    height: 72
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 59
+    paddingRight: 54
+    paddingTop: 98
+    paddingBottom: 86
+  - name: Exit_Title_Hover
+    x: 424
+    y: 284
+    width: 143
+    height: 72
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 59
+    paddingRight: 54
+    paddingTop: 98
+    paddingBottom: 86
+  - name: frame
+    x: 938
+    y: 99
+    width: 80
+    height: 113
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Gallery_Title
+    x: 681
+    y: 139
+    width: 256
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Gallery_Title_Hover
+    x: 424
+    y: 209
+    width: 256
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Huanxiangru_Hover
+    x: 383
+    y: 435
+    width: 166
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 46
+    paddingRight: 44
+    paddingTop: 97
+    paddingBottom: 82
+  - name: Huanxiangru_Normal
+    x: 216
+    y: 435
+    width: 166
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 46
+    paddingRight: 44
+    paddingTop: 97
+    paddingBottom: 82
+  - name: Jiayinhuixin_Hover
+    x: 0
+    y: 435
+    width: 215
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 21
+    paddingRight: 20
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Jiayinhuixin_Normal
+    x: 765
+    y: 361
+    width: 215
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 21
+    paddingRight: 20
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Load_Title
+    x: 215
+    y: 361
+    width: 174
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 43
+    paddingRight: 39
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Load_Title_Hover
+    x: 765
+    y: 439
+    width: 174
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 43
+    paddingRight: 39
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Luoyingbinfen_Hover
+    x: 550
+    y: 435
+    width: 214
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 22
+    paddingRight: 20
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Luoyingbinfen_Normal
+    x: 0
+    y: 357
+    width: 214
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 22
+    paddingRight: 20
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Qiyaoliuzhuan_Hover
+    x: 212
+    y: 279
+    width: 211
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 23
+    paddingRight: 22
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Qiyaoliuzhuan_Normal
+    x: 390
+    y: 357
+    width: 211
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 23
+    paddingRight: 22
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Start_Title
+    x: 814
+    y: 287
+    width: 191
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 34
+    paddingRight: 31
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Start_Title_Hover
+    x: 814
+    y: 213
+    width: 191
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 34
+    paddingRight: 31
+    paddingTop: 98
+    paddingBottom: 85
+  - name: Waneryuchen_Hover
+    x: 602
+    y: 283
+    width: 211
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 23
+    paddingRight: 22
+    paddingTop: 96
+    paddingBottom: 83
+  - name: Waneryuchen_Normal
+    x: 0
+    y: 279
+    width: 211
+    height: 77
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 23
+    paddingRight: 22
+    paddingTop: 96
+    paddingBottom: 83
+  - name: white
+    x: 940
+    y: 464
+    width: 56
+    height: 48
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 36
+    paddingRight: 36
+    paddingTop: 42
+    paddingBottom: 38
+  mPixelSize: 1
+  mReplacement: {fileID: 0}

@@ -33,6 +33,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void SetStateBuff(StateBuff stateBuff) {
             StateBuff = stateBuff;
+            Messenger.Broadcast("SetStateBuff", StateBuff);
         }
 
         public void LoadStoryRecord(string currentStateName,string lastStateName, StateBuff stateBuff) {

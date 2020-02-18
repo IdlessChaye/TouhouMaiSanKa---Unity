@@ -89,6 +89,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
+        public void VoicePlay() {
+            if(voiceIndex != null) {
+                voiceAudioSource.Play();
+            }
+        }
 
         public void VoiceStop(bool hasEffect = true) {
             voiceIndex = null;

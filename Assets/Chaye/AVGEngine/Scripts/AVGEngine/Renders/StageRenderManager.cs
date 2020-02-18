@@ -17,6 +17,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public Dictionary<string, KeyValuePair<string, UITexture>> FigureImageDict => figureImageDict;
         public List<ChoiceItem> ChoiceItemList => choiceItemList;
 
+        public GameObject buttonsCollider;
+        public MyFirstButton firstButtonHide;
+        public MyFirstButton firstButtonVoice;
+        public MyFirstButton firstButtonBacklog;
+        public MyFirstButton firstButtonSkip;
+        public MyFirstButton firstButtonAuto;
+        public MyFirstButton firstButtonNext;
+        public MyFirstButton firstButtonQS;
+        public MyFirstButton firstButtonQL;
+        public MyFirstButton firstButtonSave;
+        public MyFirstButton firstButtonLoad;
+        public MyFirstButton firstButtonConfig;
+        public MyFirstButton firstButtonExit;
 
         public UITexture consoleBackgroundImageUITexture;
         public GameObject choice0;
@@ -82,7 +95,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             messageSpeedLowest = constData.MessageSpeedLowest;
             messageSpeedHighest = constData.MessageSpeedHighest;
 
-            InitializeStory();
+            //InitializeStory();
         }
 
 
@@ -107,22 +120,22 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void OnMouseLeftDown() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
-            if(buff == StateBuff.Normal) { 
+            if (buff == StateBuff.Normal) {
                 if (state == RunAnimateState.Instance) {
                     CompleteAnimate();
                 } else if (state == RunWaitState.Instance) {
                     stateMachine.TransferStateTo(RunScriptState.Instance);
                 }
-            } else if(buff == StateBuff.Auto) {
+            } else if (buff == StateBuff.Auto) {
                 stateMachine.SetStateBuff(StateBuff.Normal);
-            } else if(buff == StateBuff.Skip) {
+            } else if (buff == StateBuff.Skip) {
                 stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
         protected override void OnMouseRightDown() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
-            if(buff == StateBuff.Normal) { 
+            if (buff == StateBuff.Normal) {
                 if (state == RunWaitState.Instance) {
                     if (isConsoleShow) {
                         ConsoleHide();
@@ -136,9 +149,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                         ConsoleShow();
                     }
                 }
-            } else if(buff == StateBuff.Auto) {
+            } else if (buff == StateBuff.Auto) {
                 stateMachine.SetStateBuff(StateBuff.Normal);
-            } else if(buff == StateBuff.Skip) {
+            } else if (buff == StateBuff.Skip) {
                 stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
@@ -148,10 +161,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (buff == StateBuff.Normal) {
                 if (state == RunAnimateState.Instance) {
                     CompleteAnimate();
-                } else if(state == RunWaitState.Instance) {
+                } else if (state == RunWaitState.Instance) {
                     stateMachine.TransferStateTo(RunScriptState.Instance);
                 }
-            } else if(buff == StateBuff.Auto) {
+            } else if (buff == StateBuff.Auto) {
                 if (state == RunAnimateState.Instance) {
                     CompleteAnimate();
                 }
@@ -164,12 +177,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     OnOtherShow(backlogRenderManager);
                 }
-            } else if(buff == StateBuff.Auto) {
+            } else if (buff == StateBuff.Auto) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
                     OnOtherShow(backlogRenderManager);
                 }
-            } else if(buff==StateBuff.Skip) {
+            } else if (buff == StateBuff.Skip) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
                     OnOtherShow(backlogRenderManager);
@@ -184,14 +197,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Tween
-        
+
 
         private void StateQuitAnimate() {
             sequence?.Kill();
             stateMachine.TransferStateTo(RunScriptState.Instance);
         }
 
-        
+
 
         #endregion
 
@@ -205,7 +218,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             dialogContextIndex = null;
             characterName = null;
 
-            if(!config.IsPlayingVoiceAfterChangeLine) {
+            if (!config.IsPlayingVoiceAfterChangeLine) {
                 musicManager.VoiceStop(hasEffect);
             }
         }
@@ -381,8 +394,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void FigureImageClear(bool hasEffect = true) {
-            if(hasEffect) {
-                foreach(string key in figureImageDict.Keys) {
+            if (hasEffect) {
+                foreach (string key in figureImageDict.Keys) {
                     FigureImageRemove(key);
                 }
             } else {
@@ -391,7 +404,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void FigureImageDataClear() {
-            if(figureImageDict == null) {
+            if (figureImageDict == null) {
                 figureImageDict = new Dictionary<string, KeyValuePair<string, UITexture>>();
                 return;
             }
@@ -580,7 +593,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             BaseState lastState = stateMachine.LastState;
 
-            sequence.OnComplete(()=>action.Invoke());
+            sequence.OnComplete(() => action.Invoke());
             action += () => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
                 choiceItemList.Clear();
                 choiceList.Clear();
@@ -600,7 +613,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void UnloadData() {
-            
+
         }
 
         protected override void DoOnOtherShow() {
@@ -614,6 +627,92 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
         #endregion
 
+
+
+
+        #region Callbacks
+
+        private void InitializeFirstButtonCallbacks() {
+            buttonsCollider.SetActive(false);
+
+            firstButtonHide.onButtonSelect += () => ConsoleHide();
+            firstButtonVoice.onButtonSelect += () => musicManager.VoicePlay();
+            firstButtonBacklog.onButtonSelect += () => OnOtherShow(backlogRenderManager);
+            firstButtonSkip.onButtonSelect += () => {
+                stateMachine.SetStateBuff(StateBuff.Skip);
+                DisableButtons();
+            };
+            firstButtonSkip.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);    
+            firstButtonAuto.onButtonSelect += () => {
+                stateMachine.SetStateBuff(StateBuff.Auto);
+                DisableButtons();
+            };
+            firstButtonAuto.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);
+            firstButtonNext.onButtonSelect += () => {
+                stateMachine.SetStateBuff(StateBuff.Next);
+                DisableButtons();
+            };
+            firstButtonNext.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);
+            //firstButtonQS;
+            //firstButtonQL;
+            //firstButtonSave;
+            //firstButtonLoad;
+            firstButtonConfig.onButtonSelect += () => OnOtherShow(configRenderManager);
+            //firstButtonExit;
+
+            Messenger.AddListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
+        }
+
+        private void FirstButtonStateBuffCallback(StateBuff stateBuff) {
+            switch(stateBuff) {
+                case StateBuff.Normal:
+                    firstButtonSkip.SetNormal();
+                    firstButtonAuto.SetNormal();
+                    firstButtonNext.SetNormal();
+                    EnableButtons();
+                    break;
+                case StateBuff.Skip:
+                    firstButtonAuto.SetNormal();
+                    firstButtonNext.SetNormal();
+                    break;
+                case StateBuff.Auto:
+                    firstButtonSkip.SetNormal();
+                    firstButtonNext.SetNormal();
+                    break;
+                case StateBuff.Next:
+                    firstButtonSkip.SetNormal();
+                    firstButtonAuto.SetNormal();
+                    break;
+            }
+        }
+
+        private void DisableButtons() {
+            buttonsCollider.SetActive(true);
+        }
+        private void EnableButtons() {
+            buttonsCollider.SetActive(false);
+        }
+        private void FinalizeFirstButtonCallbacks() {
+            firstButtonHide.onButtonSelect = null;
+            firstButtonVoice.onButtonSelect = null;
+            firstButtonBacklog.onButtonSelect = null;
+            firstButtonSkip.onButtonSelect = null;
+            firstButtonSkip.onButtonRelease = null;
+            firstButtonAuto.onButtonSelect = null;
+            firstButtonAuto.onButtonRelease = null;
+            firstButtonNext.onButtonSelect = null;
+            firstButtonNext.onButtonRelease = null;
+            firstButtonQS.onButtonSelect = null;
+            firstButtonQL.onButtonSelect = null;
+            firstButtonSave.onButtonSelect = null;
+            firstButtonLoad.onButtonSelect = null;
+            firstButtonConfig.onButtonSelect = null;
+            firstButtonExit.onButtonSelect = null;
+
+            Messenger.RemoveListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
+        }
+
+        #endregion
 
 
 
@@ -699,7 +798,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public void InitializeStory() {
+        public void InitializeStory(bool isInitFirstButtonCallbacks = true) {
             textContextContainer.text = "";
             textNameContainer.text = "";
             nameLabel.text = "";
@@ -713,7 +812,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             choice2.SetActive(false);
             choice3.SetActive(false);
 
-            root.SetActive(false);
             isShow = false;
             isWorking = false;
             sequence = null;
@@ -727,12 +825,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             choosenDLIndex = null;
             choiceItemList = null;
             isOtherShow = false;
-    }
+
+            if(isInitFirstButtonCallbacks)
+                InitializeFirstButtonCallbacks();
+        }
 
         public void FinalizeStory() {
             sequence?.Kill();
             FigureImageDataClear();
-            InitializeStory();
+            InitializeStory(false);
+            FinalizeFirstButtonCallbacks();
         }
+
+
+
+
     }
 }
