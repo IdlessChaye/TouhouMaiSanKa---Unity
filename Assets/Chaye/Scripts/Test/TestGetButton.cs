@@ -10,6 +10,8 @@ public class TestGetButton : MonoBehaviour
     public UITexture ui;
     void Start()
     {
+        Messenger.AddListener("asd", () => Debug.Log("asdads "));
+        Messenger.Broadcast("asd");
         UIEventListener.Get(go).onClick += (GameObject go) => Debug.Log("Whattttt?!");
         float value = 0f;
         Tweener tweener = DOTween.To(() => value, (x) => value = x, 1f, 5f)
