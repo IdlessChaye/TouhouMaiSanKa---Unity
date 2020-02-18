@@ -33,6 +33,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public GameObject choice1;
         public GameObject choice2;
         public GameObject choice3;
+
         private List<GameObject> choiceList;
         private PachiGrimoire pachiGrimoire;
         private ConstData constData;
@@ -48,8 +49,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Animate
-        private Sequence sequenceAnimate;
-        private System.Action actionAnimate;
+        private Sequence sequence;
+        private System.Action action;
         #endregion
 
         #region Text
@@ -106,13 +107,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #endregion
 
         private void Initialize() {
-            panel = gameRoot.GetComponent<UIPanel>();
             pachiGrimoire = PachiGrimoire.I;
             constData = pachiGrimoire.constData;
             config = pachiGrimoire.ConfigManager.Config;
             stateMachine = pachiGrimoire.StateMachine;
             resourceManager = pachiGrimoire.ResourceManager;
             musicManager = pachiGrimoire.MusicManager;
+
+            panel = gameRoot.GetComponent<UIPanel>();
+
             backlogRenderManager = GetComponent<BacklogRenderManager>();
             configRenderManager = GetComponent<ConfigRenderManager>();
             slRenderManager = GetComponent<SaveLoadRenderManager>();
@@ -135,12 +138,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
 
             if(!config.HasAnimationEffect) {
-                if(sequenceAnimate.IsPlaying() == true) {
+                if(sequence.IsPlaying() == true) {
                     CompleteAnimate();
                 }
             }
 
-            if (isWorking == false && sequenceAnimate.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
+            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
                 CompleteAnimate();
             }
 
@@ -252,32 +255,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Tween
-        private void JoinTweenAniamte(Tweener tweener) {
+        private void JoinTween(Tweener tweener) {
             if (tweener == null) {
-                Debug.LogWarning("StageRenderManager JoinTweenAniamte");
+                Debug.LogWarning("StageRenderManager JoinTween");
                 return;
             }
-            if (sequenceAnimate == null || sequenceAnimate.IsPlaying() == false) {
-                sequenceAnimate = DOTween.Sequence();
-                actionAnimate = null;
+            if (sequence == null || sequence.IsPlaying() == false) {
+                sequence = DOTween.Sequence();
+                action = null;
             }
-            sequenceAnimate.Join(tweener);
+            sequence.Join(tweener);
         }
 
         public void CompleteAnimate() {
-            sequenceAnimate?.Complete();
+            sequence?.Complete();
         }
 
         public void PauseAnimate() {
-            sequenceAnimate?.Pause();
+            sequence?.Pause();
         }
 
         public void PlayAnimate() {
-            sequenceAnimate?.Play();
+            sequence?.Play();
         }
 
         private void StateQuitAnimate() {
-            sequenceAnimate?.Kill();
+            sequence?.Kill();
             stateMachine.TransferStateTo(RunScriptState.Instance);
         }
 
@@ -329,16 +332,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     textDelayTime = characterName.Length / (messageSpeedHighest * messageSpeed + messageSpeedLowest);
                     Tweener tweenerName = textNameContainer.DOText(characterName, textDelayTime).
                         OnUpdate(() => nameLabel.text = textNameContainer.text);
-                    JoinTweenAniamte(tweenerName);
+                    JoinTween(tweenerName);
                 }
                 Tweener tweenerContext = textContextContainer.DOText(context, textShowTime)
                     .SetDelay(textDelayTime)
                     .OnUpdate(() => contextLabel.text = textContextContainer.text);
-                JoinTweenAniamte(tweenerContext);
+                JoinTween(tweenerContext);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                sequence.OnComplete(() => action.Invoke());
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             }
         }
         #endregion
@@ -359,12 +362,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 backgroundUITexture.alpha = 0f;
 
                 Tweener tweenerDisappear = DoTextureAlpha(backgroundUITextureTop, 1f, 0f);
-                JoinTweenAniamte(tweenerDisappear);
+                JoinTween(tweenerDisappear);
                 Tweener tweenerAppear = DoTextureAlpha(backgroundUITexture, 0f, 1f);
-                JoinTweenAniamte(tweenerAppear);
+                JoinTween(tweenerAppear);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate += () => {
+                sequence.OnComplete(() => action.Invoke());
+                action += () => {
                     backgroundUITextureTop.mainTexture = backgroundTexture2D;
                     backgroundUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
                     backgroundUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
@@ -372,8 +375,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     backgroundUITexture.mainTexture = null;
                     backgroundUITexture.alpha = 0f;
                 };
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             }
         }
 
@@ -386,17 +389,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     return;
                 }
                 Tweener tweener = DoTextureAlpha(backgroundUITextureTop, 1f, 0f);
-                JoinTweenAniamte(tweener);
+                JoinTween(tweener);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate += () => {
+                sequence.OnComplete(() => action.Invoke());
+                action += () => {
                     backgroundUITextureTop.mainTexture = null;
                     backgroundUITextureTop.width = ConstData.TEXTURE2D_SCREEN_WIDTH;
                     backgroundUITextureTop.height = ConstData.TEXTURE2D_SCREEN_HEIGHT;
                     backgroundUITextureTop.alpha = 1f;
                 };
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             }
         }
 
@@ -438,11 +441,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (hasEffect) {
                 uiTexture.alpha = 0f;
                 Tweener tweener = DoTextureAlpha(uiTexture, 0f, 1f);
-                JoinTweenAniamte(tweener);
+                JoinTween(tweener);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                sequence.OnComplete(() => action.Invoke());
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             } else {
                 uiTexture.alpha = 1f;
             }
@@ -460,16 +463,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (hasEffect) {
                 uiTexture.alpha = 1f;
                 Tweener tweener = DoTextureAlpha(uiTexture, 1f, 0f);
-                JoinTweenAniamte(tweener);
+                JoinTween(tweener);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate += () => {
+                sequence.OnComplete(() => action.Invoke());
+                action += () => {
                     uiTexture.mainTexture = null;
                     Destroy(uiTexture);
                     Destroy(go);
                 };
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             } else {
                 uiTexture.alpha = 0f;
                 uiTexture.mainTexture = null;
@@ -518,12 +521,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 smallFigureImageUITexture.alpha = 0f;
 
                 Tweener tweenerDisappear = DoTextureAlpha(smallFigureImageUITextureTop, 1f, 0f);
-                JoinTweenAniamte(tweenerDisappear);
+                JoinTween(tweenerDisappear);
                 Tweener tweenerAppear = DoTextureAlpha(smallFigureImageUITexture, 0f, 1f);
-                JoinTweenAniamte(tweenerAppear);
+                JoinTween(tweenerAppear);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate += () => {
+                sequence.OnComplete(() => action.Invoke());
+                action += () => {
                     smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
                     smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
                     smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_HEIGHT;
@@ -531,8 +534,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     smallFigureImageUITexture.mainTexture = null;
                     smallFigureImageUITexture.alpha = 0f;
                 };
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             }
         }
 
@@ -546,17 +549,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     return;
                 }
                 Tweener tweener = DoTextureAlpha(smallFigureImageUITextureTop, 1f, 0f);
-                JoinTweenAniamte(tweener);
+                JoinTween(tweener);
 
-                sequenceAnimate.OnComplete(() => actionAnimate.Invoke());
-                actionAnimate += () => {
+                sequence.OnComplete(() => action.Invoke());
+                action += () => {
                     smallFigureImageUITextureTop.mainTexture = null;
                     smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
                     smallFigureImageUITextureTop.height = ConstData.TEXTURE2D_HEIGHT;
                     smallFigureImageUITextureTop.alpha = 1f;
                 };
-                actionAnimate -= StateQuitAnimate;
-                actionAnimate += StateQuitAnimate;
+                action -= StateQuitAnimate;
+                action += StateQuitAnimate;
             }
         }
 
@@ -675,19 +678,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     texture.alpha = 1f;
                     go.SetActive(false);
                 });
-                JoinTweenAniamte(tweener);
+                JoinTween(tweener);
             }
             BaseState lastState = stateMachine.LastState;
 
-            sequenceAnimate.OnComplete(()=>actionAnimate.Invoke());
-            actionAnimate += () => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
+            sequence.OnComplete(()=>action.Invoke());
+            action += () => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
                 choiceItemList.Clear();
                 choiceList.Clear();
                 BacklogItem backlogItem = new BacklogItem(null, choosenDLIndex, null, constData.ChoiceBacklogItemName); // 选项的backlog name是 Choice
                 PachiGrimoire.I.BacklogManager.Push(backlogItem);
             };
-            actionAnimate -= StateQuitAnimate;
-            actionAnimate += StateQuitAnimate;
+            action -= StateQuitAnimate;
+            action += StateQuitAnimate;
         }
         #endregion
 
@@ -703,18 +706,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             // 初始化Game
             InitGameData();
             Tweener tweener = DoPanelAlpha(panel, 0f, 1f);
-            JoinTweenAniamte(tweener);
+            JoinTween(tweener);
 
-            sequenceAnimate.OnComplete(() => isWorking = true);
+            sequence.OnComplete(() => isWorking = true);
         }
 
         public void GameHide() {
             isWorking = false;
             panel.alpha = 1f;
             Tweener tweener = DoPanelAlpha(panel, 1f, 0f);
-            JoinTweenAniamte(tweener);
+            JoinTween(tweener);
 
-            sequenceAnimate.OnComplete(() => {
+            sequence.OnComplete(() => {
                 isGameShow = false;
                 gameRoot.SetActive(false);
                 //backlogItemList.Clear();
@@ -785,8 +788,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void LoadStoryRecord(StoryRecord sr) {
-            sequenceAnimate?.Pause();
-            sequenceAnimate = DOTween.Sequence();
+            sequence?.Pause();
+            sequence = DOTween.Sequence();
 
             dialogContextIndex = sr.dialogContextIndex;
             characterName = sr.characterName;
@@ -882,8 +885,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             gameRoot.SetActive(false);
             isGameShow = false;
             isWorking = false;
-            sequenceAnimate = null;
-            actionAnimate = null;
+            sequence = null;
+            action = null;
             dialogContextIndex = null;
             characterName = null;
             backgroundImageIndex = null;
@@ -898,7 +901,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void FinalizeStory() {
-            sequenceAnimate?.Kill();
+            sequence?.Kill();
             FigureImageDataClear();
             InitializeStory();
         }

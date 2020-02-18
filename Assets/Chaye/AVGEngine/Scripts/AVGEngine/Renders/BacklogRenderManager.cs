@@ -32,13 +32,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private List<BacklogItem> backlogItemList = new List<BacklogItem>();
 
         private void Awake() {
-            panel = backlogRoot.GetComponent<UIPanel>();
             backlogManager = PachiGrimoire.I.BacklogManager;
             constData = PachiGrimoire.I.constData;
             resourceManager = PachiGrimoire.I.ResourceManager;
             musicManager = PachiGrimoire.I.MusicManager;
             renderManager = GetComponent<StageRenderManager>();
             config = PachiGrimoire.I.ConfigManager.Config;
+
+            panel = backlogRoot.GetComponent<UIPanel>();
             backlogRoot.SetActive(false);
         }
 
@@ -124,8 +125,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             isWorking = false;
             backlogRoot.SetActive(true);
             panel.alpha = 0f;
-            count = backlogManager.Count;
-            head = 0;
+
             LoadBacklogData();
             // 初始化Backlog
             Tweener tweener = DoPanelAlpha(panel, 0f, 1f);
@@ -149,6 +149,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void LoadBacklogData() {
+            count = backlogManager.Count;
+            head = 0;
             backlogItemList.Clear();
             int index = head;
             string name = null, contextIndex = null, viIndex = null;
