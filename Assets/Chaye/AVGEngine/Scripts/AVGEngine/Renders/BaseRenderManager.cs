@@ -36,7 +36,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             configManager = pachiGrimoire.ConfigManager;
 
             panel = root.GetComponent<UIPanel>();
-            root.SetActive(false);
+            //root.SetActive(false);
 
             Initilize();
         }

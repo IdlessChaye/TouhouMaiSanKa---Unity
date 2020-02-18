@@ -69,9 +69,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             sliderVoiceVolume.value = config.VoiceVolume;
             if (config.IsPlayingVoiceAfterChangeLine) {
-                toggleHasEffectOn.value = true;
+                toggleVoiceChangeLineOn.value = true;
             } else {
-                toggleHasEffectOff.value = true;
+                toggleVoiceChangeLineOff.value = true;
             }
             if (config.HasAnimationEffect) {
                 toggleHasEffectOn.value = true;
