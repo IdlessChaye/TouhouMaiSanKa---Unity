@@ -5,19 +5,10 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class StageRenderManager : MonoBehaviour {
-        #region Instance
+    public class StageRenderManager : BaseRenderManager {
         private static StageRenderManager instance;
         public static StageRenderManager I => instance;
-        private void Awake() {
-            if (instance == null) {
-                instance = this;
-            } else {
-                Destroy(this);
-            }
-            Initialize();
-        }
-        #endregion
+
 
         public string DialogContextIndex => dialogContextIndex;
         public string CharacterName => characterName;
@@ -27,7 +18,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public List<ChoiceItem> ChoiceItemList => choiceItemList;
 
 
-        public GameObject gameRoot;
         public UITexture consoleBackgroundImageUITexture;
         public GameObject choice0;
         public GameObject choice1;
@@ -35,23 +25,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public GameObject choice3;
 
         private List<GameObject> choiceList;
-        private PachiGrimoire pachiGrimoire;
-        private ConstData constData;
-        private Config config;
-        private StateMachineManager stateMachine;
-        private ResourceManager resourceManager;
-        private MusicManager musicManager;
         private float messageSpeedLowest;
         private float messageSpeedHighest;
-        private UIPanel panel;
-        private bool isGameShow;
-        private bool isWorking;
 
-
-        #region Animate
-        private Sequence sequence;
-        private System.Action action;
-        #endregion
 
         #region Text
         public Text textContextContainer;
@@ -85,36 +61,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private List<ChoiceItem> choiceItemList;
         #endregion
 
-        #region Backlog
-
+        #region OtherRenders
         private BacklogRenderManager backlogRenderManager;
-        private bool isBacklogShow;
-
-        #endregion
-
-        #region Config
-
         private ConfigRenderManager configRenderManager;
-        private bool isConfigShow;
-
-        #endregion
-
-        #region SaveLoad
-
         private SaveLoadRenderManager slRenderManager;
-        private bool isSLShow;
-
         #endregion
 
-        private void Initialize() {
-            pachiGrimoire = PachiGrimoire.I;
-            constData = pachiGrimoire.constData;
-            config = pachiGrimoire.ConfigManager.Config;
-            stateMachine = pachiGrimoire.StateMachine;
-            resourceManager = pachiGrimoire.ResourceManager;
-            musicManager = pachiGrimoire.MusicManager;
-
-            panel = gameRoot.GetComponent<UIPanel>();
+        protected override void Initilize() {
+            if (instance == null) {
+                instance = this;
+            } else {
+                Destroy(this);
+                return;
+            }
 
             backlogRenderManager = GetComponent<BacklogRenderManager>();
             configRenderManager = GetComponent<ConfigRenderManager>();
@@ -128,54 +87,24 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Input
-        private void FixedUpdate() {
-            if (isBacklogShow || isConfigShow || isSLShow) {
-                return;
-            }
 
-            if (!isGameShow) { 
-                return;
-            }
-
-            if(!config.HasAnimationEffect) {
-                if(sequence.IsPlaying() == true) {
-                    CompleteAnimate();
-                }
-            }
-
-            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
-                CompleteAnimate();
-            }
-
-            if (!isWorking)
-                return;
-
+        protected override void ThenUpdateWhat() {
             BaseState state = stateMachine.CurrentState;
             if (state == SleepState.Instance) {
                 return;
             }
 
             StateBuff stateBuff = stateMachine.StateBuff; // Skip Animation
-            if(stateBuff == StateBuff.Skip || stateBuff == StateBuff.Next) {
-                if(state == RunAnimateState.Instance) {
+            if (stateBuff == StateBuff.Skip || stateBuff == StateBuff.Next) {
+                if (state == RunAnimateState.Instance) {
                     CompleteAnimate();
                 }
             }
 
-            if (Input.GetMouseButtonDown(0)) {
-                OnMouseLeftDown();
-            } else if (Input.GetMouseButtonDown(1)) {
-                OnMouseRightDown();
-            } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-                OnMouseScrollWheelZoomOut();
-            } else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-                OnMouseScrollWheelZoomIn();
-            } else if (Input.GetKeyDown(constData.KeyConfirm)) {
-                OnKeyConfirmDown();
-            }
+            UpdateInput();
         }
 
-        private void OnMouseLeftDown() {
+        protected override void OnMouseLeftDown() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
             if(buff == StateBuff.Normal) { 
@@ -190,7 +119,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
-        private void OnMouseRightDown() {
+        protected override void OnMouseRightDown() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
             if(buff == StateBuff.Normal) { 
@@ -213,7 +142,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
-        private void OnMouseScrollWheelZoomOut() {
+        protected override void OnMouseScrollWheelZoomOut() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
             if (buff == StateBuff.Normal) {
@@ -228,26 +157,26 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
             }
         }
-        private void OnMouseScrollWheelZoomIn() {
+        protected override void OnMouseScrollWheelZoomIn() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
             if (buff == StateBuff.Normal) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
-                    BacklogShow();
+                    OnOtherShow(backlogRenderManager);
                 }
             } else if(buff == StateBuff.Auto) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
-                    BacklogShow();
+                    OnOtherShow(backlogRenderManager);
                 }
             } else if(buff==StateBuff.Skip) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
-                    BacklogShow();
+                    OnOtherShow(backlogRenderManager);
                 }
             }
         }
-        private void OnKeyConfirmDown() {
+        protected override void OnKeyConfirmDown() {
             OnMouseLeftDown();
         }
 
@@ -255,45 +184,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Tween
-        private void JoinTween(Tweener tweener) {
-            if (tweener == null) {
-                Debug.LogWarning("StageRenderManager JoinTween");
-                return;
-            }
-            if (sequence == null || sequence.IsPlaying() == false) {
-                sequence = DOTween.Sequence();
-                action = null;
-            }
-            sequence.Join(tweener);
-        }
-
-        public void CompleteAnimate() {
-            sequence?.Complete();
-        }
-
-        public void PauseAnimate() {
-            sequence?.Pause();
-        }
-
-        public void PlayAnimate() {
-            sequence?.Play();
-        }
+        
 
         private void StateQuitAnimate() {
             sequence?.Kill();
             stateMachine.TransferStateTo(RunScriptState.Instance);
         }
 
-        private Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 0.5f) {
-            if (uiPanel == null) {
-                return null;
-            }
-            uiPanel.alpha = fromValue;
-            float value = fromValue;
-            Tweener tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
-                .OnUpdate(() => uiPanel.alpha = value);
-            return tweener;
-        }
+        
 
         #endregion
 
@@ -434,7 +332,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             uiTexture.width = (int)(width * scale_x);
             uiTexture.height = (int)(height * scale_y);
             go.transform.position = new Vector3(pos_x, pos_y, 0);
-            go.transform.SetParent(gameRoot.transform, false);
+            go.transform.SetParent(root.transform, false);
             KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
             figureImageDict.Add(uiKey, pair);
 
@@ -696,91 +594,24 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        #region GamePanel
-        public void GameShow() {
-            isGameShow = true;
-            isWorking = false;
-            gameRoot.SetActive(true);
-            panel.alpha = 0f;
-
-            // 初始化Game
-            InitGameData();
-            Tweener tweener = DoPanelAlpha(panel, 0f, 1f);
-            JoinTween(tweener);
-
-            sequence.OnComplete(() => isWorking = true);
-        }
-
-        public void GameHide() {
-            isWorking = false;
-            panel.alpha = 1f;
-            Tweener tweener = DoPanelAlpha(panel, 1f, 0f);
-            JoinTween(tweener);
-
-            sequence.OnComplete(() => {
-                isGameShow = false;
-                gameRoot.SetActive(false);
-                //backlogItemList.Clear();
-                //renderManager.BacklogHide();
-            });
-        }
-
-        private void InitGameData() {
+        #region RenderSwitch
+        protected override void LoadData() {
             SetAlphaOfConsole();
         }
-        #endregion
 
-
-
-        #region Backlog
-
-        public void BacklogShow() {
-            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
-            PauseAnimate();
-            isBacklogShow = true;
-            backlogRenderManager.BacklogShow();
+        protected override void UnloadData() {
+            
         }
 
-        public void BacklogHide() {
-            isBacklogShow = false;
+        protected override void DoOnOtherShow() {
+            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
+            PauseAnimate();
+        }
+
+        protected override void DoOnOtherHide() {
             PlayAnimate();
             stateMachine.TransferStateTo(stateMachine.LastState); // Sleep Back
         }
-
-        #endregion
-
-
-        #region Config
-        public void ConfigShow() {
-            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
-            PauseAnimate();
-            isConfigShow = true;
-            configRenderManager.ConfigShow();
-        }
-
-        public void ConfigHide() {
-            isConfigShow = false;
-            PlayAnimate();
-            stateMachine.TransferStateTo(stateMachine.LastState); // Sleep Back
-        }
-        #endregion
-
-
-
-        #region SaveLoad
-
-        public void SLShow() {
-            stateMachine.TransferStateTo(SleepState.Instance); // Go to Sleep
-            PauseAnimate();
-            isSLShow = true;
-            slRenderManager.SLShow();
-        }
-        public void SLHide() {
-            isSLShow = false;
-            PlayAnimate();
-            stateMachine.TransferStateTo(stateMachine.LastState); // Sleep Back
-        }
-
         #endregion
 
 
@@ -857,7 +688,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     uiTexture.width = (int)(width * scale_x);
                     uiTexture.height = (int)(height * scale_y);
                     go.transform.position = new Vector3(pos_x, pos_y, 0);
-                    go.transform.SetParent(gameRoot.transform, false);
+                    go.transform.SetParent(root.transform, false);
                     KeyValuePair<string, UITexture> pair = new KeyValuePair<string, UITexture>(fiIndex, uiTexture);
                     figureImageDict.Add(uiKey, pair);
                 }
@@ -882,8 +713,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             choice2.SetActive(false);
             choice3.SetActive(false);
 
-            gameRoot.SetActive(false);
-            isGameShow = false;
+            root.SetActive(false);
+            isShow = false;
             isWorking = false;
             sequence = null;
             action = null;
@@ -895,10 +726,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             isConsoleShow = false;
             choosenDLIndex = null;
             choiceItemList = null;
-            isBacklogShow = false;
-            isConfigShow = false;
-            isSLShow = false;
-        }
+            isOtherShow = false;
+    }
 
         public void FinalizeStory() {
             sequence?.Kill();

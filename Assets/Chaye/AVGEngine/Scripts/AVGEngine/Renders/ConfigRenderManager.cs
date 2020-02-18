@@ -4,9 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class ConfigRenderManager : MonoBehaviour {
+    public class ConfigRenderManager : BaseRenderManager {
 
-        public GameObject configRoot;
         public UISlider sliderSystemVolume;
         public UISlider sliderBGMVolume;
         public UISlider sliderSEVolume;
@@ -22,134 +21,42 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public UIToggle toggleHasEffectOff;
         public UISlider sliderAlphaOfConsole;
 
-        private bool isConfigShow;
-        private Sequence sequence;
-        private UIPanel panel;
-        private ConfigManager configManager;
-        private Config config;
-        private ConstData constData;
-        private StageRenderManager renderManager;
         private ConfigCharacterVolumeRenderManager configCharacterVolumeRenderManager;
-        private bool isWorking;
-        private bool isConfigCharacterShow;
 
 
-        private void Awake() {
-            panel = configRoot.GetComponent<UIPanel>();
-            configManager = PachiGrimoire.I.ConfigManager;
-            config = configManager.Config;
-            constData = PachiGrimoire.I.constData;
-            renderManager = GetComponent<StageRenderManager>();
+        protected override void Initilize() {
             configCharacterVolumeRenderManager = GetComponent<ConfigCharacterVolumeRenderManager>();
-            configRoot.SetActive(false);
         }
 
         #region Input
 
-        private void FixedUpdate() {
-            if (!isConfigShow)
-                return;
-            if (isConfigCharacterShow)
-                return;
-            if (!config.HasAnimationEffect) {
-                if (sequence.IsPlaying() == true) {
-                    CompleteAnimate();
-                }
-            }
-            // interrupt animation
-            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
-                CompleteAnimate();
-            }
-            if (!isWorking)
-                return;
-            if (Input.GetMouseButtonDown(0)) {
-                OnMouseLeftDown();
-            } else if (Input.GetMouseButtonDown(1)) {
-                OnMouseRightDown();
-            } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-                OnMouseScrollWheelZoomOut();
-            } else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-                OnMouseScrollWheelZoomIn();
-            } else if (Input.GetKeyDown(constData.KeyConfirm)) {
-                OnKeyConfirmDown();
-            }
+        protected override void ThenUpdateWhat() {
+            UpdateInput();
         }
 
-        private void OnMouseLeftDown() {
+        protected override void OnMouseLeftDown() {
 
         }
 
-        private void OnMouseRightDown() {
-            ConfigHide();
+        protected override void OnMouseRightDown() {
+            OnHide();
         }
-        private void OnMouseScrollWheelZoomOut() {
-        }
-
-        private void OnMouseScrollWheelZoomIn() {
+        protected override void OnMouseScrollWheelZoomOut() {
         }
 
-        private void OnKeyConfirmDown() {
+        protected override void OnMouseScrollWheelZoomIn() {
+        }
+
+        protected override void OnKeyConfirmDown() {
 
         }
 
         #endregion
 
 
-        private void JoinTween(Tweener tweener) {
-            if (tweener == null) {
-                Debug.LogWarning("ConfigRenderManager JoinTween");
-                return;
-            }
-            if (sequence == null || sequence.IsPlaying() == false) {
-                sequence = DOTween.Sequence();
-            }
-            sequence.Join(tweener);
-        }
-
-        public void CompleteAnimate() {
-            sequence.Complete();
-        }
-
-        private Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 0.5f) {
-            if (uiPanel == null) {
-                return null;
-            }
-            uiPanel.alpha = fromValue;
-            float value = fromValue;
-            Tweener tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
-                .OnUpdate(() => uiPanel.alpha = value);
-            return tweener;
-        }
 
 
-        public void ConfigShow() {
-            isConfigShow = true;
-            isWorking = false;
-            configRoot.SetActive(true);
-            panel.alpha = 0f;
-            // 初始化Config
-            LoadConfigData();
-            Tweener tweener = DoPanelAlpha(panel, 0f, 1f);
-            JoinTween(tweener);
-
-            sequence.OnComplete(() => isWorking = true);
-        }
-
-        public void ConfigHide() {
-            configManager.SaveConfigContext();
-            isWorking = false;
-            panel.alpha = 1f;
-            Tweener tweener = DoPanelAlpha(panel, 1f, 0f);
-            JoinTween(tweener);
-
-            sequence.OnComplete(() => {
-                configRoot.SetActive(false);
-                isConfigShow = false;
-                renderManager.ConfigHide();
-            });
-        }
-
-        private void LoadConfigData() {
+        protected override void LoadData() {
             sliderSystemVolume.value = config.SystemVolume;
             sliderBGMVolume.value = config.BGMVolume;
             sliderSEVolume.value = config.SEVolume;
@@ -173,7 +80,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             sliderAlphaOfConsole.value = config.AlphaOfConsole;
         }
+        protected override void UnloadData() {
+            configManager.SaveConfigContext();
+        }
+        protected override void DoOnOtherShow() {
+            configManager.SaveConfigContext();
+        }
+        protected override void DoOnOtherHide() {
 
+        }
 
         private void ConfigSetDefault() {
             config.SystemVolume = constData.DefaultSystemVolume;
@@ -186,7 +101,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             config.IsPlayingVoiceAfterChangeLine = constData.DefaultIsPlayingVoiceAfterChangeLine;
             config.HasAnimationEffect = constData.DefaultHasAnimationEffect;
             config.AlphaOfConsole = constData.DefaultAlphaOfConsole;
-            LoadConfigData();
+            LoadData();
             configManager.SaveConfigContext();
         }
 
@@ -237,7 +152,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnPressedButtonExit() {
-            ConfigHide();
+            OnHide();
         }
 
         public void OnPressedButtonSetDefault() {
@@ -245,22 +160,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnPressedButtonVoiceVolumeList() {
-            ConfigCharacterShow();
+            OnShow(configCharacterVolumeRenderManager);
         }
         #endregion
 
-
-        #region CharacterVoiceConfig
-        public void ConfigCharacterShow() {
-            configManager.SaveConfigContext();
-            isConfigCharacterShow = true;
-            configCharacterVolumeRenderManager.ConfigCharacterShow();
-        }
-
-        public void ConfigCharacterHide() {
-            isConfigCharacterShow = false;
-        }
-        #endregion
 
     }
 }

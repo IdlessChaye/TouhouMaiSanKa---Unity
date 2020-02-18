@@ -170,7 +170,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             stateMachine.TransferStateTo(RunScriptState.Instance);
             stateMachine.SetStateBuff(StateBuff.Normal);
             stageContextManager.InitializeStory();
-            StageRenderManager.GameShow();
+            StageRenderManager.OnShow(null);
         }
 
         public void LoadGame() { // 全系统入口，初始化，还有UI管理，这个函数么有写完

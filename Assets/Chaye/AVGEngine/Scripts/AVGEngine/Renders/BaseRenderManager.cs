@@ -7,22 +7,23 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
     public abstract class BaseRenderManager : MonoBehaviour {
         public GameObject root;
 
-        private PachiGrimoire pachiGrimoire;
-        private ConstData constData;
-        private Config config;
-        private StateMachineManager stateMachine;
-        private ResourceManager resourceManager;
-        private MusicManager musicManager;
-        private StageRenderManager renderManager;
+        protected PachiGrimoire pachiGrimoire;
+        protected ConstData constData;
+        protected Config config;
+        protected StateMachineManager stateMachine;
+        protected ResourceManager resourceManager;
+        protected MusicManager musicManager;
+        protected StageRenderManager renderManager;
+        protected ConfigManager configManager;
 
-        private UIPanel panel;
-        private bool isShow;
-        private bool isWorking;
-        private bool isOtherShow;
-        private BaseRenderManager fromRenderManager;
+        protected UIPanel panel;
+        protected bool isShow;
+        protected bool isWorking;
+        protected bool isOtherShow;
+        protected BaseRenderManager fromRenderManager;
 
-        private Sequence sequence;
-        private System.Action action;
+        protected Sequence sequence;
+        protected System.Action action;
 
         private void Awake() {
             pachiGrimoire = PachiGrimoire.I;
@@ -32,6 +33,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             resourceManager = pachiGrimoire.ResourceManager;
             musicManager = pachiGrimoire.MusicManager;
             renderManager = pachiGrimoire.StageRenderManager;
+            configManager = pachiGrimoire.ConfigManager;
 
             panel = root.GetComponent<UIPanel>();
             root.SetActive(false);
@@ -43,9 +45,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Update
-        private void Update() {
-            if (!isShow)
+        private void FixedUpdate() {
+            if (!isShow) {
                 return;
+            }
             if (isOtherShow)
                 return;
 
@@ -63,6 +66,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             ThenUpdateWhat();
         }
+
 
         protected abstract void ThenUpdateWhat();
 

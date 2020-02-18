@@ -155,14 +155,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 172
+  mWidth: 184
   mHeight: 24
   mDepth: 103
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 7.1666665
+  aspectRatio: 7.6666665
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -559,14 +559,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 34
+  mWidth: 36
   mHeight: 24
   mDepth: 102
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.4166666
+  aspectRatio: 1.5
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -719,7 +719,7 @@ Transform:
   m_GameObject: {fileID: 1058694805}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0027777778, y: 0.0027777778, z: 0.0027777778}
+  m_LocalScale: {x: 0.0012150669, y: 0.0012150669, z: 0.0012150669}
   m_Children:
   - {fileID: 1081544911}
   - {fileID: 813788070377329743}
@@ -996,14 +996,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 46
+  mWidth: 52
   mHeight: 24
   mDepth: 102
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.9166666
+  aspectRatio: 2.1666667
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -1864,14 +1864,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 78
+  mWidth: 84
   mHeight: 28
   mDepth: 9
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.7857144
+  aspectRatio: 3
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -4328,14 +4328,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 78
+  mWidth: 84
   mHeight: 28
   mDepth: 12
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.7857144
+  aspectRatio: 3
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -5128,14 +5128,14 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 78
+  mWidth: 84
   mHeight: 28
   mDepth: 6
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.7857144
+  aspectRatio: 3
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -5299,7 +5299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3457907240b5b2b448bc1b353f4d3982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameRoot: {fileID: 2877829292068554566}
+  root: {fileID: 2877829292068554566}
   consoleBackgroundImageUITexture: {fileID: 8812937805109576178}
   choice0: {fileID: 863221540689965531}
   choice1: {fileID: 7535928366956891919}
@@ -5338,7 +5338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da54118ff7bc3964aaf077e3bebf2d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backlogRoot: {fileID: 2233855445113491443}
+  root: {fileID: 2233855445113491443}
   voice2: {fileID: 2683922460308315570}
   name2: {fileID: 774978858860420343}
   context2: {fileID: 4517890491749789398}
@@ -5360,7 +5360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e879fe72277c554b8029868bea5f34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configRoot: {fileID: 6901492547256456368}
+  root: {fileID: 6901492547256456368}
   sliderSystemVolume: {fileID: 9084527954223133897}
   sliderBGMVolume: {fileID: 1025111058399280605}
   sliderSEVolume: {fileID: 2302030569673027847}
@@ -5387,7 +5387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddfec0f670502ef4fab97dfc2ff1d404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  configCharacterRoot: {fileID: 5016615801970191969}
+  root: {fileID: 5016615801970191969}
 --- !u!114 &1132325256437648542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5400,7 +5400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f43ecdbd88f55a4aae1e73c9ea929c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slRoot: {fileID: 3953110735778199977}
+  root: {fileID: 3953110735778199977}
   confirmRoot: {fileID: 5553438327388030857}
   confirmSprite: {fileID: 2342938909265992090}
 --- !u!1 &9041220116458198312
@@ -5495,12 +5495,12 @@ PrefabInstance:
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: mWidth
-      value: 286
+      value: 276
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: aspectRatio
-      value: 13
+      value: 12.545455
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242118, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
@@ -6748,12 +6748,12 @@ PrefabInstance:
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: mWidth
-      value: 286
+      value: 276
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: aspectRatio
-      value: 13
+      value: 12.545455
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242118, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
@@ -7084,12 +7084,12 @@ PrefabInstance:
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: mWidth
-      value: 286
+      value: 276
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: aspectRatio
-      value: 13
+      value: 12.545455
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242118, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
@@ -7190,12 +7190,12 @@ PrefabInstance:
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: mWidth
-      value: 286
+      value: 276
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242116, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}
       propertyPath: aspectRatio
-      value: 13
+      value: 12.545455
       objectReference: {fileID: 0}
     - target: {fileID: 7989207358505242118, guid: db22e761a22e91442803d1740d9d5827,
         type: 3}

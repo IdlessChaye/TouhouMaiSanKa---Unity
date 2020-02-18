@@ -4,8 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
-    public class BacklogRenderManager : MonoBehaviour {
-        public GameObject backlogRoot;
+    public class BacklogRenderManager : BaseRenderManager {
         public GameObject voice2;
         public UILabel name2;
         public UILabel context2;
@@ -16,139 +15,68 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public UILabel name0;
         public UILabel context0;
 
-        private Sequence sequence;
-        private UIPanel panel;
         private BacklogManager backlogManager;
-        private bool isBacklogShow;
-        private ConstData constData;
-        private StageRenderManager renderManager;
-        private ResourceManager resourceManager;
-        private MusicManager musicManager;
-        private Config config;
-
-        private bool isWorking;
         private int count;
         private int head;
         private List<BacklogItem> backlogItemList = new List<BacklogItem>();
 
-        private void Awake() {
+        protected override void Initilize() {
             backlogManager = PachiGrimoire.I.BacklogManager;
-            constData = PachiGrimoire.I.constData;
-            resourceManager = PachiGrimoire.I.ResourceManager;
-            musicManager = PachiGrimoire.I.MusicManager;
-            renderManager = GetComponent<StageRenderManager>();
-            config = PachiGrimoire.I.ConfigManager.Config;
-
-            panel = backlogRoot.GetComponent<UIPanel>();
-            backlogRoot.SetActive(false);
         }
 
         #region Input
-
-        private void FixedUpdate() {
-            if (!isBacklogShow)
-                return;
-            if (!config.HasAnimationEffect) {
-                if (sequence.IsPlaying() == true) {
-                    CompleteAnimate();
-                }
-            }
-            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
-                CompleteAnimate();
-            }
-            if (!isWorking)
-                return;
-            if (Input.GetMouseButtonDown(0)) {
-                OnMouseLeftDown();
-            } else if (Input.GetMouseButtonDown(1)) {
-                OnMouseRightDown();
-            } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-                OnMouseScrollWheelZoomOut();
-            } else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-                OnMouseScrollWheelZoomIn();
-            } else if (Input.GetKeyDown(constData.KeyConfirm)) {
-                OnKeyConfirmDown();
-            }
+        protected override void ThenUpdateWhat() {
+            UpdateInput();
         }
 
-        private void OnMouseLeftDown() {
+        protected override void OnMouseLeftDown() {
 
         }
 
-        private void OnMouseRightDown() {
-            BacklogHide();
+        protected override void OnMouseRightDown() {
+            OnHide();
         }
-        private void OnMouseScrollWheelZoomOut() {
+        protected override void OnMouseScrollWheelZoomOut() {
             BacklogScrollDown(1);
         }
 
-        private void OnMouseScrollWheelZoomIn() {
+        protected override void OnMouseScrollWheelZoomIn() {
             BacklogScrollUp(1);
         }
 
-        private void OnKeyConfirmDown() {
+        protected override void OnKeyConfirmDown() {
 
         }
 
         #endregion
 
 
-        private void JoinTween(Tweener tweener) {
-            if (tweener == null) {
-                Debug.LogWarning("BacklogRenderManager JoinTween");
-                return;
+
+        public void BacklogScrollUp(int amount) {
+            if (amount <= 0) {
+                throw new System.Exception("BacklogRenderManager BacklogScrollUp");
             }
-            if (sequence == null || sequence.IsPlaying() == false) {
-                sequence = DOTween.Sequence();
+
+            int index = amount + head;
+            if (index > count - 3)
+                head = count - 3 <= 0 ? 0 : count - 3;
+            else
+                head = index;
+            LoadData();
+        }
+
+        public void BacklogScrollDown(int amount) {
+            if (amount <= 0) {
+                throw new System.Exception("BacklogRenderManager BacklogScrollDown");
             }
-            sequence.Join(tweener);
-        }
 
-        public void CompleteAnimate() {
-            sequence.Complete();
-        }
-
-        private Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 0.5f) {
-            if (uiPanel == null) {
-                return null;
-            }
-            uiPanel.alpha = fromValue;
-            float value = fromValue;
-            Tweener tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
-                .OnUpdate(() => uiPanel.alpha = value);
-            return tweener;
+            int index = head - amount;
+            head = index <= 0 ? 0 : index;
+            LoadData();
         }
 
 
-        public void BacklogShow() {
-            isBacklogShow = true;
-            isWorking = false;
-            backlogRoot.SetActive(true);
-            panel.alpha = 0f;
-
-            LoadBacklogData();
-            // 初始化Backlog
-            Tweener tweener = DoPanelAlpha(panel, 0f, 1f);
-            JoinTween(tweener);
-
-            sequence.OnComplete(() => isWorking = true);
-        }
-
-        public void BacklogHide() {
-            isWorking = false;
-            panel.alpha = 1f;
-            Tweener tweener = DoPanelAlpha(panel, 1f, 0f);
-            JoinTween(tweener);
-
-            sequence.OnComplete(() => {
-                isBacklogShow = false;
-                backlogItemList.Clear();
-                backlogRoot.SetActive(false);
-                renderManager.BacklogHide();
-            });
-        }
-
-        private void LoadBacklogData() {
+        protected override void LoadData() {
             count = backlogManager.Count;
             head = 0;
             backlogItemList.Clear();
@@ -228,30 +156,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 context2.text = context;
             }
         }
-
-
-        public void BacklogScrollUp(int amount) {
-            if (amount <= 0) {
-                throw new System.Exception("BacklogRenderManager BacklogScrollUp");
-            }
-
-            int index = amount + head;
-            if (index > count - 3)
-                head = count - 3 <= 0 ? 0 : count - 3;
-            else
-                head = index;
-            LoadBacklogData();
+        protected override void UnloadData() {
+            backlogItemList.Clear();
+        }
+        protected override void DoOnOtherShow() {
+            throw new System.NotImplementedException();
+        }
+        protected override void DoOnOtherHide() {
+            throw new System.NotImplementedException();
         }
 
-        public void BacklogScrollDown(int amount) {
-            if (amount <= 0) {
-                throw new System.Exception("BacklogRenderManager BacklogScrollDown");
-            }
-
-            int index = head - amount;
-            head = index <= 0 ? 0 : index;
-            LoadBacklogData();
-        }
 
 
 
@@ -302,5 +216,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         #endregion
+
     }
 }
