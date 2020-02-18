@@ -28,8 +28,8 @@ MonoBehaviour:
     paddingTop: 149
     paddingBottom: 205
   - name: Exit_Frag
-    x: 374
-    y: 113
+    x: 0
+    y: 30
     width: 82
     height: 67
     borderLeft: 0
@@ -42,7 +42,7 @@ MonoBehaviour:
     paddingBottom: 103
   - name: Exit_Frag_Hover
     x: 374
-    y: 181
+    y: 132
     width: 90
     height: 75
     borderLeft: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
     paddingBottom: 99
   - name: Exit_Frag_Pressed
     x: 374
-    y: 41
+    y: 60
     width: 86
     height: 71
     borderLeft: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
     paddingTop: 84
     paddingBottom: 101
   - name: Line
-    x: 465
+    x: 431
     y: 254
     width: 12
     height: 2
@@ -80,7 +80,7 @@ MonoBehaviour:
     paddingTop: 7
     paddingBottom: 7
   - name: note
-    x: 64
+    x: 83
     y: 34
     width: 63
     height: 63
@@ -93,7 +93,7 @@ MonoBehaviour:
     paddingTop: 36
     paddingBottom: 29
   - name: note_play
-    x: 0
+    x: 147
     y: 34
     width: 63
     height: 63
@@ -106,8 +106,8 @@ MonoBehaviour:
     paddingTop: 36
     paddingBottom: 29
   - name: oneTriangle
-    x: 457
-    y: 131
+    x: 461
+    y: 82
     width: 49
     height: 49
     borderLeft: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
     paddingBottom: 35
   - name: twoTriangle
     x: 461
-    y: 81
+    y: 32
     width: 49
     height: 49
     borderLeft: 0
@@ -131,5 +131,18 @@ MonoBehaviour:
     paddingRight: 38
     paddingTop: 44
     paddingBottom: 35
+  - name: white
+    x: 374
+    y: 208
+    width: 56
+    height: 48
+    borderLeft: 1
+    borderRight: 1
+    borderTop: 1
+    borderBottom: 1
+    paddingLeft: 36
+    paddingRight: 36
+    paddingTop: 42
+    paddingBottom: 38
   mPixelSize: 1
   mReplacement: {fileID: 0}
