@@ -22,6 +22,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         protected override void Initilize() {
             backlogManager = PachiGrimoire.I.BacklogManager;
+            name2.text = "";
+            name1.text = "";
+            name0.text = "";
+            context2.text = "";
+            context1.text = "";
+            context0.text = "";
+            voice2.SetActive(false);
+            voice1.SetActive(false);
+            voice0.SetActive(false);
         }
 
         #region Input

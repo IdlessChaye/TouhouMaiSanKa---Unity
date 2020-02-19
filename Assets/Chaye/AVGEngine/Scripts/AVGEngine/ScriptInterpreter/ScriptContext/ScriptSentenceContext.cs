@@ -36,6 +36,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             } else {
                 currentToken = null;
             }
+            Debug.Log("NextToken currentToken: " + currentToken);
             return currentToken;
         }
 
@@ -52,12 +53,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (tokenName == null || IsOver() == true || tokenName.Equals(currentToken) == false) {
                 throw new System.Exception("ERRER IN SkipToken!");
             }
+            Debug.Log("SkipToken :" + tokenName);
             NextToken();
         }
 
+        public void ShowSelfAll() {
+            for(int i = 0; i < tokens.Length;i++) {
+                Debug.Log(tokens[i]);
+            }
+        }
         private bool Process(string[] tokens) {
             return true;
         }
+
+
 
     }
 

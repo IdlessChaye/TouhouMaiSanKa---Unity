@@ -50,6 +50,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 pointerLineNumberStack.Push(ScriptPointerLineNumber);
             }
             scriptSentenceList = ProcessScriptContext(scriptContext);
+            foreach(var s in scriptSentenceList) {
+                s.ShowSelfAll();
+            }
             ScriptPointerScriptName = scriptName;
             ScriptPointerLineNumber = 0;
         }
@@ -96,6 +99,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             // 1. "\r\n" -> "\n"
             scriptContext.Replace("\r\n", "\n");
+            scriptContext.Replace("\r", "");
             int lastIndex = scriptContext.Length - 1; // 给最后补上'\n'
             if (scriptContext[lastIndex] != '\n') {
                 scriptContext = scriptContext + "\n";
@@ -200,6 +204,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
                 // 4. 空格消除
                 str = str.Replace(" ", "");
+                str = str.Replace("\r", "");
                 tempList[i] = str;
             }
 
@@ -221,19 +226,47 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 for (j = 0; j < str.Length; j++) {
                     char ch = str[j];
                     switch (ch) {
+                        case '\r':
+                            throw new System.Exception("有内鬼！");
+                        case '/': // 实现注释功能
+                            length = j - lastTailIndex - 1;
+                            int strLength = str.Length;
+                            if(length == 0 && j+1 < strLength && str[j+1] == '/') { // 第一个就是/后边又接了一个/
+                                // 到\n都扔
+                                int findHuicheIndex = j + 2;
+                                while(findHuicheIndex < strLength && str[findHuicheIndex] != '\n') {
+                                    findHuicheIndex++;
+                                }
+                                if(findHuicheIndex == strLength) {
+                                    throw new System.Exception("有注释，但没找到回车！实现注释功能");
+                                } else { // 跳过注释所在行
+                                    Debug.Log("注释跳了！ 内容 :" + str.Substring(j, findHuicheIndex - j + 1));
+                                    lastTailIndex = findHuicheIndex; 
+                                    j = findHuicheIndex;
+                                }
+                            }
+                            break;
                         case '\n':
                             length = j - lastTailIndex - 1;
                             if (length != 0) {
+                                Debug.LogWarning("Error, str:" + str);
+                                Debug.LogWarning("Error, fragmentList:");
+                                foreach (var s in fragmentList)
+                                    Debug.Log(s);
+                                Debug.LogWarning("ErrorEnd, fragmentList.");
                                 throw new System.Exception("语法出错,\n前一定是),但事实不是!");
+
                             }
                             lastTailIndex = j;
                             ScriptSentenceContext scriptSentenceContext = new ScriptSentenceContext(fragmentList.ToArray());
-                            if (scriptSentenceContext.IsCorrect == false) {
+                            if (scriptSentenceContext.IsCorrect == false) { // 解析错误防止功能
                                 throw new System.Exception("ScriptSentence is not right!");
                             }
                             string currentToken = scriptSentenceContext.CurrentToken;
-                            if (currentToken != null && !currentToken.Substring(0, 2).Equals("//")) {
+                            if (currentToken != null && !currentToken.Substring(0, 2).Equals("//")) { // 跳过空行功能以及跳过注释辅助功能
                                 sentenceList.Add(scriptSentenceContext);
+                            } else {
+                                Debug.Log("放弃ScriptSentenceContext currentToken :" + currentToken);
                             }
                             fragmentList.Clear();
                             break;
@@ -327,8 +360,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             ScriptPointerLineNumber = ScriptPointerLineNumber + 1;
             // 开始翻译
             ExpressionRootNode rootNode = new ExpressionRootNode();
+            Debug.Log("开始翻译 Show all tokens:");
+            context.ShowSelfAll();
+            Debug.Log("开始翻译结束 Show all end.");
             rootNode.Interpret(context);
+            Debug.Log("开始执行");
             rootNode.Execute();
+            Debug.Log("开始执行结束");
             return true;
         }
 
@@ -377,12 +415,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             ScriptReplaceValues = new List<string>();
             pointerScriptNameStack = new Stack<string>();
             pointerLineNumberStack = new Stack<int>();
-            ConstData constData = PachiGrimoire.I.constData;
-            string mainScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.MainScriptFileNameWithoutTXT);
-            LoadScriptFile(constData.MainScriptFileNameWithoutTXT, mainScriptContext);
             isSecondGear = false;
             secondScriptSentenceList = null;
             secondScriptPointerLineNumber = -1;
+
+            ConstData constData = PachiGrimoire.I.constData;
+            string initScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.InitScriptFileNameWithoutTXT);
+            Debug.Log(initScriptContext);
+            LoadScriptFile(constData.InitScriptFileNameWithoutTXT, initScriptContext);
+            int a = 1;
+            while (NextSentence()) {
+                a++;
+                if(a > 100)
+                    break;
+            }
         }
 
         public void FinalizeStory() {

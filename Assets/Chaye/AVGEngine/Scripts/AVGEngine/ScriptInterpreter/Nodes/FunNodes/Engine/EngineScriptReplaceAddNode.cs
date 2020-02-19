@@ -13,7 +13,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void OnUpdateStageContext() {
-            if (paraList.Count == 2)
+            if (paraList.Count != 2)
                 throw new System.Exception("EngineScriptReplaceNode");
             PachiGrimoire.I.ScriptManager.ScriptReplaceAdd(paraList[0], paraList[1]);
         }

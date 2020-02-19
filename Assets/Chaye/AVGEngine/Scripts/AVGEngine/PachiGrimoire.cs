@@ -112,9 +112,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private void FixedUpdate() {
 
+            #region Test
+            if(Input.GetKeyDown(KeyCode.S)) {
+                StartGame();
+            }
+            #endregion
+
+
+
             #region State
-
-
             BaseState state = stateMachine.CurrentState;
 
             if (state == RunScriptState.Instance) { // RunScript State
@@ -158,9 +164,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region AVGEngine Layer
 
         public void StartGame() { // 初始界面入口，初始化，还有UI管理，这个函数么有写完
+            stageContextManager.InitializeStory();
             stateMachine.TransferStateTo(RunScriptState.Instance);
             stateMachine.SetStateBuff(StateBuff.Normal);
-            stageContextManager.InitializeStory();
             stageRenderManager.OnShow(null);
         }
 

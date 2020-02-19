@@ -42,7 +42,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
                 return unit.Data;
             } else {
-                Debug.Log("Not Contain");
+                Debug.Log("BufferIndexer Not Contain. Ready to load data.");
                 if (AddNewValueByFinalIndex(key, finalIndex) == true) {
                     return bufferDict[key].Data;
                 } else {
@@ -83,7 +83,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return false;
             unit.Next = First;
             Debug.Log("Data : "+unit.Data);
-            Debug.Log("Count : "+Count);
             if (Count == 0) {
                 Count++;
                 First = unit;

@@ -9,7 +9,8 @@ Replace(<
 else
 	>,<,>)
 Replace(<
-endif>,<)>)
+endif>,<)
+>)
 Replace(< then
 		>,<,>)
 Replace(<
@@ -17,4 +18,5 @@ Replace(<
 		>,<,>)
 // 最后测试文件尾自动添加回车功能
 Replace(<
-	endif>,<)>)
+	endif>,<)
+>)

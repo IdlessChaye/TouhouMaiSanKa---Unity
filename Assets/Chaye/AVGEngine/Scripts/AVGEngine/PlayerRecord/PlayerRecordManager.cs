@@ -6,7 +6,7 @@ using System;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class PlayerRecordManager {
         public PlayerRecord PlayerRecord { get; private set; }
-        public Dictionary<int, StoryRecord> StoryRecordDict { get;private set; }
+        public Dictionary<int, StoryRecord> StoryRecordDict { get; private set; } = new Dictionary<int, StoryRecord>();
 
 
         public void SavePlayerRecord(PlayerRecord newPlayerRecord) {

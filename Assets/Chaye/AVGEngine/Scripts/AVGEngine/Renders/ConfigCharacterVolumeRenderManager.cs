@@ -15,6 +15,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private bool hasInstantiated;
 
         protected override void Initilize() {
+            var a = voiceItemList; // 为了消警报
+            voiceItemList = new List<MyVoiceConfigItem>();
             uiGrid = scrollViewGridRoot.GetComponent<UIGrid>();
             hasInstantiated = false;
         }

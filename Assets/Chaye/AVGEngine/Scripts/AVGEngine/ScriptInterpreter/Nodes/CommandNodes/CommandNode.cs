@@ -23,16 +23,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 node = new CommandEngineNode();
             } else if (commandToken.Equals("Music")) {
                 node = new CommandMusicNode();
-            } else if(commandToken.Equals("Text")) {
+            } else if (commandToken.Equals("Text")) {
                 node = new CommandTextNode();
-            } else if(commandToken.Equals("Image")) {
+            } else if (commandToken.Equals("Image")) {
                 node = new CommandImageNode();
             } else {
                 canParse = false;
             }
 
-            if (canParse)
+            if (canParse) {
+                Debug.Log("CommandNode CanParse commandToken: " + commandToken);
                 node.Interpret(context);
+            } else {
+                Debug.Log("CommandNode FALSE canParse! token :" + commandToken);
+            }
 
             return canParse;
         }

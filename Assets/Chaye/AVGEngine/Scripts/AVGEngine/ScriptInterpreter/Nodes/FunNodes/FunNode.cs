@@ -8,10 +8,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void InterpretPart(ScriptSentenceContext context) {
             context.SkipToken("(");
             while(true) {
-                if (context.CurrentToken.Equals(")"))
+                if (context.CurrentToken.Equals(")")) {
+                    context.NextToken();
+                    if(context.CurrentToken != null) {
+                        throw new System.Exception("你咋害有！？");
+                    }
                     break;
+                }
                 string currentToken = context.CurrentToken;
                 paraList.Add(currentToken);
+                context.NextToken();
             }
         }
 

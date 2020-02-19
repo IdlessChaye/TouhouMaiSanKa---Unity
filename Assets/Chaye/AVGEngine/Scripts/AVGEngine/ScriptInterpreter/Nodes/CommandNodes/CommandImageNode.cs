@@ -52,6 +52,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (canParse) {
                 nodeList.Add(node);
                 node.Interpret(scriptSentenceContext);
+            } else {
+                Debug.Log("CommandImageNode FALSE canParse! token :" + token);
             }
 
             return canParse;

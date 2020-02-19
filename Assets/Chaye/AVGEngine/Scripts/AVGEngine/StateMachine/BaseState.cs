@@ -131,11 +131,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override void OnEnter(BaseState oldState) {
             if(oldState == IdleState.Instance) {
-                ScriptManager scriptManager = PachiGrimoire.I.ScriptManager;
                 ConstData constData = PachiGrimoire.I.constData;
-                string initScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.InitScriptFileNameWithoutTXT);
-                scriptManager.LoadScriptFile(constData.InitScriptFileNameWithoutTXT, initScriptContext);
-                while (scriptManager.NextSentence()) ;
+                ScriptManager scriptManager = PachiGrimoire.I.ScriptManager;
+
+                string mainScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.MainScriptFileNameWithoutTXT);
+                scriptManager.LoadScriptFile(constData.MainScriptFileNameWithoutTXT, mainScriptContext);
             }
         }
 

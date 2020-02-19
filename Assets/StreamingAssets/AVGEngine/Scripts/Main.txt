@@ -1,1 +1,1 @@
-Engine_LoadFile(*SC_GameStart*)
+Engine_ScriptLoadFile(*SC_GameStart*)

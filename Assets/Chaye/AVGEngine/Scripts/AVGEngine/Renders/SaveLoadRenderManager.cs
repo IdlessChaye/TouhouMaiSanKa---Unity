@@ -37,6 +37,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private int _pageNumber;
 
         protected override void Initilize() {
+            bool a = isConfirmShow; // 为了消除isConfirmShow没被用的警告
             stageContextManager = pachiGrimoire.StageContextManager;
             playerRecordManager = pachiGrimoire.PlayerRecordManager;
             confirmRoot.SetActive(false);

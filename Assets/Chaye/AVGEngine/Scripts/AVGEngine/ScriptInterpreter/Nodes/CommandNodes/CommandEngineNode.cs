@@ -27,7 +27,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private bool CanParse(string token, ScriptSentenceContext scriptSentenceContext) {
             bool canParse = true;
-
+            
             BaseInterpreterNode node = null;
             if (token.Equals("ScriptReplace")) {
                 node = new EngineScriptReplaceAddNode();
@@ -70,6 +70,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (canParse) {
                 nodeList.Add(node);
                 node.Interpret(scriptSentenceContext);
+            } else {
+                Debug.Log("CommandEngineNode FALSE canParse! token :" + token);
             }
 
             return canParse;
