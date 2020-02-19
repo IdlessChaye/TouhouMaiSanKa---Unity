@@ -176,17 +176,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             StateBuff buff = stateMachine.StateBuff;
             if (buff == StateBuff.Normal) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
-                    OnOtherShow(backlogRenderManager);
+                    backlogRenderManager.OnShow(this);
                 }
             } else if (buff == StateBuff.Auto) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
-                    OnOtherShow(backlogRenderManager);
+                    backlogRenderManager.OnShow(this);
                 }
             } else if (buff == StateBuff.Skip) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
-                    OnOtherShow(backlogRenderManager);
+                    backlogRenderManager.OnShow(this);
                 }
             }
         }
@@ -637,7 +637,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             firstButtonHide.onButtonSelect += () => ConsoleHide();
             firstButtonVoice.onButtonSelect += () => musicManager.VoicePlay();
-            firstButtonBacklog.onButtonSelect += () => OnOtherShow(backlogRenderManager);
+            firstButtonBacklog.onButtonSelect += () => backlogRenderManager.OnShow(this); ;
             firstButtonSkip.onButtonSelect += () => {
                 stateMachine.SetStateBuff(StateBuff.Skip);
                 DisableButtons();
@@ -663,13 +663,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             };
             firstButtonSave.onButtonSelect += () => {
                 slRenderManager.IsSaveMode = true;
-                OnOtherShow(slRenderManager);
+                slRenderManager.OnShow(this);
             };
             firstButtonLoad.onButtonSelect += () => {
                 slRenderManager.IsSaveMode = false;
-                OnOtherShow(slRenderManager);
+                slRenderManager.OnShow(this);
             };
-            firstButtonConfig.onButtonSelect += () => OnOtherShow(configRenderManager);
+            firstButtonConfig.onButtonSelect += () => configRenderManager.OnShow(this);
             firstButtonExit.onButtonSelect += () => {
                 OnHide(); // TODO: 加个提示框
                 action += () => pachiGrimoire.ExitGame(); // 销毁渲染，全系统退出

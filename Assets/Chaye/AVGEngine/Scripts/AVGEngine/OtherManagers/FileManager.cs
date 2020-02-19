@@ -56,6 +56,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             language = configManager.Config.Language;
         }
+        public string LoadDefaultConfig() {
+            return ReadSingleTXTFileInBothReadonlyFolder(constData.DefaultDataSubFolderPathInReadonlyDataFolderName, constData.DefaultConfigFileName);
+        }
 
         public void LoadPlayerRecord() {
             string playerRecordContext = null;

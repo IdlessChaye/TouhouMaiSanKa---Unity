@@ -4,13 +4,11 @@ Json中记录的变量名取短点
 Document
 
 Debug
-Config无法SetDefault
+更改pastScriptManager 第二个参数不需要是pair，因为脚本初始号都是0，不用记录
+疯狂点击按钮保护的问题
 Save模式无法保存存档
 Next模式无法退出
-Hide无法Move Console，右键无法Hide
-Config Character无法切出
-状态机老切错状态
-Console 没了
+Config第一次出现UI是错的
 
 Script Design
 油库里

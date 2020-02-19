@@ -50,8 +50,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void SaveStoryRecord(int indexOfRecord) {
             BaseState currentState = stateMachine.CurrentState;
-            if (currentState != RunWaitState.Instance && currentState != ChoiceWaitState.Instance) {
-                throw new System.Exception("StageContextManager SaveStoryRecord");
+            if (currentState != SleepState.Instance) {
+                throw new System.Exception("StageContextManager SaveStoryRecord" + currentState.StateName);
             }
 
             StoryRecord storyRecord = new StoryRecord();

@@ -12,13 +12,30 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private UIGrid uiGrid;
         private List<MyVoiceConfigItem> voiceItemList;
-        private bool hasInstantiated;
+        
 
         protected override void Initilize() {
-            var a = voiceItemList; // 为了消警报
             voiceItemList = new List<MyVoiceConfigItem>();
             uiGrid = scrollViewGridRoot.GetComponent<UIGrid>();
-            hasInstantiated = false;
+
+            int arrayLength = characterVoiceClipArray != null ? characterVoiceClipArray.Length : -1;
+            List<string> characterNameList = config.CharacterNameList;
+            List<float> characterVolumeList = config.VoiceVolumeValueList;
+            for (int i = 0; i < characterNameList.Count; i++) {
+                string name = characterNameList[i];
+                GameObject go = Instantiate(prefabVoiceCharacterItem) as GameObject;
+                go.transform.SetParent(scrollViewGridRoot.transform, false);
+                MyVoiceConfigItem myVoiceConfigItem = go.GetComponent<MyVoiceConfigItem>();
+                myVoiceConfigItem.Index = i;
+                myVoiceConfigItem.CharacterName = name;
+                myVoiceConfigItem.Volume = characterVolumeList[i];
+                if (i < arrayLength && characterVoiceClipArray[i] != null) {
+                    myVoiceConfigItem.Clip = characterVoiceClipArray[i];
+                }
+                voiceItemList.Add(myVoiceConfigItem);
+            }
+            uiGrid.Reposition();
+
         }
 
         #region Input
@@ -49,25 +66,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void LoadData() {
-            if (hasInstantiated == false) {
-                hasInstantiated = true;
-                int arrayLength = characterVoiceClipArray != null ? characterVoiceClipArray.Length : -1;
-                List<string> characterNameList = config.CharacterNameList;
-                List<float> characterVolumeList = config.VoiceVolumeValueList;
-                for (int i = 0; i < characterNameList.Count; i++) {
-                    string name = characterNameList[i];
-                    GameObject go = Instantiate(prefabVoiceCharacterItem) as GameObject;
-                    go.transform.SetParent(scrollViewGridRoot.transform, false);
-                    MyVoiceConfigItem myVoiceConfigItem = go.GetComponent<MyVoiceConfigItem>();
-                    myVoiceConfigItem.Index = i;
-                    myVoiceConfigItem.CharacterName = name;
-                    myVoiceConfigItem.Volume = characterVolumeList[i];
-                    if (i < arrayLength && characterVoiceClipArray[i] != null) {
-                        myVoiceConfigItem.Clip = characterVoiceClipArray[i];
-                    }
-                    voiceItemList.Add(myVoiceConfigItem);
-                }
-                uiGrid.Reposition();
+            List<float> characterVolumeList = config.VoiceVolumeValueList;
+            for (int i = 0;i< voiceItemList.Count;i++) {
+                var item = voiceItemList[i];
+                item.Volume = characterVolumeList[item.Index];
             }
         }
         protected override void UnloadData() {
@@ -83,7 +85,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         private void ConfigCharacterSetDefault() {
-            config.VoiceVolumeValueList = new List<float>(constData.DefaultVoiceVolumeValueList);
+            configManager.LoadDefaultConfig(true);
             LoadData();
         }
 

@@ -135,18 +135,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public float ChoicePosY_3of4 = -17;
 
 
-        // Config Default Data
-        public float DefaultSystemVolume; 
-        public float DefaultBGMVolume;
-        public float DefaultSEVolume; 
-        public float DefaultMessageSpeed; 
-        public float DefaultAutoMessageSpeed; 
-        public bool DefaultIsReadSkipOrAllSkipNot; 
-        public float DefaultVoiceVolume; 
-        public List<float> DefaultVoiceVolumeValueList = new List<float>(); 
-        public bool DefaultIsPlayingVoiceAfterChangeLine; 
-        public bool DefaultHasAnimationEffect; 
-        public float DefaultAlphaOfConsole;
+        //// Config Default Data
+        //public float DefaultSystemVolume; 
+        //public float DefaultBGMVolume;
+        //public float DefaultSEVolume; 
+        //public float DefaultMessageSpeed; 
+        //public float DefaultAutoMessageSpeed; 
+        //public bool DefaultIsReadSkipOrAllSkipNot; 
+        //public float DefaultVoiceVolume; 
+        //public List<float> DefaultVoiceVolumeValueList = new List<float>(); 
+        //public bool DefaultIsPlayingVoiceAfterChangeLine; 
+        //public bool DefaultHasAnimationEffect; 
+        //public float DefaultAlphaOfConsole;
 
         // SaveLoad number of show words
         public int NumberOfShowWords = 18;

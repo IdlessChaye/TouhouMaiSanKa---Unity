@@ -91,18 +91,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void ConfigSetDefault() {
-            config.SystemVolume = constData.DefaultSystemVolume;
-            config.BGMVolume = constData.DefaultBGMVolume;
-            config.SEVolume = constData.DefaultSEVolume;
-            config.MessageSpeed = constData.DefaultMessageSpeed;
-            config.AutoMessageSpeed = constData.DefaultAutoMessageSpeed;
-            config.IsReadSkipOrAllSkipNot = constData.DefaultIsPlayingVoiceAfterChangeLine;
-            config.VoiceVolume = constData.DefaultVoiceVolume;
-            config.IsPlayingVoiceAfterChangeLine = constData.DefaultIsPlayingVoiceAfterChangeLine;
-            config.HasAnimationEffect = constData.DefaultHasAnimationEffect;
-            config.AlphaOfConsole = constData.DefaultAlphaOfConsole;
+            configManager.LoadDefaultConfig();
             LoadData();
-            configManager.SaveConfigContext();
         }
 
 
@@ -161,7 +151,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnPressedButtonVoiceVolumeList() {
-            OnShow(configCharacterVolumeRenderManager);
+            configCharacterVolumeRenderManager.OnShow(this);
         }
         #endregion
 
