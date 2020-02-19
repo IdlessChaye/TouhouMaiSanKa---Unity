@@ -57,6 +57,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public BacklogManager BacklogManager => backlogManager;
         public ScriptManager ScriptManager => scriptManager;
         public StageRenderManager StageRenderManager => stageRenderManager;
+        public SaveLoadRenderManager SaveLoadRenderManager => saveLoadRenderManager;
         public MusicManager MusicManager => musicManager;
         #endregion
         #region Private Manager Properties
@@ -67,6 +68,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private PlayerRecordManager playerRecordManager = new PlayerRecordManager();
         private MarkManager markManager = new MarkManager();
         private PastScriptManager pastScriptManager = new PastScriptManager();
+        private SaveLoadRenderManager saveLoadRenderManager;
         private StageContextManager stageContextManager;
         private BacklogManager backlogManager;
         private ScriptManager scriptManager;
@@ -98,6 +100,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             scriptManager = new ScriptManager(pastScriptManager);
             backlogManager = new BacklogManager(constData.BacklogCapacity);
             stageRenderManager = GetComponent<StageRenderManager>() ?? gameObject.AddComponent<StageRenderManager>();
+            saveLoadRenderManager = GetComponent<SaveLoadRenderManager>() ?? gameObject.AddComponent<SaveLoadRenderManager>();
             musicManager = GetComponent<MusicManager>() ?? gameObject.AddComponent<MusicManager>();
             stageContextManager = new StageContextManager();
 
@@ -166,20 +169,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region AVGEngine Layer
 
-        public void StartGame() { // 全系统入口，初始化，还有UI管理，这个函数么有写完
+        public void StartGame() { // 初始界面入口，初始化，还有UI管理，这个函数么有写完
             stateMachine.TransferStateTo(RunScriptState.Instance);
             stateMachine.SetStateBuff(StateBuff.Normal);
             stageContextManager.InitializeStory();
-            StageRenderManager.OnShow(null);
+            stageRenderManager.OnShow(null);
         }
 
-        public void LoadGame() { // 全系统入口，初始化，还有UI管理，这个函数么有写完
+        public void LoadGame() { // 初始界面读取存档入口，初始化，还有UI管理，这个函数么有写完
             BaseState currentState = stateMachine.CurrentState;
             if(currentState == IdleState.Instance) {
                 stateMachine.TransferStateTo(RunScriptState.Instance);
                 //stageContextManager.LoadStoryRecord();
-            } else if(currentState == RunWaitState.Instance||currentState == ChoiceWaitState.Instance) {
-                //stageContextManager.LoadStoryRecord();
+                saveLoadRenderManager.IsSaveMode = false;
+                saveLoadRenderManager.OnShow(null);
             }
         }
 

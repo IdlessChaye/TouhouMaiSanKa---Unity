@@ -15,8 +15,8 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 21eb9ed070b6b2c458644faf5948e8e4, type: 2}
   mSprites:
   - name: 1
-    x: 214
-    y: 203
+    x: 308
+    y: 151
     width: 49
     height: 49
     borderLeft: 0
@@ -28,8 +28,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 10
-    x: 164
-    y: 203
+    x: 258
+    y: 153
     width: 49
     height: 49
     borderLeft: 0
@@ -41,8 +41,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 2
-    x: 384
-    y: 216
+    x: 208
+    y: 177
     width: 49
     height: 49
     borderLeft: 0
@@ -54,8 +54,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 3
-    x: 264
-    y: 203
+    x: 381
+    y: 156
     width: 49
     height: 49
     borderLeft: 0
@@ -67,8 +67,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 4
-    x: 334
-    y: 302
+    x: 208
+    y: 127
     width: 49
     height: 49
     borderLeft: 0
@@ -80,8 +80,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 5
-    x: 384
-    y: 266
+    x: 158
+    y: 177
     width: 49
     height: 49
     borderLeft: 0
@@ -93,8 +93,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 6
-    x: 334
-    y: 252
+    x: 431
+    y: 156
     width: 49
     height: 49
     borderLeft: 0
@@ -106,8 +106,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 7
-    x: 434
-    y: 266
+    x: 331
+    y: 201
     width: 49
     height: 49
     borderLeft: 0
@@ -119,8 +119,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 8
-    x: 314
-    y: 202
+    x: 158
+    y: 127
     width: 49
     height: 49
     borderLeft: 0
@@ -132,8 +132,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 35
   - name: 9
-    x: 434
-    y: 216
+    x: 281
+    y: 203
     width: 49
     height: 49
     borderLeft: 0
@@ -144,9 +144,35 @@ MonoBehaviour:
     paddingRight: 38
     paddingTop: 44
     paddingBottom: 35
+  - name: CHAPTER
+    x: 158
+    y: 227
+    width: 122
+    height: 25
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: DATE
+    x: 419
+    y: 130
+    width: 65
+    height: 25
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: Exit_Frag
-    x: 81
-    y: 187
+    x: 421
+    y: 255
     width: 82
     height: 67
     borderLeft: 0
@@ -159,7 +185,7 @@ MonoBehaviour:
     paddingBottom: 103
   - name: Exit_Frag_Hover
     x: 396
-    y: 388
+    y: 323
     width: 90
     height: 75
     borderLeft: 0
@@ -171,8 +197,8 @@ MonoBehaviour:
     paddingTop: 82
     paddingBottom: 99
   - name: Exit_Frag_Pressed
-    x: 396
-    y: 316
+    x: 334
+    y: 251
     width: 86
     height: 71
     borderLeft: 0
@@ -184,14 +210,14 @@ MonoBehaviour:
     paddingTop: 84
     paddingBottom: 101
   - name: frame
-    x: 0
-    y: 141
+    x: 396
+    y: 399
     width: 80
     height: 113
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
+    borderLeft: 35
+    borderRight: 37
+    borderTop: 64
+    borderBottom: 39
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -210,8 +236,8 @@ MonoBehaviour:
     paddingTop: 149
     paddingBottom: 205
   - name: NO
-    x: 0
-    y: 255
+    x: 167
+    y: 253
     width: 166
     height: 98
     borderLeft: 0
@@ -222,6 +248,32 @@ MonoBehaviour:
     paddingRight: 45
     paddingTop: 96
     paddingBottom: 62
+  - name: NO 1
+    x: 358
+    y: 126
+    width: 60
+    height: 29
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Number
+    x: 0
+    y: 172
+    width: 157
+    height: 82
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: Save_Logo
     x: 216
     y: 352
@@ -235,22 +287,35 @@ MonoBehaviour:
     paddingRight: 165
     paddingTop: 147
     paddingBottom: 205
-  - name: white
-    x: 396
-    y: 464
-    width: 56
-    height: 48
+  - name: SmallFrame
+    x: 258
+    y: 214
+    width: 21
+    height: 12
     borderLeft: 0
     borderRight: 0
     borderTop: 0
     borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: white
+    x: 421
+    y: 206
+    width: 56
+    height: 48
+    borderLeft: 1
+    borderRight: 1
+    borderTop: 1
+    borderBottom: 1
     paddingLeft: 36
     paddingRight: 36
     paddingTop: 42
     paddingBottom: 38
   - name: Yes
-    x: 167
-    y: 253
+    x: 0
+    y: 255
     width: 166
     height: 98
     borderLeft: 0

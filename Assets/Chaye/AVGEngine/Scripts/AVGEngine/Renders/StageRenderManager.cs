@@ -37,6 +37,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public GameObject choice2;
         public GameObject choice3;
 
+        private StageContextManager stageContextManager;
         private List<GameObject> choiceList;
         private float messageSpeedLowest;
         private float messageSpeedHighest;
@@ -87,7 +88,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 Destroy(this);
                 return;
             }
-
+            stageContextManager = pachiGrimoire.StageContextManager;
             backlogRenderManager = GetComponent<BacklogRenderManager>();
             configRenderManager = GetComponent<ConfigRenderManager>();
             slRenderManager = GetComponent<SaveLoadRenderManager>();
@@ -497,8 +498,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 console.transform.position = Vector3.up * -1000;
         }
 
-        public void SetAlphaOfConsole() {
-            float alpha = config.AlphaOfConsole;
+        public void SetAlphaOfConsole(float alpha) {
             consoleBackgroundImageUITexture.alpha = alpha;
         }
 
@@ -609,7 +609,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region RenderSwitch
         protected override void LoadData() {
-            SetAlphaOfConsole();
+            SetAlphaOfConsole(config.AlphaOfConsole);
         }
 
         protected override void UnloadData() {
@@ -653,12 +653,27 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 DisableButtons();
             };
             firstButtonNext.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);
-            //firstButtonQS;
-            //firstButtonQL;
-            //firstButtonSave;
-            //firstButtonLoad;
+            firstButtonQS.onButtonSelect += () => {
+                stageContextManager.SavePlayerRecord();
+                stageContextManager.SaveStoryRecord(0);
+            };
+            firstButtonQL.onButtonSelect += () => {
+                stageContextManager.SavePlayerRecord();
+                stageContextManager.LoadStoryRecord(0);
+            };
+            firstButtonSave.onButtonSelect += () => {
+                slRenderManager.IsSaveMode = true;
+                OnOtherShow(slRenderManager);
+            };
+            firstButtonLoad.onButtonSelect += () => {
+                slRenderManager.IsSaveMode = false;
+                OnOtherShow(slRenderManager);
+            };
             firstButtonConfig.onButtonSelect += () => OnOtherShow(configRenderManager);
-            //firstButtonExit;
+            firstButtonExit.onButtonSelect += () => {
+                OnHide(); // TODO: 加个提示框
+                action += () => pachiGrimoire.ExitGame(); // 销毁渲染，全系统退出
+            };
 
             Messenger.AddListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
         }
@@ -710,6 +725,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             firstButtonExit.onButtonSelect = null;
 
             Messenger.RemoveListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
+            Messenger.RemoveListener<float>("SetAlphaOfConsole", SetAlphaOfConsole);
         }
 
         #endregion
@@ -826,8 +842,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             choiceItemList = null;
             isOtherShow = false;
 
-            if(isInitFirstButtonCallbacks)
+
+            if (isInitFirstButtonCallbacks) { 
+                Messenger.AddListener<float>("SetAlphaOfConsole", SetAlphaOfConsole);
                 InitializeFirstButtonCallbacks();
+            }
         }
 
         public void FinalizeStory() {

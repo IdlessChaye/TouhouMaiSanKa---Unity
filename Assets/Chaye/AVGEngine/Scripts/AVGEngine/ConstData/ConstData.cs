@@ -146,8 +146,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public List<float> DefaultVoiceVolumeValueList = new List<float>(); 
         public bool DefaultIsPlayingVoiceAfterChangeLine; 
         public bool DefaultHasAnimationEffect; 
-        public float DefaultAlphaOfConsole; 
+        public float DefaultAlphaOfConsole;
 
+        // SaveLoad number of show words
+        public int NumberOfShowWords = 18;
+        public string SaveInquiry = "要保存游戏进度吗？";
+        public string LoadInquiry = "要读取游戏进度吗？";
         #endregion
     }
 }

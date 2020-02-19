@@ -127,8 +127,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             config.VoiceVolume = sliderVoiceVolume.value;
         }
         public void OnValueChangedSliderAlphaOfConsole() {
-            config.AlphaOfConsole = sliderAlphaOfConsole.value;
-            PachiGrimoire.I.StageRenderManager.SetAlphaOfConsole(); 
+            float value = sliderAlphaOfConsole.value;
+            config.AlphaOfConsole = value;
+            PachiGrimoire.I.StageRenderManager.SetAlphaOfConsole(value); 
         }
 
 
