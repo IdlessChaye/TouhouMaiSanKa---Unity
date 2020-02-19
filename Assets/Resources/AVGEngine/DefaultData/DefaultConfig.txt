@@ -1,1 +1,1 @@
-{"Language":"Chinese","PlayerIdentifier":"0xFFFFFFFF"}
+{"Language":"Chinese","CharacterNameList":["A","B","C","ETC"],"SystemVolume":1.0,"BGMVolume":1.0,"SEVolume":1.0,"MessageSpeed":1.0,"AutoMessageSpeed":1.0,"IsReadSkipOrAllSkipNot":true,"VoiceVolume":1.0,"VoiceVolumeValueList":[1.0,1.0,1.0,1.0],"IsPlayingVoiceAfterChangeLine":false,"HasAnimationEffect":true,"AlphaOfConsole":0.5}

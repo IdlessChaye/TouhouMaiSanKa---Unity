@@ -5,9 +5,18 @@ using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class ConfigCharacterVolumeRenderManager : BaseRenderManager {
+        public GameObject scrollViewGridRoot;
+        public GameObject prefabVoiceCharacterItem;
+        public AudioClip[] characterVoiceClipArray;
+
+
+        private UIGrid uiGrid;
+        private List<MyVoiceConfigItem> voiceItemList;
+        private bool hasInstantiated;
 
         protected override void Initilize() {
-            
+            uiGrid = scrollViewGridRoot.GetComponent<UIGrid>();
+            hasInstantiated = false;
         }
 
         #region Input
@@ -38,9 +47,29 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void LoadData() {
-           
+            if (hasInstantiated == false) {
+                hasInstantiated = true;
+                int arrayLength = characterVoiceClipArray != null ? characterVoiceClipArray.Length : -1;
+                List<string> characterNameList = config.CharacterNameList;
+                List<float> characterVolumeList = config.VoiceVolumeValueList;
+                for (int i = 0; i < characterNameList.Count; i++) {
+                    string name = characterNameList[i];
+                    GameObject go = Instantiate(prefabVoiceCharacterItem) as GameObject;
+                    go.transform.SetParent(scrollViewGridRoot.transform, false);
+                    MyVoiceConfigItem myVoiceConfigItem = go.GetComponent<MyVoiceConfigItem>();
+                    myVoiceConfigItem.Index = i;
+                    myVoiceConfigItem.CharacterName = name;
+                    myVoiceConfigItem.Volume = characterVolumeList[i];
+                    if (i < arrayLength && characterVoiceClipArray[i] != null) {
+                        myVoiceConfigItem.Clip = characterVoiceClipArray[i];
+                    }
+                    voiceItemList.Add(myVoiceConfigItem);
+                }
+                uiGrid.Reposition();
+            }
         }
         protected override void UnloadData() {
+            musicManager.StopCharacterVoice();
             configManager.SaveConfigContext();
         }
         protected override void DoOnOtherShow() {

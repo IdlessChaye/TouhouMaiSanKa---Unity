@@ -16,7 +16,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     if (instance == null) {
                         GameObject go = Instantiate(Resources.Load<GameObject>("AVGEngine/PachiGrimoire"));
                         go.name = "AVGEngine";
-                        go.transform.position = Vector3.zero; 
+                        go.transform.position = Vector3.zero;
                         instance = go.GetComponent<PachiGrimoire>();
                     }
                 }
@@ -29,7 +29,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (instance == null) {
                 instance = this;
             } else {
-                if(instance != this) {
+                if (instance != this) {
                     Debug.Log("????");
                     Destroy(gameObject);
                 }
@@ -39,9 +39,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
         #endregion
         public bool isShutDown;
-        public bool isDebugMode;
-        public UnityEngine.UI.Text text;
-        public UITexture t;
 
 
         public ConstData constData;
@@ -81,18 +78,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private float autoStartTime;
 
 
-
-        IEnumerator TestGetBgImage() {
-            yield return new WaitForSeconds(1f);
-            for (int i = 0; i < 100; i++) {
-                string name = i.ToString();
-                name = "BI_" + name;
-                Texture2D tex = resourceManager.Get<Texture2D>(name);
-                t.mainTexture = tex;
-                yield return new WaitForSeconds(1f);
-            }
-        }
-
         private void Initialize() {
             if (isShutDown)
                 return;
@@ -104,22 +89,25 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             musicManager = GetComponent<MusicManager>() ?? gameObject.AddComponent<MusicManager>();
             stageContextManager = new StageContextManager();
 
-
-
-            //configManager.Config.PlayerIdentifier = "0xFFFFFFFF";
+            #region Test
             //configManager.Config.Language = "Chinese";
+            //configManager.Config.CharacterNameList = new List<string>(new string[] { "A", "B", "C", "ETC" });
+            //configManager.Config.SystemVolume = 1f;
+            //configManager.Config.BGMVolume = 1f;
+            //configManager.Config.SEVolume = 1f;
+            //configManager.Config.MessageSpeed = 1f;
+            //configManager.Config.AutoMessageSpeed = 1f;
+            //configManager.Config.IsReadSkipOrAllSkipNot = true;
+            //configManager.Config.VoiceVolume = 1f; // Slider
+            //configManager.Config.VoiceVolumeValueList = new List<float>(new float[] { 1, 1, 1, 1 }); // Sliders
+            //configManager.Config.IsPlayingVoiceAfterChangeLine = false; // Toggle
+            //configManager.Config.HasAnimationEffect = true; // Toggle
+            //configManager.Config.AlphaOfConsole = 0.5f;
             //configManager.SaveConfigContext();
-            //playerRecordManager.PlayerRecord.markList = new List<string>();
-            //playerRecordManager.PlayerRecord.markList.Add("呜呜呜~~");
-            //playerRecordManager.SavePlayerRecord();
+            #endregion
+
+
             StateMachine.TransferStateTo(InitState.Instance);
-
-            //StartCoroutine(TestGetBgImage());
-
-            if (isDebugMode) {
-                text.text = configManager.Config.Language;
-                //text.text = playerRecordManager.PlayerRecord.markPlayerList[0];
-            }
         }
 
         private void FixedUpdate() {
@@ -131,10 +119,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             if (state == RunScriptState.Instance) { // RunScript State
                 scriptManager.NextSentence();
-            } else if(state == RunWaitState.Instance) { // RunWait State
+            } else if (state == RunWaitState.Instance) { // RunWait State
                 StateBuff stateBuff = stateMachine.StateBuff;
-                if(stateBuff == StateBuff.Auto) {  // Auto Buff
-                    if(isFirstInAutoBuff == false) {
+                if (stateBuff == StateBuff.Auto) {  // Auto Buff
+                    if (isFirstInAutoBuff == false) {
                         isFirstInAutoBuff = true;
                         float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
                         float highestTime = constData.AutoMessageSpeedHighest;
@@ -142,13 +130,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                         autoWaitTime = (lowestTime - highestTime) * autoMessageSpeed + highestTime;
                         autoStartTime = Time.time;
                     }
-                    if(Time.time - autoStartTime >= autoWaitTime) {
+                    if (Time.time - autoStartTime >= autoWaitTime) {
                         stateMachine.TransferStateTo(RunScriptState.Instance);
                         isFirstInAutoBuff = false;
                     }
-                } else if(stateBuff == StateBuff.Skip) { // Skip Buff
-                    if(configManager.Config.IsReadSkipOrAllSkipNot) { 
-                        if(PastScriptManager.HasRead(ScriptManager.ScriptPointerScriptName,scriptManager.ScriptPointerLineNumber)) {
+                } else if (stateBuff == StateBuff.Skip) { // Skip Buff
+                    if (configManager.Config.IsReadSkipOrAllSkipNot) {
+                        if (PastScriptManager.HasRead(ScriptManager.ScriptPointerScriptName, scriptManager.ScriptPointerLineNumber)) {
                             stateMachine.TransferStateTo(RunScriptState.Instance);
                         } else {
                             stateMachine.SetStateBuff(StateBuff.Normal);
@@ -156,7 +144,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     } else {
                         stateMachine.TransferStateTo(RunScriptState.Instance);
                     }
-                } else if(stateBuff == StateBuff.Next) { // Next Buff
+                } else if (stateBuff == StateBuff.Next) { // Next Buff
                     stateMachine.TransferStateTo(RunScriptState.Instance);
                 }
             }
@@ -178,7 +166,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void LoadGame() { // 初始界面读取存档入口，初始化，还有UI管理，这个函数么有写完
             BaseState currentState = stateMachine.CurrentState;
-            if(currentState == IdleState.Instance) {
+            if (currentState == IdleState.Instance) {
                 stateMachine.TransferStateTo(RunScriptState.Instance);
                 //stageContextManager.LoadStoryRecord();
                 saveLoadRenderManager.IsSaveMode = false;

@@ -4,24 +4,6 @@ Json中记录的变量名取短点
 Document
 
 
-
-要给Panel分层，比如SaveLoad、ConfigCharacter
-取消Panel，都变成Sprite
-
-实现Config系统各个参数功能
-角色语音设置界面（ScrollView?）的功能
-
-让GamePanel成为独立的一个Panel
-实现GamePanel底下各个Button的功能，其中Auto与Skip要与状态机Buff保持一致,Box遮挡
-
-实现SaveLoad界面
-实现SaveLoad界面的确认读取和保存功能
-从Sleep或Idle Load Record 初始化不一致，保存UI界面
-
-使游戏重复切出加载不会出问题
-
-Panel深度相邻
-
 Script Design
 油库里
 dairi

@@ -25,14 +25,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public bool HasAnimationEffect; // Toggle
 
-        public float AlphaOfConsole {
-            get { return alphaOfConsole; }
-            set {
-                alphaOfConsole = value;
-                Messenger.Broadcast<float>("SetAlphaOfConsole", alphaOfConsole);
-            }
-        }
-        private float alphaOfConsole;
+        public float AlphaOfConsole;
 
     }
 }

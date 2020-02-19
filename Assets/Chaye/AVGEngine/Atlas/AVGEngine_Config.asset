@@ -28,7 +28,7 @@ MonoBehaviour:
     paddingTop: 147
     paddingBottom: 205
   - name: Effect_Frag
-    x: 383
+    x: 326
     y: 18
     width: 135
     height: 67
@@ -42,7 +42,7 @@ MonoBehaviour:
     paddingBottom: 103
   - name: Etc_Frag
     x: 449
-    y: 153
+    y: 145
     width: 70
     height: 67
     borderLeft: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
     paddingTop: 86
     paddingBottom: 103
   - name: Exit_Frag
-    x: 446
+    x: 494
     y: 293
     width: 82
     height: 67
@@ -67,8 +67,8 @@ MonoBehaviour:
     paddingTop: 86
     paddingBottom: 103
   - name: Exit_Frag_Hover
-    x: 322
-    y: 217
+    x: 403
+    y: 285
     width: 90
     height: 75
     borderLeft: 0
@@ -80,8 +80,8 @@ MonoBehaviour:
     paddingTop: 82
     paddingBottom: 99
   - name: Exit_Frag_Pressed
-    x: 413
-    y: 221
+    x: 446
+    y: 213
     width: 86
     height: 71
     borderLeft: 0
@@ -92,8 +92,21 @@ MonoBehaviour:
     paddingRight: 84
     paddingTop: 84
     paddingBottom: 101
+  - name: frame
+    x: 322
+    y: 247
+    width: 80
+    height: 113
+    borderLeft: 34
+    borderRight: 38
+    borderTop: 55
+    borderBottom: 41
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: Message_Frag
-    x: 57
+    x: 0
     y: 16
     width: 175
     height: 68
@@ -106,8 +119,8 @@ MonoBehaviour:
     paddingTop: 85
     paddingBottom: 103
   - name: note
-    x: 529
-    y: 297
+    x: 462
+    y: 81
     width: 63
     height: 63
     borderLeft: 0
@@ -119,8 +132,8 @@ MonoBehaviour:
     paddingTop: 36
     paddingBottom: 29
   - name: note_play
-    x: 500
-    y: 229
+    x: 520
+    y: 149
     width: 63
     height: 63
     borderLeft: 0
@@ -132,7 +145,7 @@ MonoBehaviour:
     paddingTop: 36
     paddingBottom: 29
   - name: Screen_Frag
-    x: 233
+    x: 176
     y: 17
     width: 149
     height: 67
@@ -198,7 +211,7 @@ MonoBehaviour:
     paddingBottom: 103
   - name: Voice_Frag
     x: 322
-    y: 293
+    y: 179
     width: 123
     height: 67
     borderLeft: 0
@@ -223,8 +236,8 @@ MonoBehaviour:
     paddingTop: 153
     paddingBottom: 162
   - name: white
-    x: 0
-    y: 36
+    x: 533
+    y: 244
     width: 56
     height: 48
     borderLeft: 0

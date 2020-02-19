@@ -23,6 +23,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private string characterName;
         private AudioSource voiceAudioSource;
         #endregion
+        #region Backup
+        private AudioSource backupAudioSource;
+        #endregion
 
 
         private void Awake() {
@@ -42,6 +45,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voiceAudioSource = gameObject.AddComponent<AudioSource>();
                 bgmAudioSource.playOnAwake = false;
                 bgmAudioSource.loop = false;
+            }
+            if (backupAudioSource == null) {
+                backupAudioSource = gameObject.AddComponent<AudioSource>();
+                backupAudioSource.playOnAwake = false;
+                backupAudioSource.loop = false;
             }
         }
 
@@ -90,7 +98,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void VoicePlay() {
-            if(voiceIndex != null) {
+            if (voiceIndex != null) {
                 voiceAudioSource.Play();
             }
         }
@@ -98,20 +106,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void VoiceStop(bool hasEffect = true) {
             voiceIndex = null;
             characterName = null;
-            if(hasEffect) {
+            if (hasEffect) {
                 voiceAudioSource.Stop();
             }
         }
 
 
         public void LoadStoryRecord(string bgmIndex, string voiceIndex, string characterName) {
-            if(bgmIndex != null) {
+            if (bgmIndex != null) {
                 AudioClip bgmClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(bgmIndex);
                 BGMPlay(bgmClip, bgmIndex);
             } else {
                 this.bgmIndex = null;
             }
-            if(voiceIndex != null && characterName != null) {
+            if (voiceIndex != null && characterName != null) {
                 AudioClip voiceClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(voiceIndex);
                 VoicePlay(characterName, voiceClip, voiceIndex, false);
             } else {
@@ -119,6 +127,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 this.voiceIndex = null;
             }
         }
+
+
+        public void PlayCharacterVoice(string characterName, AudioClip clip) {
+            if (clip == null || string.IsNullOrEmpty(characterName)) {
+                throw new System.Exception("MusicManager PlayCharacterVoice");
+            }
+            backupAudioSource.clip = clip;
+            float volume = config.SystemVolume;
+            volume *= config.VoiceVolume;
+            int index = config.CharacterNameList.IndexOf(characterName);
+            if (index == -1) {
+                throw new System.Exception("MusicManager PlayCharacterVoice");
+            } else {
+                volume *= config.VoiceVolumeValueList[index];
+            }
+            backupAudioSource.volume = volume;
+            backupAudioSource.Play();
+        }
+
+        public void StopCharacterVoice() {
+            backupAudioSource?.Stop();
+        }
+
+
+
+
 
         public void InitializeStory() {
             voiceIndex = null;
@@ -131,6 +165,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             characterName = null;
             bgmIndex = null;
         }
+
+
 
     }
 }
