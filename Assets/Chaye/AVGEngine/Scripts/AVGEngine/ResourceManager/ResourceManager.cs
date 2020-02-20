@@ -100,7 +100,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public TValue Get<TValue>(string index) where TValue : class {
             if(string.IsNullOrEmpty(index)) {
-                throw new System.Exception("ResourceManager Get");
+                throw new System.Exception("ResourceManager Get :null index.");
             }
             string subName;
             string typeName = GetTypeNameOfIndex(index, out subName);

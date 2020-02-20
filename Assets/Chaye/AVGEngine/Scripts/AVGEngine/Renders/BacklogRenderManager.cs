@@ -105,7 +105,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             name = item.name;
             viIndex = item.voiceIndex;
             contextIndex = item.contextIndex;
-            context = resourceManager.Get<string>(contextIndex);
+            if (!string.IsNullOrEmpty(contextIndex))
+                context = resourceManager.Get<string>(contextIndex);
+            else
+                context = "";
             if (viIndex == null)
                 voice0.SetActive(false);
             else
@@ -129,8 +132,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             name = item.name;
             viIndex = item.voiceIndex;
             contextIndex = item.contextIndex;
-            context = resourceManager.Get<string>(contextIndex);
-            if (viIndex == null)
+            if (!string.IsNullOrEmpty(contextIndex))
+                context = resourceManager.Get<string>(contextIndex);
+            else
+                context = "";
+            if (string.IsNullOrEmpty(viIndex))
                 voice1.SetActive(false);
             else
                 voice1.SetActive(true);
@@ -153,8 +159,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             name = item.name;
             viIndex = item.voiceIndex;
             contextIndex = item.contextIndex;
-            context = resourceManager.Get<string>(contextIndex);
-            if (viIndex == null)
+            if (!string.IsNullOrEmpty(contextIndex))
+                context = resourceManager.Get<string>(contextIndex);
+            else
+                context = "";
+            if (string.IsNullOrEmpty(viIndex))
                 voice2.SetActive(false);
             else
                 voice2.SetActive(true);
@@ -200,8 +209,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             BacklogItem item = backlogItemList[2];
             string characterName = item.name;
             string index = item.voiceIndex;
-            AudioClip clip = resourceManager.Get<AudioClip>(index);
-            musicManager.VoicePlay(characterName, clip, index);
+            if(!string.IsNullOrEmpty(index)) { 
+                AudioClip clip = resourceManager.Get<AudioClip>(index);
+                musicManager.VoicePlay(characterName, clip, index);
+            }
         }
         public void VoicePlay1() {
             int count = backlogItemList.Count;
@@ -210,8 +221,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             BacklogItem item = backlogItemList[1];
             string characterName = item.name;
             string index = item.voiceIndex;
-            AudioClip clip = resourceManager.Get<AudioClip>(index);
-            musicManager.VoicePlay(characterName, clip, index);
+            if (!string.IsNullOrEmpty(index)) {
+                AudioClip clip = resourceManager.Get<AudioClip>(index);
+                musicManager.VoicePlay(characterName, clip, index);
+            }
         }
         public void VoicePlay0() {
             int count = backlogItemList.Count;
@@ -220,8 +233,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             BacklogItem item = backlogItemList[0];
             string characterName = item.name;
             string index = item.voiceIndex;
-            AudioClip clip = resourceManager.Get<AudioClip>(index);
-            musicManager.VoicePlay(characterName, clip, index);
+            if (!string.IsNullOrEmpty(index)) {
+                AudioClip clip = resourceManager.Get<AudioClip>(index);
+                musicManager.VoicePlay(characterName, clip, index);
+            }
         }
 
         #endregion

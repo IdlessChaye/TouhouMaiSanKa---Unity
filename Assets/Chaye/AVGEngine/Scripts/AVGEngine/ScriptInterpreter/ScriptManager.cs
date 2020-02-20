@@ -44,6 +44,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void LoadScriptFile(string scriptName, string scriptContext) {
             if (string.IsNullOrEmpty(scriptContext) || string.IsNullOrEmpty(scriptName))
                 throw new System.Exception("LoadScriptFile");
+            Debug.Log("加载脚本 :" + scriptName);
             isSecondGear = false;
             if (!IsOver()) {
                 pointerScriptNameStack.Push(ScriptPointerScriptName);
@@ -94,6 +95,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (scriptContext == null || scriptContext.Length == 0) {
                 throw new System.Exception("传了个啥?");
             }
+            Debug.Log("Process Script Context.");
 
             List<ScriptSentenceContext> sentenceList = new List<ScriptSentenceContext>();
 
@@ -202,7 +204,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                         str = str.Replace(key, value);
                     }
                 }
-                // 4. 空格消除
+                // 4. 空格杠二消除
                 str = str.Replace(" ", "");
                 str = str.Replace("\r", "");
                 tempList[i] = str;
@@ -360,9 +362,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             ScriptPointerLineNumber = ScriptPointerLineNumber + 1;
             // 开始翻译
             ExpressionRootNode rootNode = new ExpressionRootNode();
-            Debug.Log("开始翻译 Show all tokens:");
+            Debug.Log("开始翻译 :");
             context.ShowSelfAll();
-            Debug.Log("开始翻译结束 Show all end.");
+            Debug.Log("开始翻译结束");
             rootNode.Interpret(context);
             Debug.Log("开始执行");
             rootNode.Execute();
@@ -423,12 +425,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             string initScriptContext = PachiGrimoire.I.ResourceManager.Get<string>(constData.ScriptIndexPrefix + "_" + constData.InitScriptFileNameWithoutTXT);
             Debug.Log(initScriptContext);
             LoadScriptFile(constData.InitScriptFileNameWithoutTXT, initScriptContext);
-            int a = 1;
-            while (NextSentence()) {
-                a++;
-                if(a > 100)
-                    break;
-            }
+            while (NextSentence()) ;
+            Debug.Log("执行完毕InitScript in InitializeStory()");
         }
 
         public void FinalizeStory() {

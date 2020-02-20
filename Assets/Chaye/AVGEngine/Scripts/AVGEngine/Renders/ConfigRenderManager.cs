@@ -151,7 +151,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnPressedButtonVoiceVolumeList() {
-            configCharacterVolumeRenderManager.OnShow(this);
+            OnOtherShow(configCharacterVolumeRenderManager);
         }
         #endregion
 

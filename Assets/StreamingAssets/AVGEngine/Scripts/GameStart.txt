@@ -1,2 +1,3 @@
 Engine_SystemDebugLog(<Hello!
 World!>)
+Engine_SystemChangeStateToWait()

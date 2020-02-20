@@ -17,10 +17,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 LoadPageData();
             }
         }
+        public int SelectedNumber => selectedNumber;
 
         public GameObject confirmRoot;
         public UISprite confirmSprite;
         public UILabel labelInquiry;
+        public GameObject goYes;
+        public GameObject goNo;
 
         public UISprite spriteLoad;
         public UISprite spriteSave;
@@ -40,8 +43,18 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             bool a = isConfirmShow; // 为了消除isConfirmShow没被用的警告
             stageContextManager = pachiGrimoire.StageContextManager;
             playerRecordManager = pachiGrimoire.PlayerRecordManager;
+            UIEventListener.Get(goYes).onPress = (GameObject go, bool isPress) => {
+                if (isPress == false)
+                    return;
+                OnConfirmYESHide();
+            };
+            UIEventListener.Get(goNo).onPress = (GameObject go, bool isPress) => {
+                if (isPress == false)
+                    return;
+                OnConfirmNOHide();
+            };
             confirmRoot.SetActive(false);
-            for(int i = 0; i < pageNumberArray.Length;i++) {
+            for (int i = 0; i < pageNumberArray.Length; i++) {
                 UIEventListener.Get(pageNumberArray[i].gameObject).onClick = (GameObject go) => {
                     string selectedPageNumberName = go.name;
                     PageNumber = int.Parse(selectedPageNumberName);
@@ -62,9 +75,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void OnMouseRightDown() {
-            if(isWorking) { 
+            if (isWorking) {
                 OnHide();
-            } else if(isConfirmWorking){
+            } else if (isConfirmWorking) {
                 OnConfirmNOHide();
             }
         }
@@ -83,7 +96,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-        private Tweener DoSpriteAlpha(UISprite uiPanel, float fromValue, float toValue, float duration = 0.5f) {
+        private Tweener DoSpriteAlpha(UISprite uiPanel, float fromValue, float toValue, float duration = 1f) {
             if (uiPanel == null) {
                 return null;
             }
@@ -98,7 +111,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         protected override void LoadData() {
             if (isSaveMode) {
-                spriteSave.enabled =true;
+                spriteSave.enabled = true;
                 spriteLoad.enabled = false;
                 labelInquiry.text = constData.SaveInquiry;
             } else {
@@ -106,11 +119,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 spriteLoad.enabled = true;
                 labelInquiry.text = constData.LoadInquiry;
             }
-            confirmRoot.SetActive(false);
             PageNumber = 1;
         }
         protected override void UnloadData() {
-            confirmRoot.SetActive(false);
         }
         protected override void DoOnOtherShow() {
         }
@@ -121,22 +132,23 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void LoadPageData() {
             Dictionary<int, StoryRecord> storyRecordDict = playerRecordManager.StoryRecordDict;
             int baseNumber = 10 * (_pageNumber - 1);
-            for(int i = 0; i < mySaveLoadButtonArray.Length;i++) {
+            for (int i = 0; i < mySaveLoadButtonArray.Length; i++) {
                 int selectedNumber = baseNumber + i;
                 MySaveLoadButton button = mySaveLoadButtonArray[i];
                 GameObject go = button.gameObject;
                 if (storyRecordDict.ContainsKey(selectedNumber)) {
                     BoxCollider boxCollider = go.GetComponent<BoxCollider>();
-                    boxCollider.enabled = true;
-                    UIEventListener.Get(go).onClick = (GameObject goo) => {
-                        string selectedNumberName = goo.name.Substring("Button".Length);
-                        this.selectedNumber = 10 * (_pageNumber - 1) + int.Parse(selectedNumberName) - 1;
-                        OnConfirmShow();
-                    };
+                    if (selectedNumber == 0 && IsSaveMode == true) {
+                        boxCollider.enabled = false;
+                        UIEventListener.Get(go).onPress = null;
+                    } else { 
+                        boxCollider.enabled = true;
+                        UIEventListener.Get(go).onPress = OnMyPressRecord;
+                    }
                     var record = storyRecordDict[selectedNumber];
                     button.Title = record.chapterName;
                     button.Date = record.dateTime;
-                    if (record.dialogContextIndex == null) { 
+                    if (string.IsNullOrEmpty(record.dialogContextIndex)) {
                         button.Context = "";
                     } else {
                         string context = resourceManager.Get<string>(record.dialogContextIndex);
@@ -144,13 +156,37 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     }
                 } else {
                     BoxCollider boxCollider = go.GetComponent<BoxCollider>();
-                    boxCollider.enabled = false;
-                    UIEventListener.Get(go).onClick = null;
+                    if (IsSaveMode == true) {
+                        if(selectedNumber == 0) {
+                            boxCollider.enabled = false;
+                            UIEventListener.Get(go).onPress = null;
+                        } else { 
+                            boxCollider.enabled = true;
+                            UIEventListener.Get(go).onPress = OnMyPressRecord;
+                        }
+                    } else {
+                        boxCollider.enabled = false;
+                        UIEventListener.Get(go).onPress = null;
+                    }
                     button.ClearLabel();
                 }
             }
         }
 
+        private void OnMyPressRecord(GameObject goo, bool isPress) {
+            if (isPress == false) {
+                return;
+            }
+            string selectedNumberName = goo.name.Substring("Button".Length);
+            int selectedNumber = 10 * (_pageNumber - 1) + int.Parse(selectedNumberName) - 1;
+            if (selectedNumber == 0 && IsSaveMode == true) {
+                Debug.LogError("不能普通保存0号存档，这是快速保存存档");
+                return;
+            }
+            this.selectedNumber = selectedNumber;
+            Debug.Log("Record selectedNumber :" + selectedNumber);
+            OnConfirmShow();
+        }
 
 
         #region Callbacks
@@ -168,6 +204,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnConfirmNOHide() {
+            if (isConfirmWorking == false)
+                return;
             isConfirmWorking = false;
             confirmSprite.alpha = 1f;
             Tweener tweener = DoSpriteAlpha(confirmSprite, 1f, 0f);
@@ -181,6 +219,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnConfirmYESHide() {
+            if (isConfirmWorking == false)
+                return;
             isConfirmWorking = false;
             confirmSprite.alpha = 1f;
             Tweener tweener = DoSpriteAlpha(confirmSprite, 1f, 0f);
@@ -200,12 +240,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     root.SetActive(false);
                     fromRenderManager?.OnOtherHide();
                     // ??????horse 默认SaveLoad界面只能从StageRenderManager那里来，如果不是，那一定是从StartPanel来的，这样要进行渲染系统初始化
-                    if(fromRenderManager == null) { // ??? 等着Debug吧
+                    if (fromRenderManager == null && IsSaveMode == false) { // ??? 等着Debug吧
                         stageContextManager.InitializeStory();
                         pachiGrimoire.StageRenderManager.OnShow(null);
                     }
                     stageContextManager.SavePlayerRecord();
-                    stageContextManager.LoadStoryRecord(selectedNumber);
+                    if (PachiGrimoire.I.SaveLoadRenderManager.IsSaveMode)
+                        stageContextManager.SaveStoryRecord(PachiGrimoire.I.SaveLoadRenderManager.SelectedNumber);
+                    else
+                        stageContextManager.LoadStoryRecord(PachiGrimoire.I.SaveLoadRenderManager.SelectedNumber);
                 });
             });
         }

@@ -34,10 +34,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public string Context {
             get {
-                return labelContext.text?.Substring(0,constData.NumberOfShowWords);
+                return labelContext.text;
             }
             set {
-                labelContext.text = value;
+                if (value == null)
+                    labelContext.text = "";
+                else {
+                    int maxNumberOfShowWords = constData.NumberOfShowWords;
+                    int length = value.Length;
+                    length = length <= maxNumberOfShowWords ? length : maxNumberOfShowWords;
+                    labelContext.text = value.Substring(0, length);
+                }
             }
         }
 

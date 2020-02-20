@@ -37,9 +37,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 node = new EngineScriptLoadFileNode();
             } else if (token.Equals("BacklogAdd")) {
                 node = new EngineBacklogAddNode();
-            } else if (token.Equals("ChangeStateToAnimate")) {
+            } else if (token.Equals("SystemChangeStateToAnimate")) {
                 node = new EngineSystemChangeStateToAnimate();
-            } else if (token.Equals("ChangeStateToWait")) {
+            } else if (token.Equals("SystemChangeStateToWait")) {
                 node = new EngineSystemChangeStateToWait();
             } else if (token.Equals("MarkPlayerGet")) {
                 node = new EngineMarkPlayerGetNode();

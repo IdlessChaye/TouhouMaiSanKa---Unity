@@ -10,6 +10,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public List<float> varPlayerValueList = new List<float>();
 
         public List<string> pastScriptNameList;
-        public List<KeyValuePair<int, int>> pastScriptRangeList; // SaveData 用
+        public List<int> pastScriptLineNumberList; // SaveData 用
     }
 }

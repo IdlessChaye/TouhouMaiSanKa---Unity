@@ -14,7 +14,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void OnUpdateStageContext() {
-            if (paraList.Count == 0)
+            if (paraList.Count != 0)
                 throw new System.Exception("EngineSystemChangeStateToAnimate");
             PachiGrimoire.I.StateMachine.TransferStateTo(RunAnimateState.Instance);
         }

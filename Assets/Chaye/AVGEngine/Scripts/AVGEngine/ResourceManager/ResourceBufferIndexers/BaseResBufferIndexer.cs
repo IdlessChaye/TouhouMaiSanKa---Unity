@@ -34,7 +34,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public TValue Get(TKey key, string finalIndex) {
             Debug.Log("Get finalIndex: "+finalIndex);
             if (bufferDict.ContainsKey(key)) {
-                Debug.Log("Contain");
+                Debug.Log("BufferIndexer Contain. Get old data.");
                 ResBufferUnit<TKey, TValue> unit = bufferDict[key];
                 if (First != unit) {
                     RemoveUnit(unit);
@@ -42,7 +42,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 }
                 return unit.Data;
             } else {
-                Debug.Log("BufferIndexer Not Contain. Ready to load data.");
+                Debug.Log("BufferIndexer Not Contain. Set new data.");
                 if (AddNewValueByFinalIndex(key, finalIndex) == true) {
                     return bufferDict[key].Data;
                 } else {
@@ -143,7 +143,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         private void RemoveAndDestroyUnit(ResBufferUnit<TKey, TValue> unit) {
-            Debug.Log("NOOOOOO!" + unit.Data);
+            Debug.Log("RemoveAndDestroyUnit :" + unit.Data);
             ResBufferUnit<TKey, TValue> oldUnit = RemoveUnit(unit);
             if (oldUnit == null) {
                 throw new System.Exception("咋回事儿?");

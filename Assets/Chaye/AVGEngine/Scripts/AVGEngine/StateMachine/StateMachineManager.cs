@@ -26,6 +26,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 newState.OnEnter(CurrentState);
                 LastState = CurrentState;
                 CurrentState = newState;
+                CurrentState.OnHasEntered();
             } else {
                 throw new System.Exception($"状态机切换状态失败!\n现状态 : {CurrentState.StateName}    新状态 : {newState.StateName}\n");
             }

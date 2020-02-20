@@ -113,7 +113,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void FixedUpdate() {
 
             #region Test
-            if(Input.GetKeyDown(KeyCode.S)) {
+            if (Input.GetKeyDown(KeyCode.S)) {
                 StartGame();
             }
             #endregion
@@ -124,10 +124,19 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             BaseState state = stateMachine.CurrentState;
 
             if (state == RunScriptState.Instance) { // RunScript State
-                scriptManager.NextSentence();
+                bool success = scriptManager.NextSentence();
+                if (success == false) {
+                    //Debug.LogWarning("脚本执行结束");
+                    //if (stageRenderManager.IsShow == true) {
+                    //    stageRenderManager.OnHide();
+                    //    FinalizeGame();
+                    //}
+                }
             } else if (state == RunWaitState.Instance) { // RunWait State
                 StateBuff stateBuff = stateMachine.StateBuff;
-                if (stateBuff == StateBuff.Auto) {  // Auto Buff
+                if (stateBuff == StateBuff.Normal) {
+                    // Pass
+                } else if (stateBuff == StateBuff.Auto) {  // Auto Buff
                     if (isFirstInAutoBuff == false) {
                         isFirstInAutoBuff = true;
                         float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
@@ -180,7 +189,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public void ExitGame() { // 全系统出口，推出清理，还有UI管理，这个函数么有写完
+        public void FinalizeGame() { // 全系统出口，推出清理，还有UI管理，这个函数么有写完
             stageContextManager.FinalizeStory();
             stateMachine.TransferStateTo(IdleState.Instance);
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class StageContextManager {
@@ -14,7 +15,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private PastScriptManager pastScriptManager;
         private StageRenderManager renderManager;
 
-        public StageContextManager() { 
+        public StageContextManager() {
             recordManager = PachiGrimoire.I.PlayerRecordManager;
             stateMachine = PachiGrimoire.I.StateMachine;
             scriptManager = PachiGrimoire.I.ScriptManager;
@@ -26,6 +27,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void SavePlayerRecord() {
+            Debug.Log("保存玩家记录!");
             BaseState currentState = stateMachine.CurrentState;
 
             PlayerRecord playerRecord = new PlayerRecord();
@@ -36,23 +38,25 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             var pastScriptDict = pastScriptManager.PastScriptDict;
             List<string> pastScriptNameList = new List<string>();
-            List<KeyValuePair<int, int>> pastScriptRangeList = new List<KeyValuePair<int, int>>();
+            List<int> pastScriptLineNumberList = new List<int>();
             foreach (string key in pastScriptDict.Keys) {
-                var pair = pastScriptDict[key];
+                int lineNumber = pastScriptDict[key];
                 pastScriptNameList.Add(key);
-                pastScriptRangeList.Add(pair);
+                pastScriptLineNumberList.Add(lineNumber);
             }
             playerRecord.pastScriptNameList = pastScriptNameList;
-            playerRecord.pastScriptRangeList = pastScriptRangeList;
+            playerRecord.pastScriptLineNumberList = pastScriptLineNumberList;
 
             recordManager.SavePlayerRecord(playerRecord);
         }
 
         public void SaveStoryRecord(int indexOfRecord) {
             BaseState currentState = stateMachine.CurrentState;
-            if (currentState != SleepState.Instance) {
-                throw new System.Exception("StageContextManager SaveStoryRecord" + currentState.StateName);
+            if (currentState != RunWaitState.Instance && currentState != ChoiceWaitState.Instance) { //currentState != SleepState.Instance &&
+                throw new System.Exception("StageContextManager SaveStoryRecord " + currentState.StateName);
             }
+
+            Debug.Log("保存故事记录! :" + indexOfRecord);
 
             StoryRecord storyRecord = new StoryRecord();
 
@@ -88,10 +92,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             storyRecord.backgroundImageIndex = renderManager.BackgroundImageIndex;
             List<string> figureImageKeyList = new List<string>();
             List<string> figureImageFIIndexList = new List<string>();
-            List<KeyValuePair<float, float>> figureImagePosList = new List<KeyValuePair<float, float>>();
-            List<KeyValuePair<float, float>> figureImageScaleList = new List<KeyValuePair<float, float>>();
+            List<float> figureImagePosXList = new List<float>();
+            List<float> figureImagePosYList = new List<float>();
+            List<float> figureImageScaleXList = new List<float>();
+            List<float> figureImageScaleYList = new List<float>();
             Dictionary<string, KeyValuePair<string, UITexture>> figureImageDict = renderManager.FigureImageDict;
-            foreach (string key in figureImageDict.Keys) {
+            var keyArray = figureImageDict.Keys.ToArray();
+            for (int i = 0; i< keyArray.Length;i++) {
+                string key = keyArray[i];
                 KeyValuePair<string, UITexture> pair = figureImageDict[key];
                 string fiIndex = pair.Key;
                 Transform uiTextureTF = pair.Value.transform;
@@ -99,13 +107,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 Vector3 scale = uiTextureTF.localScale;
                 figureImageKeyList.Add(key);
                 figureImageFIIndexList.Add(fiIndex);
-                figureImagePosList.Add(new KeyValuePair<float, float>(pos.x, pos.y));
-                figureImageScaleList.Add(new KeyValuePair<float, float>(scale.x, scale.y));
+                figureImagePosXList.Add(pos.x);
+                figureImagePosYList.Add(pos.y);
+                figureImageScaleXList.Add(scale.x);
+                figureImageScaleYList.Add(scale.y);
             }
             storyRecord.figureImageKeyList = figureImageKeyList;
             storyRecord.figureImageFIIndexList = figureImageFIIndexList;
-            storyRecord.figureImagePosList = figureImagePosList;
-            storyRecord.figureImageScaleList = figureImageScaleList;
+            storyRecord.figureImagePosXList = figureImagePosXList;
+            storyRecord.figureImagePosYList = figureImagePosYList;
+            storyRecord.figureImageScaleXList = figureImageScaleXList;
+            storyRecord.figureImageScaleYList = figureImageScaleYList;
             storyRecord.smallFigureImageIndex = renderManager.SmallFigureImageIndex;
             storyRecord.choiceItemList = renderManager.ChoiceItemList;
 
@@ -118,22 +130,30 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void LoadPlayerRecord() {
+            Debug.Log("读取玩家记录!");
             PlayerRecord playerRecord = recordManager.PlayerRecord;
-
             markManager.LoadPlayerRecord(playerRecord.markPlayerList, playerRecord.varPlayerNameList, playerRecord.varPlayerValueList);
-            pastScriptManager.LoadPlayerRecord(playerRecord.pastScriptNameList, playerRecord.pastScriptRangeList);
+            pastScriptManager.LoadPlayerRecord(playerRecord.pastScriptNameList, playerRecord.pastScriptLineNumberList);
         }
 
         public void LoadStoryRecord(int indexOfRecord) {
             Dictionary<int, StoryRecord> storyRecordDict = recordManager.StoryRecordDict;
-            StoryRecord sr = storyRecordDict[indexOfRecord];
+            StoryRecord sr = null;
+
+            if (storyRecordDict.ContainsKey(indexOfRecord)) { 
+                sr = storyRecordDict[indexOfRecord];
+                Debug.Log("读取故事记录! :" + indexOfRecord);
+            } else { 
+                Debug.LogWarning("不能读取故事存档 :" + indexOfRecord);
+                return;
+            }
 
             stateMachine.LoadStoryRecord(sr.currentStateName, sr.LastStateName, sr.StateBuff);
             musicManager.LoadStoryRecord(sr.bgmIndex, sr.voiceIndex, sr.voiceCharacterName);
-            scriptManager.LoadStoryRecord(sr.scriptPointerScriptName, sr.scriptPointerLineNumber, 
-                sr.scriptReplaceKeys, sr.scriptReplaceValues, 
+            scriptManager.LoadStoryRecord(sr.scriptPointerScriptName, sr.scriptPointerLineNumber,
+                sr.scriptReplaceKeys, sr.scriptReplaceValues,
                 sr.pointerScriptNameStack, sr.pointerLineNumberStack);
-            markManager.LoadStoryRecord(sr.markStoryList, sr.varStoryNameList, sr.varStoryValueList,sr.chapterName);
+            markManager.LoadStoryRecord(sr.markStoryList, sr.varStoryNameList, sr.varStoryValueList, sr.chapterName);
             backlogManager.LoadStoryRecord(sr.backlogItemList, sr.head, sr.capacity, sr.count);
             //renderManager.LoadStoryData 负责Choice Backlog Image Text
             renderManager.LoadStoryRecord(sr);

@@ -38,7 +38,7 @@ public class TestChoiceButton : MonoBehaviour
             Debug.Log("Clear choiceItemList!");
         });
     }
-    private Tweener DoTextureAlpha(UITexture uiTexture, float fromValue, float toValue, float duration = 0.5f) {
+    private Tweener DoTextureAlpha(UITexture uiTexture, float fromValue, float toValue, float duration = 1f) {
         if (uiTexture == null) {
             return null;
         }

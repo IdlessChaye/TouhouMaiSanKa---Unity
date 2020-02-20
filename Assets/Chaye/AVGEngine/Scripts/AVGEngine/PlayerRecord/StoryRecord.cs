@@ -33,8 +33,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public string backgroundImageIndex;
         public List<string> figureImageKeyList = new List<string>();
         public List<string> figureImageFIIndexList = new List<string>();
-        public List<KeyValuePair<float, float>> figureImagePosList = new List<KeyValuePair<float, float>>();
-        public List<KeyValuePair<float, float>> figureImageScaleList = new List<KeyValuePair<float, float>>();
+        public List<float> figureImagePosXList = new List<float>();
+        public List<float> figureImagePosYList = new List<float>();
+        public List<float> figureImageScaleXList = new List<float>();
+        public List<float> figureImageScaleYList = new List<float>();
         public string smallFigureImageIndex;
         public List<ChoiceItem> choiceItemList = new List<ChoiceItem>();
 

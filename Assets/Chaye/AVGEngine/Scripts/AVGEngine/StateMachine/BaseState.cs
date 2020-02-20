@@ -17,12 +17,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public abstract List<uint> RejectedOldStateIDList { get; }
 
         public virtual void OnEnter(BaseState oldState) {
-            Debug.Log("OldStateID : " + oldState.StateName);
+            Debug.Log("新状态进入，旧状态名 :" + oldState.StateName);
         }
         public virtual void OnExit(BaseState newState) {
-            Debug.Log("NewStateID : " + newState.StateName);
+            Debug.Log("旧状态退出，新状态名 :" + newState.StateName);
         }
-
+        public virtual void OnHasEntered() {
+            Debug.Log("状态转换完毕 :" + StateName);
+        }
         public bool CanBeTransferedFrom(BaseState oldState) {
             return !RejectedOldStateIDList.Contains(oldState.StateID);
         }
@@ -44,13 +46,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
-
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
     }
 
     public class InitState : BaseState {
@@ -81,8 +76,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
+        public override void OnHasEntered() {
+            PachiGrimoire.I.StateMachine.TransferStateTo(IdleState.Instance);
         }
     }
 
@@ -103,13 +98,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 1, 3 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
+ 
+             
+        
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
+ 
+             
+        
     }
 
     public class RunScriptState : BaseState {
@@ -131,6 +126,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override void OnEnter(BaseState oldState) {
             if(oldState == IdleState.Instance) {
+                Debug.Log("状态切换 :IdleState -> RunScriptState");
                 ConstData constData = PachiGrimoire.I.constData;
                 ScriptManager scriptManager = PachiGrimoire.I.ScriptManager;
 
@@ -139,9 +135,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
+
     }
 
     public class RunWaitState : BaseState {
@@ -161,13 +155,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 5};
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
     }
 
     public class RunAnimateState : BaseState {
@@ -187,13 +175,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 6 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
     }
 
     public class ChoiceWaitState : BaseState {
@@ -213,13 +195,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 7 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
     }
 
     public class SleepState : BaseState {
@@ -239,13 +215,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private readonly List<uint> rejectedOldStateIDList = new List<uint> { 8 };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
-        public override void OnEnter(BaseState oldState) {
-            Debug.Log("OldState: " + oldState.StateName);
-        }
 
-        public override void OnExit(BaseState newState) {
-            Debug.Log("NewState: " + newState.StateName);
-        }
     }
 
 }

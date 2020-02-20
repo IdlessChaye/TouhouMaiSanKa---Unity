@@ -174,19 +174,21 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void OnMouseScrollWheelZoomIn() {
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
+            Debug.Log("StageRender OnMouseScrollWheelZoomIn. state :" + state.StateName + " buff :" + buff.ToString());
             if (buff == StateBuff.Normal) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
-                    backlogRenderManager.OnShow(this);
+                    Debug.Log("OnMouseScrollWheelZoomIn OnOtherShow(backlogRenderManager);");
+                    OnOtherShow(backlogRenderManager);
                 }
             } else if (buff == StateBuff.Auto) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
-                    backlogRenderManager.OnShow(this);
+                    OnOtherShow(backlogRenderManager);
                 }
             } else if (buff == StateBuff.Skip) {
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance || state == ChoiceWaitState.Instance) {
                     stateMachine.SetStateBuff(StateBuff.Normal);
-                    backlogRenderManager.OnShow(this);
+                    OnOtherShow(backlogRenderManager);
                 }
             }
         }
@@ -315,7 +317,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        private Tweener DoTextureAlpha(UITexture uiTexture, float fromValue, float toValue, float duration = 0.5f) {
+        private Tweener DoTextureAlpha(UITexture uiTexture, float fromValue, float toValue, float duration = 1f) {
             if (uiTexture == null) {
                 return null;
             }
@@ -528,7 +530,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 ChoiceItem choiceItem = choiceItemList[i];
                 string dlIndex = choiceItem.DLIndex;
                 bool canBeSelected = choiceItem.CanBeSelected;
-                string choiceContext = resourceManager.Get<string>(dlIndex);
+                string choiceContext = null;
+                if(!string.IsNullOrEmpty(dlIndex))
+                    choiceContext = resourceManager.Get<string>(dlIndex);
                 GameObject choice = choiceList[i];
                 choice.SetActive(true);
                 if (count <= 3) {
@@ -609,11 +613,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region RenderSwitch
         protected override void LoadData() {
+            figureImageDict = new Dictionary<string, KeyValuePair<string, UITexture>>();
             SetAlphaOfConsole(config.AlphaOfConsole);
         }
 
         protected override void UnloadData() {
-
+            FigureImageDataClear();
         }
 
         protected override void DoOnOtherShow() {
@@ -637,7 +642,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             firstButtonHide.onButtonSelect += () => ConsoleHide();
             firstButtonVoice.onButtonSelect += () => musicManager.VoicePlay();
-            firstButtonBacklog.onButtonSelect += () => backlogRenderManager.OnShow(this); ;
+            firstButtonBacklog.onButtonSelect += () => OnOtherShow(backlogRenderManager);
             firstButtonSkip.onButtonSelect += () => {
                 stateMachine.SetStateBuff(StateBuff.Skip);
                 DisableButtons();
@@ -663,16 +668,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             };
             firstButtonSave.onButtonSelect += () => {
                 slRenderManager.IsSaveMode = true;
-                slRenderManager.OnShow(this);
+                OnOtherShow(slRenderManager);
             };
             firstButtonLoad.onButtonSelect += () => {
                 slRenderManager.IsSaveMode = false;
-                slRenderManager.OnShow(this);
+                OnOtherShow(slRenderManager);
             };
-            firstButtonConfig.onButtonSelect += () => configRenderManager.OnShow(this);
+            firstButtonConfig.onButtonSelect += () => OnOtherShow(configRenderManager);
             firstButtonExit.onButtonSelect += () => {
                 OnHide(); // TODO: 加个提示框
-                action += () => pachiGrimoire.ExitGame(); // 销毁渲染，全系统退出
+                action += () => pachiGrimoire.FinalizeGame(); // 销毁渲染，全系统退出
             };
 
             Messenger.AddListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
@@ -743,11 +748,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             smallFigureImageIndex = sr.smallFigureImageIndex;
             List<string> figureImageKeyList = new List<string>(sr.figureImageKeyList);
             List<string> figureImageFIIndexList = new List<string>(sr.figureImageFIIndexList);
-            List<KeyValuePair<float, float>> figureImagePosList = new List<KeyValuePair<float, float>>(sr.figureImagePosList);
-            List<KeyValuePair<float, float>> figureImageScaleList = new List<KeyValuePair<float, float>>(sr.figureImageScaleList);
+            List<float> figureImagePosXList = new List<float>(sr.figureImagePosXList);
+            List<float> figureImagePosYList = new List<float>(sr.figureImagePosYList);
+            List<float> figureImageScaleXList = new List<float>(sr.figureImageScaleXList);
+            List<float> figureImageScaleYList = new List<float>(sr.figureImageScaleYList);
             choiceItemList = new List<ChoiceItem>(sr.choiceItemList);
 
-            if (dialogContextIndex != null) {
+            if (!string.IsNullOrEmpty(dialogContextIndex)) {
                 string context = resourceManager.Get<string>(dialogContextIndex);
                 contextLabel.text = context;
             } else {
@@ -756,7 +763,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             nameLabel.text = characterName == null ? "" : characterName;
 
-            if (backgroundImageIndex != null) {
+            if (!string.IsNullOrEmpty( backgroundImageIndex )) {
                 Texture2D backgroundTexture2D = resourceManager.Get<Texture2D>(backgroundImageIndex);
                 backgroundUITextureTop.mainTexture = backgroundTexture2D;
                 backgroundUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
@@ -770,7 +777,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             backgroundUITexture.height = ConstData.TEXTURE2D_HEIGHT;
             backgroundUITexture.alpha = 1f;
 
-            if (smallFigureImageIndex != null) {
+            if (!string.IsNullOrEmpty( smallFigureImageIndex )) {
                 Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(smallFigureImageIndex);
                 smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
                 smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
@@ -789,11 +796,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 for (int i = 0; i < figureImageKeyList.Count; i++) {
                     string uiKey = figureImageKeyList[i];
                     string fiIndex = figureImageFIIndexList[i];
-                    float scale_x = figureImageScaleList[i].Key;
-                    float scale_y = figureImageScaleList[i].Value;
-                    float pos_x = figureImagePosList[i].Key;
-                    float pos_y = figureImagePosList[i].Value;
-                    Texture2D texture2D = resourceManager.Get<Texture2D>(fiIndex);
+                    float scale_x = figureImageScaleXList[i];
+                    float scale_y = figureImageScaleYList[i];
+                    float pos_x = figureImagePosXList[i];
+                    float pos_y = figureImagePosYList[i];
+                    Texture2D texture2D = null;
+                    if (!string.IsNullOrEmpty(fiIndex))
+                        texture2D = resourceManager.Get<Texture2D>(fiIndex);
                     float width = texture2D.width;
                     float height = texture2D.height;
 

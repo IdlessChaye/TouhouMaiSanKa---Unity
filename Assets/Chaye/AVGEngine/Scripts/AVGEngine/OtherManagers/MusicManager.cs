@@ -113,13 +113,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void LoadStoryRecord(string bgmIndex, string voiceIndex, string characterName) {
-            if (bgmIndex != null) {
+            if (!string.IsNullOrEmpty(bgmIndex)) {
                 AudioClip bgmClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(bgmIndex);
                 BGMPlay(bgmClip, bgmIndex);
             } else {
                 this.bgmIndex = null;
             }
-            if (voiceIndex != null && characterName != null) {
+            if (!string.IsNullOrEmpty(voiceIndex) && !string.IsNullOrEmpty(characterName)) {
                 AudioClip voiceClip = PachiGrimoire.I.ResourceManager.Get<AudioClip>(voiceIndex);
                 VoicePlay(characterName, voiceClip, voiceIndex, false);
             } else {

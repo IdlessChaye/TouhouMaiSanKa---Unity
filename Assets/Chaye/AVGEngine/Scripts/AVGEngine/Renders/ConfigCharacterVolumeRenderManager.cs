@@ -5,6 +5,7 @@ using DG.Tweening;
 
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     public class ConfigCharacterVolumeRenderManager : BaseRenderManager {
+        public GameObject scrollView;
         public GameObject scrollViewGridRoot;
         public GameObject prefabVoiceCharacterItem;
         public AudioClip[] characterVoiceClipArray;
@@ -12,11 +13,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private UIGrid uiGrid;
         private List<MyVoiceConfigItem> voiceItemList;
-        
+
+        private const float MYSTERIES = 57.78f;
+        private UIPanel scrollViewPanel;
 
         protected override void Initilize() {
             voiceItemList = new List<MyVoiceConfigItem>();
             uiGrid = scrollViewGridRoot.GetComponent<UIGrid>();
+            scrollViewPanel = scrollView.GetComponent<UIPanel>();
+            
 
             int arrayLength = characterVoiceClipArray != null ? characterVoiceClipArray.Length : -1;
             List<string> characterNameList = config.CharacterNameList;
@@ -66,6 +71,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void LoadData() {
+            scrollView.transform.position = Vector3.zero;
+            scrollViewPanel.clipOffset = new Vector2(scrollViewPanel.clipOffset.x, MYSTERIES);
             List<float> characterVolumeList = config.VoiceVolumeValueList;
             for (int i = 0;i< voiceItemList.Count;i++) {
                 var item = voiceItemList[i];

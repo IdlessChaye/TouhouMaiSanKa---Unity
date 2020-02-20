@@ -21,13 +21,16 @@ public class MyFirstButton : MonoBehaviour {
         sprite.atlas = atlas;
         sprite.spriteName = spriteNormalName;
         eventListener = UIEventListener.Get(gameObject);
-        eventListener.onClick += OnMyClick;
+        eventListener.onPress += OnMyPress;
         eventListener.onHover += OnMyHover;
     }
 
 
 
-    private void OnMyClick(GameObject go) {
+    private void OnMyPress(GameObject go,bool isPress) {
+        if(isPress == false) {
+            return;
+        }
         if (string.IsNullOrEmpty(spritePressedName)) {
             if (sprite.spriteName == spriteHoverName) {
                 if (onButtonSelect != null) {

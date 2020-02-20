@@ -4,12 +4,16 @@ Json中记录的变量名取短点
 Document
 
 Debug
-更改pastScriptManager 第二个参数不需要是pair，因为脚本初始号都是0，不用记录
-疯狂点击按钮保护的问题
 Save模式无法保存存档
 Next模式无法退出
 Config第一次出现UI是错的
+重复加载游戏报错 好像没事了
 
+测试SaveLoad
+测试RunWaitState
+测试ChoiceWaitState
+退出游戏提示窗
+SaveLoad显示编号
 Script Design
 油库里
 dairi

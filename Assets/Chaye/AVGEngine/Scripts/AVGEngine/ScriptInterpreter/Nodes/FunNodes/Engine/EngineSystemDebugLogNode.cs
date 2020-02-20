@@ -13,7 +13,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void OnUpdateStageContext() {
-            if (paraList.Count == 1)
+            if (paraList.Count != 1)
                 throw new System.Exception("EngineSystemDebugLogNode");
             string context = paraList[0];
             PachiGrimoire.I.DebugLog(context);
