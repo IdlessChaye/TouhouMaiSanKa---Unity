@@ -102,6 +102,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Input
 
+        protected override bool CanUpdateWhenShow() {
+            BaseState state = stateMachine.CurrentState;
+            if (state == ChoiceWaitState.Instance) {
+                return false;
+            }
+            return true;
+        }
+
         protected override void ThenUpdateWhat() {
             BaseState state = stateMachine.CurrentState;
             if (state == SleepState.Instance) {
@@ -119,6 +127,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void OnMouseLeftDown() {
+            if(!isConsoleShow) {
+                ConsoleShow();
+                return;
+            }
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
             if (buff == StateBuff.Normal) {
@@ -157,6 +169,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         protected override void OnMouseScrollWheelZoomOut() {
+            if (!isConsoleShow) {
+                ConsoleShow();
+                return;
+            }
             BaseState state = stateMachine.CurrentState;
             StateBuff buff = stateMachine.StateBuff;
             if (buff == StateBuff.Normal) {
@@ -486,6 +502,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (isConsoleShow) {
                 return;
             }
+            Debug.Log("ConsoleShow");
             isConsoleShow = true;
             if (hasEffect)
                 console.transform.position = Vector3.zero;
@@ -495,6 +512,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (!isConsoleShow) {
                 return;
             }
+            Debug.Log("ConsoleHide");
             isConsoleShow = false;
             if (hasEffect)
                 console.transform.position = Vector3.up * -1000;
@@ -509,6 +527,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 throw new System.Exception("StageRenderManager ChoiceCreate");
             }
             this.choiceItemList = choiceItemList;
+            choosenDLIndex = null;
 
             int count = choiceItemList.Count;
             // 得到各个选项的文本
@@ -528,29 +547,29 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             for (int i = 0; i < choiceList.Count; i++) {
                 ChoiceItem choiceItem = choiceItemList[i];
-                string dlIndex = choiceItem.DLIndex;
-                bool canBeSelected = choiceItem.CanBeSelected;
+                string dlIndex = choiceItem.dlIndex;
+                bool canBeSelected = choiceItem.canBeSelected;
                 string choiceContext = null;
-                if(!string.IsNullOrEmpty(dlIndex))
+                if (!string.IsNullOrEmpty(dlIndex))
                     choiceContext = resourceManager.Get<string>(dlIndex);
                 GameObject choice = choiceList[i];
                 choice.SetActive(true);
                 if (count <= 3) {
                     if (i == 0)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_0of23, constData.ChoicePosY_0of23, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_0of23, constData.ChoicePosY_0of23, 0f);
                     else if (i == 1)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_1of23, constData.ChoicePosY_1of23, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_1of23, constData.ChoicePosY_1of23, 0f);
                     else if (i == 2)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_2of23, constData.ChoicePosY_2of23, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_2of23, constData.ChoicePosY_2of23, 0f);
                 } else if (count == 4) {
                     if (i == 0)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_0of4, constData.ChoicePosY_0of4, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_0of4, constData.ChoicePosY_0of4, 0f);
                     else if (i == 1)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_1of4, constData.ChoicePosY_1of4, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_1of4, constData.ChoicePosY_1of4, 0f);
                     else if (i == 2)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_2of4, constData.ChoicePosY_2of4, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_2of4, constData.ChoicePosY_2of4, 0f);
                     else if (i == 3)
-                        choice.transform.position = new Vector3(constData.ChoicePosX_3of4, constData.ChoicePosY_3of4, 0f);
+                        choice.transform.localPosition = new Vector3(constData.ChoicePosX_3of4, constData.ChoicePosY_3of4, 0f);
                 }
                 UIButton uiButton = choice.GetComponent<UIButton>();
                 UILabel uiLabel = choice.GetComponentInChildren<UILabel>();
@@ -558,45 +577,55 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
                 uiLabel.text = choiceContext; // 文本
                 if (canBeSelected) { // 颜色 和 点击事件
-                    uiButton.hover = uiButton.pressed;
-                    listener.onClick += OnChoiceButtonClick;
+                    uiButton.hover = Color.white;
+                    uiButton.pressed = Color.white;
+                    listener.onPress += OnChoiceButtonPress;
                 } else {
                     uiButton.hover = uiButton.disabledColor;
+                    uiButton.pressed = uiButton.disabledColor;
                 }
             }
         }
 
-        private void OnChoiceButtonClick(GameObject go) { // 不知道怎么编能更好
+        private void OnChoiceButtonPress(GameObject go,bool isPress) { // 不知道怎么编能更好
+            if (isPress == false)
+                return;
+            if (choosenDLIndex != null)
+                return;
+            if (!isWorking)
+                return;
             string name = go.name;
             int number = int.Parse(name[6].ToString());
             ChoiceItem choiceItem = choiceItemList[number];
-            choosenDLIndex = choiceItem.DLIndex;
-            string mark = choiceItem.Mark;
-            string scriptContext = choiceItem.OnSelectedScirptContext;
+            choosenDLIndex = choiceItem.dlIndex;
+            string mark = choiceItem.mark;
+            string scriptContext = choiceItem.onSelectedScirptContext;
             PachiGrimoire.I.MarkManager.MarkStorySet(mark);
             PachiGrimoire.I.MarkManager.MarkPlayerSet(mark);
             PachiGrimoire.I.ScriptManager.LoadScriptContext(scriptContext);
 
-            OnChoiceButtonClickHelper();
+            OnChoiceButtonOnPressHelper();
         }
 
-        private void OnChoiceButtonClickHelper() {
+        private void OnChoiceButtonOnPressHelper() {
             for (int i = 0; i < choiceList.Count; i++) { // 还原Choice Gameobjects 状态
                 GameObject go = choiceList[i];
+                UIEventListener.Get(go).onPress = null;
                 UIButton button = go.GetComponent<UIButton>();
-                button.onClick = null;
                 UITexture texture = go.GetComponent<UITexture>();
                 UILabel label = go.GetComponentInChildren<UILabel>();
-                Tweener tweener = DoTextureAlpha(texture, 1f, 0f).OnComplete(() => {
-                    button.hover = button.pressed;
-                    label.text = "";
-                    texture.alpha = 1f;
-                    go.SetActive(false);
-                });
+                Tweener tweener = DoTextureAlpha(texture, 1f, 0f);
                 JoinTween(tweener);
-            }
-            BaseState lastState = stateMachine.LastState;
 
+                sequence.OnComplete(() => action.Invoke());
+                action += () => {
+                    button.hover = button.pressed;
+                    texture.alpha = 1f;
+                    label.text = "";
+                    go.SetActive(false);
+                };
+            }
+            
             sequence.OnComplete(() => action.Invoke());
             action += () => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
                 choiceItemList.Clear();
@@ -647,12 +676,24 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 stateMachine.SetStateBuff(StateBuff.Skip);
                 DisableButtons();
             };
-            firstButtonSkip.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);    
+            firstButtonSkip.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);
             firstButtonAuto.onButtonSelect += () => {
                 stateMachine.SetStateBuff(StateBuff.Auto);
                 DisableButtons();
             };
             firstButtonAuto.onButtonRelease += () => stateMachine.SetStateBuff(StateBuff.Normal);
+            firstButtonNext.onJudgeEnable = () => {
+                BaseState state = stateMachine.CurrentState;
+                StateBuff buff = stateMachine.StateBuff;
+                if (state == RunAnimateState.Instance || state == RunWaitState.Instance) {
+                    if(buff == StateBuff.Normal) { 
+                        if(choiceItemList.Count == 0) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            };
             firstButtonNext.onButtonSelect += () => {
                 stateMachine.SetStateBuff(StateBuff.Next);
                 DisableButtons();
@@ -676,15 +717,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             };
             firstButtonConfig.onButtonSelect += () => OnOtherShow(configRenderManager);
             firstButtonExit.onButtonSelect += () => {
-                OnHide(); // TODO: 加个提示框
-                action += () => pachiGrimoire.FinalizeGame(); // 销毁渲染，全系统退出
+                if (IsWorking == true) {
+                    OnHide(); // TODO: 加个提示框
+                    action += () => pachiGrimoire.FinalizeGame(); // 销毁渲染，全系统退出
+                }
             };
 
             Messenger.AddListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
         }
 
         private void FirstButtonStateBuffCallback(StateBuff stateBuff) {
-            switch(stateBuff) {
+            switch (stateBuff) {
                 case StateBuff.Normal:
                     firstButtonSkip.SetNormal();
                     firstButtonAuto.SetNormal();
@@ -739,9 +782,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void LoadStoryRecord(StoryRecord sr) {
+            // Reset Original Data
+            #region Reset Original Data
+            choice0.SetActive(false);
+            choice1.SetActive(false);
+            choice2.SetActive(false);
+            choice3.SetActive(false);
+            if (choiceList != null) {
+                for (int i = 0; i < choiceList.Count; i++) { // 还原Choice Gameobjects 状态
+                    GameObject go = choiceList[i];
+                    UIEventListener.Get(go).onPress = null;
+                    UIButton button = go.GetComponent<UIButton>();
+                    button.hover = Color.white;
+                    button.pressed = Color.white;
+                    UITexture texture = go.GetComponent<UITexture>();
+                    texture.alpha = 1f;
+                    UILabel label = go.GetComponentInChildren<UILabel>();
+                    label.text = "";
+                    go.SetActive(false);
+                }
+            }
             sequence?.Pause();
-            sequence = DOTween.Sequence();
+            sequence = CreateSequence();
 
+            #endregion
+
+            // Reset StoryRecord Data
             dialogContextIndex = sr.dialogContextIndex;
             characterName = sr.characterName;
             backgroundImageIndex = sr.backgroundImageIndex;
@@ -763,7 +829,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
             nameLabel.text = characterName == null ? "" : characterName;
 
-            if (!string.IsNullOrEmpty( backgroundImageIndex )) {
+            if (!string.IsNullOrEmpty(backgroundImageIndex)) {
                 Texture2D backgroundTexture2D = resourceManager.Get<Texture2D>(backgroundImageIndex);
                 backgroundUITextureTop.mainTexture = backgroundTexture2D;
                 backgroundUITextureTop.width = ConstData.TEXTURE2D_WIDTH;
@@ -777,7 +843,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             backgroundUITexture.height = ConstData.TEXTURE2D_HEIGHT;
             backgroundUITexture.alpha = 1f;
 
-            if (!string.IsNullOrEmpty( smallFigureImageIndex )) {
+            if (!string.IsNullOrEmpty(smallFigureImageIndex)) {
                 Texture2D smallFigureTexture2D = resourceManager.Get<Texture2D>(smallFigureImageIndex);
                 smallFigureImageUITextureTop.mainTexture = smallFigureTexture2D;
                 smallFigureImageUITextureTop.width = ConstData.TEXTURE2D_SMALL_FIGURE_IMAGE_WIDTH;
@@ -846,13 +912,13 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             backgroundImageIndex = null;
             figureImageDict = null;
             smallFigureImageIndex = null;
-            isConsoleShow = false;
+            isConsoleShow = true;
             choosenDLIndex = null;
-            choiceItemList = null;
+            choiceItemList = new List<ChoiceItem>();
             isOtherShow = false;
 
 
-            if (isInitFirstButtonCallbacks) { 
+            if (isInitFirstButtonCallbacks) {
                 Messenger.AddListener<float>("SetAlphaOfConsole", SetAlphaOfConsole);
                 InitializeFirstButtonCallbacks();
             }

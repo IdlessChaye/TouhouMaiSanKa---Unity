@@ -29,10 +29,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void Push(BacklogItem item) {
             int index = (head + 1) % capacity;
             if (count < capacity) {
-                if (count + 1 != index) {
+                if (count != index) { // index == 0, count == 0, count will increase
                     throw new System.Exception("BacklogManager Push");
                 }
-                count++;
+                count++; // count == index + 1
                 BacklogItemList.Add(item);
             } else {
                 BacklogItemList[index] = item;

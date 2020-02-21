@@ -110,7 +110,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             StateMachine.TransferStateTo(InitState.Instance);
         }
 
-        private void FixedUpdate() {
+        private void Update() {
 
             #region Test
             if (Input.GetKeyDown(KeyCode.S)) {
@@ -173,19 +173,23 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region AVGEngine Layer
 
         public void StartGame() { // 初始界面入口，初始化，还有UI管理，这个函数么有写完
-            stageContextManager.InitializeStory();
-            stateMachine.TransferStateTo(RunScriptState.Instance);
-            stateMachine.SetStateBuff(StateBuff.Normal);
-            stageRenderManager.OnShow(null);
+            if (stageRenderManager.IsShow == false) {
+                stageContextManager.InitializeStory();
+                stateMachine.TransferStateTo(RunScriptState.Instance);
+                stateMachine.SetStateBuff(StateBuff.Normal);
+                stageRenderManager.OnShow(null);
+            }
         }
 
         public void LoadGame() { // 初始界面读取存档入口，初始化，还有UI管理，这个函数么有写完
             BaseState currentState = stateMachine.CurrentState;
             if (currentState == IdleState.Instance) {
-                stateMachine.TransferStateTo(RunScriptState.Instance);
-                //stageContextManager.LoadStoryRecord();
-                saveLoadRenderManager.IsSaveMode = false;
-                saveLoadRenderManager.OnShow(null);
+                if (saveLoadRenderManager.IsShow == false) {
+                    stateMachine.TransferStateTo(RunScriptState.Instance);
+                    //stageContextManager.LoadStoryRecord();
+                    saveLoadRenderManager.IsSaveMode = false;
+                    saveLoadRenderManager.OnShow(null);
+                }
             }
         }
 

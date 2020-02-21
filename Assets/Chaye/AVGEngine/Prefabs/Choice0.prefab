@@ -165,7 +165,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 0.7960785, g: 0.7960785, b: 0.7960785, a: 1}
+  mColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
   mPivot: 4
   mWidth: 924
   mHeight: 90
@@ -226,7 +226,7 @@ MonoBehaviour:
   tweenTarget: {fileID: 7989207359766616284}
   hover: {r: 1, g: 1, b: 1, a: 1}
   pressed: {r: 1, g: 1, b: 1, a: 1}
-  disabledColor: {r: 0.79607844, g: 0.79607844, b: 0.79607844, a: 1}
+  disabledColor: {r: 0.5411765, g: 0.5411765, b: 0.5411765, a: 1}
   duration: 0
   dragHighlight: 0
   hoverSprite: 

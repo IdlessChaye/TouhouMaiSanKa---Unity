@@ -46,7 +46,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 throw new System.Exception("LoadScriptFile");
             Debug.Log("加载脚本 :" + scriptName);
             isSecondGear = false;
-            if (!IsOver()) {
+            if (!IsOver()) { // 保存主翻译器函数返回地址
                 pointerScriptNameStack.Push(ScriptPointerScriptName);
                 pointerLineNumberStack.Push(ScriptPointerLineNumber);
             }
@@ -362,25 +362,31 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             ScriptPointerLineNumber = ScriptPointerLineNumber + 1;
             // 开始翻译
             ExpressionRootNode rootNode = new ExpressionRootNode();
-            Debug.Log("开始翻译 :");
+            Debug.Log("主翻译器 开始翻译 :");
             context.ShowSelfAll();
-            Debug.Log("开始翻译结束");
+            Debug.Log("主翻译器 开始翻译结束");
             rootNode.Interpret(context);
-            Debug.Log("开始执行");
+            Debug.Log("主翻译器 开始执行");
             rootNode.Execute();
-            Debug.Log("开始执行结束");
+            Debug.Log("主翻译器 开始执行结束");
             return true;
         }
 
         private bool NextSecondSentence() {
             if (IsSecondOver()) {
+                UnloadSecondSentence();
                 return false;
             }
             ScriptSentenceContext context = secondScriptSentenceList[secondScriptPointerLineNumber];
             secondScriptPointerLineNumber = secondScriptPointerLineNumber + 1;
             ExpressionRootNode rootNode = new ExpressionRootNode();
+            Debug.Log("从翻译器 开始翻译 :");
+            context.ShowSelfAll();
+            Debug.Log("从翻译器 开始翻译结束");
             rootNode.Interpret(context);
+            Debug.Log("从翻译器 开始执行");
             rootNode.Execute();
+            Debug.Log("从翻译器 开始执行结束");
             return true;
         }
 

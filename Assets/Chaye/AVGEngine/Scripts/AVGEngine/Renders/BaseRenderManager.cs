@@ -11,6 +11,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             get { return isShow; }
             set { isShow = value; }
         }
+        public bool IsWorking => isWorking;
         protected PachiGrimoire pachiGrimoire;
         protected ConstData constData;
         protected Config config;
@@ -28,6 +29,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         protected Sequence sequence;
         protected System.Action action;
+        protected bool lastSeqIsPlaying;
 
         private UIEventListener listener;
 
@@ -55,28 +57,42 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Update
-        private void FixedUpdate() {
+        private void Update() {
             if (!isShow) {
                 return;
             }
             if (isOtherShow)
                 return;
 
+            if(!CanUpdateWhenShow()) { // 为了防止CompeleteAnimate报错，关键时刻禁用这个函数
+                return;
+            }
+
             if (!config.HasAnimationEffect) {
                 if (sequence.IsPlaying() == true) {
                     CompleteAnimate();
                 }
             }
-            if (sequence.IsPlaying() == true && Input.GetMouseButtonDown(0)) {
+            if (lastSeqIsPlaying == true && sequence.IsPlaying() == true && (Input.GetMouseButtonDown(0) || Input.GetAxis("Mouse ScrollWheel") < 0)) {
                 CompleteAnimate();
+                return;
             }
 
             if (!isWorking)
                 return;
 
             ThenUpdateWhat();
+
         }
 
+        private void LateUpdate() {
+            if(sequence != null)
+                lastSeqIsPlaying = sequence.IsPlaying();
+        }
+
+        protected virtual bool CanUpdateWhenShow() {
+            return true;
+        }
 
         protected abstract void ThenUpdateWhat();
 
@@ -147,14 +163,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return;
             }
             if (sequence == null || sequence.IsPlaying() == false) {
-                sequence = DOTween.Sequence();
+                sequence = CreateSequence();
                 action = null;
             }
             sequence.Join(tweener);
         }
 
+        protected Sequence CreateSequence() {
+            return DOTween.Sequence();
+        }
 
-        protected void CompleteAnimate() {
+        protected void CompleteAnimate() { // 动画刚创建的那一帧不能Compelete
             sequence.Complete();
         }
 
@@ -230,6 +249,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             DoOnOtherShow();
             isOtherShow = true;
+            isWorking = false;
             whoShow.OnShow(this);
         }
         protected abstract void DoOnOtherShow();
@@ -239,6 +259,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return;
             }
             isOtherShow = false;
+            isWorking = true;
             DoOnOtherHide();
         }
         protected abstract void DoOnOtherHide();

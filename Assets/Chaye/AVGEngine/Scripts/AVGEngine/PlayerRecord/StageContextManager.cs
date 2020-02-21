@@ -143,7 +143,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             if (storyRecordDict.ContainsKey(indexOfRecord)) { 
                 sr = storyRecordDict[indexOfRecord];
                 Debug.Log("读取故事记录! :" + indexOfRecord);
-            } else { 
+            } else {
                 Debug.LogWarning("不能读取故事存档 :" + indexOfRecord);
                 return;
             }

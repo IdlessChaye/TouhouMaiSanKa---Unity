@@ -68,6 +68,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         protected override void ThenUpdateWhat() {
             UpdateInput();
+            if(Input.GetMouseButtonDown(1)) {
+                OnMouseRightDown();
+            }
         }
 
         protected override void OnMouseLeftDown() {
@@ -75,10 +78,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void OnMouseRightDown() {
-            if (isWorking) {
-                OnHide();
-            } else if (isConfirmWorking) {
+            if (isConfirmShow) {
                 OnConfirmNOHide();
+            } else if(isWorking) {
+                OnHide();
             }
         }
         protected override void OnMouseScrollWheelZoomOut() {
@@ -173,10 +176,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
+
+        #region Callbacks
+
         private void OnMyPressRecord(GameObject goo, bool isPress) {
             if (isPress == false) {
                 return;
             }
+            if (!isWorking)
+                return;
             string selectedNumberName = goo.name.Substring("Button".Length);
             int selectedNumber = 10 * (_pageNumber - 1) + int.Parse(selectedNumberName) - 1;
             if (selectedNumber == 0 && IsSaveMode == true) {
@@ -189,8 +197,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
-        #region Callbacks
         public void OnConfirmShow() {
+            if (!isWorking)
+                return;
             isConfirmShow = true;
             isConfirmWorking = false;
             confirmRoot.SetActive(true);
@@ -204,7 +213,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnConfirmNOHide() {
-            if (isConfirmWorking == false)
+            if (!isConfirmWorking)
                 return;
             isConfirmWorking = false;
             confirmSprite.alpha = 1f;
@@ -219,7 +228,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void OnConfirmYESHide() {
-            if (isConfirmWorking == false)
+            if (!isConfirmWorking)
                 return;
             isConfirmWorking = false;
             confirmSprite.alpha = 1f;
@@ -232,7 +241,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
                 isWorking = false;
                 panel.alpha = 1f;
-                sequence = DOTween.Sequence();
+                sequence = CreateSequence();
                 sequence.Join(DoPanelAlpha(panel, 1f, 0f));
                 sequence.OnComplete(() => {
                     isShow = false;

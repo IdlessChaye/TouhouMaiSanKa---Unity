@@ -36,7 +36,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             } else {
                 currentToken = null;
             }
-            Debug.Log("NextToken currentToken: " + currentToken);
+            if(currentToken != null)
+                Debug.Log("NextToken currentToken: " + currentToken);
+            else
+                Debug.Log("NextToken Over");
             return currentToken;
         }
 

@@ -5,16 +5,10 @@ using UnityEngine;
 namespace IdlessChaye.IdleToolkit.AVGEngine {
     [System.Serializable]
     public struct ChoiceItem {
-
-        public string Mark => mark;
-        public string DLIndex => dlIndex;
-        public bool CanBeSelected => canBeSelected;
-        public string OnSelectedScirptContext => onSelectedScirptContext;
-
-        private string mark;
-        private string dlIndex;
-        private bool canBeSelected;
-        private string onSelectedScirptContext;
+        public string mark;
+        public string dlIndex;
+        public bool canBeSelected;
+        public string onSelectedScirptContext;
 
         public ChoiceItem(string mark,
          string dlIndex,

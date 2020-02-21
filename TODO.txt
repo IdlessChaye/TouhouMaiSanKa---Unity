@@ -3,17 +3,23 @@ Json中记录的变量名取短点
 为了让图片能够被DXT5压缩，更改sprite大小
 Document
 
+Next到Choice要重新渲染
+
 Debug
-Save模式无法保存存档
-Next模式无法退出
-Config第一次出现UI是错的
-重复加载游戏报错 好像没事了
 
 测试SaveLoad
 测试RunWaitState
 测试ChoiceWaitState
+测试乱点鼠标
+测试Auto
+测试Skip
+
+已经选过的选项要有标识
+Config第一次出现UI是错的
 退出游戏提示窗
 SaveLoad显示编号
+执行脚本报错，报错脚本名和行号 封装报错系统
+字体颜色没法改
 Script Design
 油库里
 dairi

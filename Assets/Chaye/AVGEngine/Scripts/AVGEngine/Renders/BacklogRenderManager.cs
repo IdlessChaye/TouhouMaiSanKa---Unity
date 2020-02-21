@@ -22,15 +22,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         protected override void Initilize() {
             backlogManager = PachiGrimoire.I.BacklogManager;
-            name2.text = "";
-            name1.text = "";
-            name0.text = "";
-            context2.text = "";
-            context1.text = "";
-            context0.text = "";
-            voice2.SetActive(false);
-            voice1.SetActive(false);
-            voice0.SetActive(false);
+            ResetBacklogUI();
         }
 
         #region Input
@@ -86,6 +78,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         protected override void LoadData() {
+            name2.text = "";
+            name1.text = "";
+            name0.text = "";
+            context2.text = "";
+            context1.text = "";
+            context0.text = "";
+            voice2.SetActive(false);
+            voice1.SetActive(false);
+            voice0.SetActive(false);
             count = backlogManager.Count;
             head = 0;
             backlogItemList.Clear();
@@ -115,7 +116,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voice0.SetActive(true);
             name0.text = name == null || name.Equals(constData.ChoiceBacklogItemName) ? "" : name;
             if (name != null && name.Equals(constData.ChoiceBacklogItemName)) {
-                context0.text = "<color=magenta>" + context + "</color>";
+                context0.text = "      > " + context + " <";
             } else {
                 context0.text = context;
             }
@@ -176,6 +177,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
         protected override void UnloadData() {
             backlogItemList.Clear();
+            ResetBacklogUI();
+
         }
         protected override void DoOnOtherShow() {
             throw new System.NotImplementedException();
@@ -184,6 +187,20 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             throw new System.NotImplementedException();
         }
 
+
+
+
+        private void ResetBacklogUI() {
+            name2.text = "";
+            name1.text = "";
+            name0.text = "";
+            context2.text = "";
+            context1.text = "";
+            context0.text = "";
+            voice2.SetActive(false);
+            voice1.SetActive(false);
+            voice0.SetActive(false);
+        }
 
 
 
