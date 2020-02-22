@@ -1,0 +1,6 @@
+TS(*DL_Dialog_44*,我)TSEND
+TS(*DL_Dialog_45*,我)TSEND
+TS(*DL_Dialog_36*,我)TSEND
+TS(*DL_Dialog_42*,)TSEND
+TS(*DL_Dialog_43*,)TSEND
+WAIT()

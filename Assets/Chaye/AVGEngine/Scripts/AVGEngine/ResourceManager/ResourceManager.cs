@@ -132,7 +132,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private string GetTypeNameOfIndex(string index, out string subName) {
             subName = null;
-            if (index == null)
+            if (string.IsNullOrEmpty(index))
                 return null;
             int _index = index.IndexOf('_');
             if (_index == -1)

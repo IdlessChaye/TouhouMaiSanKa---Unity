@@ -88,7 +88,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             voice1.SetActive(false);
             voice0.SetActive(false);
             count = backlogManager.Count;
-            head = 0;
             backlogItemList.Clear();
             int index = head;
             string name = null, contextIndex = null, viIndex = null;
@@ -110,7 +109,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 context = resourceManager.Get<string>(contextIndex);
             else
                 context = "";
-            if (viIndex == null)
+            if (string.IsNullOrEmpty(viIndex))
                 voice0.SetActive(false);
             else
                 voice0.SetActive(true);
@@ -143,7 +142,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voice1.SetActive(true);
             name1.text = name == null || name.Equals(constData.ChoiceBacklogItemName) ? "" : name;
             if (name != null && name.Equals(constData.ChoiceBacklogItemName)) {
-                context1.text = "<color=magenta>" + context + "</color>";
+                context1.text = "      > " + context + " <";
             } else {
                 context1.text = context;
             }
@@ -170,7 +169,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 voice2.SetActive(true);
             name2.text = name == null || name.Equals(constData.ChoiceBacklogItemName) ? "" : name;
             if (name != null && name.Equals(constData.ChoiceBacklogItemName)) {
-                context2.text = "<color=magenta>" + context + "</color>";
+                context2.text = "      > " + context + " <";
             } else {
                 context2.text = context;
             }
@@ -178,7 +177,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         protected override void UnloadData() {
             backlogItemList.Clear();
             ResetBacklogUI();
-
+            head = 0;
         }
         protected override void DoOnOtherShow() {
             throw new System.NotImplementedException();

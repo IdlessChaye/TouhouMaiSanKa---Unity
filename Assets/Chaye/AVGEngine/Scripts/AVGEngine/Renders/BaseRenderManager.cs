@@ -69,11 +69,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
 
             if (!config.HasAnimationEffect) {
-                if (sequence.IsPlaying() == true) {
+                if (sequence?.IsPlaying() == true) {
                     CompleteAnimate();
                 }
             }
-            if (lastSeqIsPlaying == true && sequence.IsPlaying() == true && (Input.GetMouseButtonDown(0) || Input.GetAxis("Mouse ScrollWheel") < 0)) {
+            if (lastSeqIsPlaying == true && sequence?.IsPlaying() == true && (Input.GetMouseButtonDown(0) || Input.GetAxis("Mouse ScrollWheel") < 0)) {
                 CompleteAnimate();
                 return;
             }

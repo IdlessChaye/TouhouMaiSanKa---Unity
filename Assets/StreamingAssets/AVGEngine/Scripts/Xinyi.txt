@@ -1,0 +1,5 @@
+TS(*DL_Dialog_33*,我)TSEND
+TS(*DL_Dialog_37*,丘比特)TSEND
+TS(*DL_Dialog_40*,我)TSEND
+TS(*DL_Dialog_41*,)TSEND
+WAIT()

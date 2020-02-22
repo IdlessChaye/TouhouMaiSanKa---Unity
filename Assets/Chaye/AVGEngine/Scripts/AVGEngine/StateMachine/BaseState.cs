@@ -192,7 +192,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public override string StateName => "ChoiceWaitState";
 
-        private readonly List<uint> rejectedOldStateIDList = new List<uint> { 7 };
+        private readonly List<uint> rejectedOldStateIDList = new List<uint> {  };
         public override List<uint> RejectedOldStateIDList => rejectedOldStateIDList;
 
 

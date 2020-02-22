@@ -3,7 +3,12 @@ Json中记录的变量名取短点
 为了让图片能够被DXT5压缩，更改sprite大小
 Document
 
+语句的字出现时间节奏有问题
 Next到Choice要重新渲染
+Next不好用
+语音播放时长在Auto模式的延迟时间决定
+动画播放效果取消Bug
+命令不用Index和用Index都行
 
 Debug
 
@@ -14,6 +19,7 @@ Debug
 测试Auto
 测试Skip
 
+按键音效，Sound对象池
 执行脚本报错，报错脚本名和行号 封装报错系统
 Config第一次出现UI是错的
 字体颜色没法改

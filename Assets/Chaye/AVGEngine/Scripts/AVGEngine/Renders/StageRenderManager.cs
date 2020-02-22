@@ -908,12 +908,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
 
-
-
-
-
-
-
             // Reset StoryRecord Data
             dialogContextIndex = sr.dialogContextIndex;
             characterName = sr.characterName;
@@ -992,7 +986,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
 
             if (choiceItemList.Count != 0) {
-                ChoiceCreate(choiceItemList);
+                //ChoiceCreate(choiceItemList);
+                PachiGrimoire.I.ScriptManager.KILLERQUEEN();
             }
         }
 

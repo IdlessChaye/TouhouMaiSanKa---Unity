@@ -113,7 +113,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private void Update() {
 
             #region Test
-            if (Input.GetKeyDown(KeyCode.S)) {
+            if (Input.GetKeyDown(constData.KeyConfirm)) {
                 StartGame();
             }
             #endregion
@@ -142,7 +142,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                         float autoMessageSpeed = ConfigManager.Config.AutoMessageSpeed;
                         float highestTime = constData.AutoMessageSpeedHighest;
                         float lowestTime = constData.AutoMessageSpeedLowest;
-                        autoWaitTime = (lowestTime - highestTime) * autoMessageSpeed + highestTime;
+                        autoWaitTime = (highestTime - lowestTime) * autoMessageSpeed + lowestTime;
                         autoStartTime = Time.time;
                     }
                     if (Time.time - autoStartTime >= autoWaitTime) {

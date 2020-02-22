@@ -81,6 +81,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             } else {
                 LoadScriptContext(elseStr);
             }
+            while (NextSentence()) ;
         }
 
         public void ScriptReplaceAdd(string key, string value) { // 后来居上
@@ -388,6 +389,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             rootNode.Execute();
             Debug.Log("从翻译器 开始执行结束");
             return true;
+        }
+
+
+        public void KILLERQUEEN() {
+            if (ScriptPointerLineNumber <= 0)
+                return;
+            ScriptPointerLineNumber--;
+            NextFirstSentence();
         }
 
 

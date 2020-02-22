@@ -20,3 +20,12 @@ Replace(<
 Replace(<
 	endif>,<)
 >)
+Replace(<ANI(>,<Engine_SystemChangeStateToAnimate(>)
+Replace(<WAIT(>,<Engine_SystemChangeStateToWait(>)
+Replace(<TS(>,<Text_Clear()
+Text_Change(>)
+Replace(<)TSEND>,<)
+ANI()
+WAIT()
+Engine_BacklogAdd()
+>)

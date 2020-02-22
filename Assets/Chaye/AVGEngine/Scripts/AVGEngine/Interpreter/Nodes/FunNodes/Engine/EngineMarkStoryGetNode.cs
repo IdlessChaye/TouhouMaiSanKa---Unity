@@ -17,7 +17,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 throw new System.Exception("EngineMarkStoryGetNode");
 
             string mark = paraList[0];
-            PachiGrimoire.I.MarkManager.MarkStoryGet(mark);
+            bool isTrue = PachiGrimoire.I.MarkManager.MarkStoryGet(mark);
+            if (isTrue == false) {
+                PachiGrimoire.I.ScriptManager.IsAllTrue = false;
+            }
         }
 
 
