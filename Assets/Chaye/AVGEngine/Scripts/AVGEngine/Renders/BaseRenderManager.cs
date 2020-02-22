@@ -174,7 +174,11 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected void CompleteAnimate() { // 动画刚创建的那一帧不能Compelete
-            sequence.Complete();
+            try { 
+                sequence?.Complete();
+            } catch {
+                Debug.LogWarning("CompleteAnimate");
+            }
         }
 
         protected Tweener DoPanelAlpha(UIPanel uiPanel, float fromValue, float toValue, float duration = 1f) {
@@ -187,7 +191,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 .OnUpdate(() => uiPanel.alpha = value);
             return tweener;
         }
-
+        protected Tweener DoSpriteAlpha(UISprite uiPanel, float fromValue, float toValue, float duration = 1f) {
+            if (uiPanel == null) {
+                return null;
+            }
+            uiPanel.alpha = fromValue;
+            float value = fromValue;
+            Tweener tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
+                .OnUpdate(() => uiPanel.alpha = value);
+            return tweener;
+        }
         protected void PauseAnimate() {
             sequence?.Pause();
         }

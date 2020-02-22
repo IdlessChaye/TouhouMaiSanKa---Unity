@@ -81,6 +81,15 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private SaveLoadRenderManager slRenderManager;
         #endregion
 
+        #region ExitConfirm
+        public GameObject confirmRoot;
+        public UISprite confirmSprite;
+        public GameObject confirmYes;
+        public GameObject confirmNo;
+        private bool isConfirmShow;
+        private bool isConfirmWorking;
+        #endregion
+
         protected override void Initilize() {
             if (instance == null) {
                 instance = this;
@@ -96,16 +105,39 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             messageSpeedLowest = constData.MessageSpeedLowest;
             messageSpeedHighest = constData.MessageSpeedHighest;
 
+            UIEventListener.Get(confirmYes).onPress = (GameObject go, bool isPress) => {
+                if (isPress == false)
+                    return;
+                if (!isConfirmWorking)
+                    return;
+                OnConfirmYESHide();
+            };
+            UIEventListener.Get(confirmNo).onPress = (GameObject go, bool isPress) => {
+                if (isPress == false)
+                    return;
+                if (!isConfirmWorking)
+                    return;
+                OnConfirmNOHide();
+            };
+            confirmRoot.SetActive(false);
+
             //InitializeStory();
         }
 
 
         #region Input
+        private void FixedUpdate() { // 另一路Update，防止Update被CanUpdateWhenShow阻塞
+            if (isConfirmWorking) {
+                if (Input.GetMouseButtonDown(1)) {
+                    OnConfirmNOHide();
+                }
+            }
+        }
 
         protected override bool CanUpdateWhenShow() {
             BaseState state = stateMachine.CurrentState;
             if (state == ChoiceWaitState.Instance) {
-                return false;
+                return true;
             }
             return true;
         }
@@ -116,18 +148,21 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 return;
             }
 
-            StateBuff stateBuff = stateMachine.StateBuff; // Skip Animation
-            if (stateBuff == StateBuff.Skip || stateBuff == StateBuff.Next) {
-                if (state == RunAnimateState.Instance) {
-                    CompleteAnimate();
-                }
-            }
+            if (isConfirmWorking) {
 
-            UpdateInput();
+            } else {
+                StateBuff stateBuff = stateMachine.StateBuff; // Skip Animation
+                if (stateBuff == StateBuff.Skip || stateBuff == StateBuff.Next) {
+                    if (state == RunAnimateState.Instance) {
+                        CompleteAnimate();
+                    }
+                }
+                UpdateInput();
+            }
         }
 
         protected override void OnMouseLeftDown() {
-            if(!isConsoleShow) {
+            if (!isConsoleShow) {
                 ConsoleShow();
                 return;
             }
@@ -146,26 +181,30 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
         protected override void OnMouseRightDown() {
-            BaseState state = stateMachine.CurrentState;
-            StateBuff buff = stateMachine.StateBuff;
-            if (buff == StateBuff.Normal) {
-                if (state == RunWaitState.Instance) {
-                    if (isConsoleShow) {
-                        ConsoleHide();
-                    } else {
-                        ConsoleShow();
+            if (isConfirmShow) {
+                OnConfirmNOHide();
+            } else if (isWorking) {
+                BaseState state = stateMachine.CurrentState;
+                StateBuff buff = stateMachine.StateBuff;
+                if (buff == StateBuff.Normal) {
+                    if (state == RunWaitState.Instance) {
+                        if (isConsoleShow) {
+                            ConsoleHide();
+                        } else {
+                            ConsoleShow();
+                        }
+                    } else if (state == ChoiceWaitState.Instance) {
+                        if (isConsoleShow) {
+                            ConsoleHide();
+                        } else {
+                            ConsoleShow();
+                        }
                     }
-                } else if (state == ChoiceWaitState.Instance) {
-                    if (isConsoleShow) {
-                        ConsoleHide();
-                    } else {
-                        ConsoleShow();
-                    }
+                } else if (buff == StateBuff.Auto) {
+                    stateMachine.SetStateBuff(StateBuff.Normal);
+                } else if (buff == StateBuff.Skip) {
+                    stateMachine.SetStateBuff(StateBuff.Normal);
                 }
-            } else if (buff == StateBuff.Auto) {
-                stateMachine.SetStateBuff(StateBuff.Normal);
-            } else if (buff == StateBuff.Skip) {
-                stateMachine.SetStateBuff(StateBuff.Normal);
             }
         }
         protected override void OnMouseScrollWheelZoomOut() {
@@ -547,6 +586,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
             for (int i = 0; i < choiceList.Count; i++) {
                 ChoiceItem choiceItem = choiceItemList[i];
+                string mark = choiceItem.mark;
                 string dlIndex = choiceItem.dlIndex;
                 bool canBeSelected = choiceItem.canBeSelected;
                 string choiceContext = null;
@@ -576,6 +616,9 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 UIEventListener listener = UIEventListener.Get(choice);
 
                 uiLabel.text = choiceContext; // 文本
+                if(PachiGrimoire.I.MarkManager.MarkPlayerGet(mark)) {
+                    uiLabel.text = "(已选择) " + choiceContext;
+                }
                 if (canBeSelected) { // 颜色 和 点击事件
                     uiButton.hover = Color.white;
                     uiButton.pressed = Color.white;
@@ -587,7 +630,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             }
         }
 
-        private void OnChoiceButtonPress(GameObject go,bool isPress) { // 不知道怎么编能更好
+        private void OnChoiceButtonPress(GameObject go, bool isPress) { // 不知道怎么编能更好
             if (isPress == false)
                 return;
             if (choosenDLIndex != null)
@@ -625,7 +668,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                     go.SetActive(false);
                 };
             }
-            
+
             sequence.OnComplete(() => action.Invoke());
             action += () => { // 只要做出选择 要处理choiceItemList，处理Backlog ,SetActive，State
                 choiceItemList.Clear();
@@ -647,6 +690,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void UnloadData() {
+            stageContextManager.SavePlayerRecord();
             FigureImageDataClear();
         }
 
@@ -665,6 +709,64 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         #region Callbacks
+        public void OnConfirmShow() {
+            if (!isWorking)
+                return;
+            isConfirmShow = true;
+            isConfirmWorking = false;
+            confirmRoot.SetActive(true);
+            confirmSprite.alpha = 0f;
+
+            Tweener tweener = DoSpriteAlpha(confirmSprite, 0f, 1f);
+            JoinTween(tweener);
+
+            sequence.OnComplete(() => action.Invoke());
+            action += () => isConfirmWorking = true;
+        }
+
+        private void OnConfirmNOHide() {
+            if (!isConfirmWorking)
+                return;
+            isConfirmWorking = false;
+            confirmSprite.alpha = 1f;
+            Tweener tweener = DoSpriteAlpha(confirmSprite, 1f, 0f);
+            JoinTween(tweener);
+
+            sequence.OnComplete(() => action.Invoke());
+            action += () => {
+                isConfirmShow = false;
+                confirmRoot.SetActive(false);
+            };
+        }
+        private void OnConfirmYESHide() {
+            if (!isConfirmWorking)
+                return;
+            isConfirmWorking = false;
+            confirmSprite.alpha = 1f;
+            Tweener tweener = DoSpriteAlpha(confirmSprite, 1f, 0f);
+            JoinTween(tweener);
+
+            sequence.OnComplete(() => {
+                isConfirmShow = false;
+                confirmRoot.SetActive(false);
+
+                isWorking = false;
+                panel.alpha = 1f;
+                sequence = CreateSequence();
+                JoinTween(DoPanelAlpha(panel, 1f, 0f));
+
+                sequence.OnComplete(() => {
+                    isShow = false;
+                    UnloadData();
+                    root.SetActive(false);
+                    fromRenderManager?.OnOtherHide();
+
+                    pachiGrimoire.FinalizeGame();
+                });
+            });
+        }
+
+
 
         private void InitializeFirstButtonCallbacks() {
             buttonsCollider.SetActive(false);
@@ -686,8 +788,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 BaseState state = stateMachine.CurrentState;
                 StateBuff buff = stateMachine.StateBuff;
                 if (state == RunAnimateState.Instance || state == RunWaitState.Instance) {
-                    if(buff == StateBuff.Normal) { 
-                        if(choiceItemList.Count == 0) {
+                    if (buff == StateBuff.Normal) {
+                        if (choiceItemList.Count == 0) {
                             return true;
                         }
                     }
@@ -717,10 +819,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             };
             firstButtonConfig.onButtonSelect += () => OnOtherShow(configRenderManager);
             firstButtonExit.onButtonSelect += () => {
-                if (IsWorking == true) {
-                    OnHide(); // TODO: 加个提示框
-                    action += () => pachiGrimoire.FinalizeGame(); // 销毁渲染，全系统退出
-                }
+                OnConfirmShow();
             };
 
             Messenger.AddListener<StateBuff>("SetStateBuff", FirstButtonStateBuffCallback);
@@ -806,6 +905,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             sequence = CreateSequence();
 
             #endregion
+
+
+
+
+
+
+
+
 
             // Reset StoryRecord Data
             dialogContextIndex = sr.dialogContextIndex;

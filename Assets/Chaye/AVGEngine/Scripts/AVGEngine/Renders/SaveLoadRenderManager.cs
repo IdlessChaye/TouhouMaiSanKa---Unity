@@ -46,10 +46,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
             UIEventListener.Get(goYes).onPress = (GameObject go, bool isPress) => {
                 if (isPress == false)
                     return;
+                if (!isConfirmWorking)
+                    return;
                 OnConfirmYESHide();
             };
             UIEventListener.Get(goNo).onPress = (GameObject go, bool isPress) => {
                 if (isPress == false)
+                    return;
+                if (!isConfirmWorking)
                     return;
                 OnConfirmNOHide();
             };
@@ -58,7 +62,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 UIEventListener.Get(pageNumberArray[i].gameObject).onClick = (GameObject go) => {
                     string selectedPageNumberName = go.name;
                     PageNumber = int.Parse(selectedPageNumberName);
-                    Debug.Log(PageNumber);
                 };
             }
         }
@@ -67,9 +70,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         #region Input
 
         protected override void ThenUpdateWhat() {
-            UpdateInput();
-            if(Input.GetMouseButtonDown(1)) {
-                OnMouseRightDown();
+            if (isConfirmWorking) {
+                if (Input.GetMouseButtonDown(1)) {
+                    OnConfirmNOHide();
+                }
+            } else {
+                UpdateInput();
             }
         }
 
@@ -78,11 +84,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         protected override void OnMouseRightDown() {
-            if (isConfirmShow) {
-                OnConfirmNOHide();
-            } else if(isWorking) {
-                OnHide();
-            }
+            OnHide();
         }
         protected override void OnMouseScrollWheelZoomOut() {
         }
@@ -96,19 +98,6 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #endregion
 
-
-
-
-        private Tweener DoSpriteAlpha(UISprite uiPanel, float fromValue, float toValue, float duration = 1f) {
-            if (uiPanel == null) {
-                return null;
-            }
-            uiPanel.alpha = fromValue;
-            float value = fromValue;
-            Tweener tweener = DOTween.To(() => value, (x) => value = x, toValue, duration)
-                .OnUpdate(() => uiPanel.alpha = value);
-            return tweener;
-        }
 
 
 
@@ -139,12 +128,14 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 int selectedNumber = baseNumber + i;
                 MySaveLoadButton button = mySaveLoadButtonArray[i];
                 GameObject go = button.gameObject;
+                string strSelectedNumber = selectedNumber.ToString();
+                button.RecordNumber = selectedNumber == 0 ? "Quick" : "NO." + (strSelectedNumber.Length == 1 ? "0" : "") + strSelectedNumber;
                 if (storyRecordDict.ContainsKey(selectedNumber)) {
                     BoxCollider boxCollider = go.GetComponent<BoxCollider>();
                     if (selectedNumber == 0 && IsSaveMode == true) {
                         boxCollider.enabled = false;
                         UIEventListener.Get(go).onPress = null;
-                    } else { 
+                    } else {
                         boxCollider.enabled = true;
                         UIEventListener.Get(go).onPress = OnMyPressRecord;
                     }
@@ -160,10 +151,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
                 } else {
                     BoxCollider boxCollider = go.GetComponent<BoxCollider>();
                     if (IsSaveMode == true) {
-                        if(selectedNumber == 0) {
+                        if (selectedNumber == 0) {
                             boxCollider.enabled = false;
                             UIEventListener.Get(go).onPress = null;
-                        } else { 
+                        } else {
                             boxCollider.enabled = true;
                             UIEventListener.Get(go).onPress = OnMyPressRecord;
                         }

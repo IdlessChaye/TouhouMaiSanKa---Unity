@@ -14,11 +14,8 @@ Debug
 测试Auto
 测试Skip
 
-已经选过的选项要有标识
-Config第一次出现UI是错的
-退出游戏提示窗
-SaveLoad显示编号
 执行脚本报错，报错脚本名和行号 封装报错系统
+Config第一次出现UI是错的
 字体颜色没法改
 Script Design
 油库里

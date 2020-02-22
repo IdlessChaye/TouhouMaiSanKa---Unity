@@ -1,6 +1,6 @@
 Engine_SystemDebugLog(<Hello!
 World!>)
 Engine_SystemChangeStateToWait()
-Engine_ChoiceCreate(myFirstMark,*DL_Choice_0*,true,<Engine_SystemDebugLog(<点了第一个选项！>)>,mySecondMark,*DL_Choice_1*,false,<Engine_SystemDebugLog(<点了第二个选项！>)>)
+Engine_ChoiceCreate(myFirstMark,*DL_Choice_0*,true,<Engine_SystemDebugLog(<点了第一个选项！>)>,mySecondMark,*DL_Choice_1*,true,<Engine_SystemDebugLog(<点了第二个选项！>)>)
 Engine_SystemDebugLog(<已经选完选项了>)
 Engine_SystemChangeStateToWait()

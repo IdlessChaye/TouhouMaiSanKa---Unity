@@ -38,6 +38,8 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public bool LoadPlayerRecordData(string playerRecordJSON) {
+            Debug.Log("playerRecordJSON");
+            Debug.Log(playerRecordJSON);
             PlayerRecord = new PlayerRecord();
             if (playerRecordJSON == null) {
                 // 保存一个默认的玩家记录数据

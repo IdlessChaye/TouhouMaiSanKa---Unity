@@ -13,6 +13,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public UILabel labelTitle;
         public UILabel labelDate;
         public UILabel labelContext;
+        public UILabel labelRecordNumber;
+
+        public string RecordNumber {
+            get {
+                return labelRecordNumber.text;
+            }
+            set {
+                labelRecordNumber.text = value;
+            }
+        }
 
         public string Title {
             get {

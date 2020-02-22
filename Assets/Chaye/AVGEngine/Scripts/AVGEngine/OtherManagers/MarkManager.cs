@@ -22,12 +22,17 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         #region Player Functions
         public bool MarkPlayerGet(string mark) {
+            Debug.Log("展示markPlayerList:");
+            foreach (var s in markPlayerList)
+                Debug.Log(s);
+            Debug.Log("展示结束markPlayerList");
             return markPlayerList.Contains(mark);
         }
 
         public void MarkPlayerSet(string mark) {
             if (!markPlayerList.Contains(mark)) {
                 markPlayerList.Add(mark);
+                Debug.Log("新Player Mark :" + mark);
             }
         }
 
@@ -58,6 +63,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         public void MarkStorySet(string mark) {
             if (!markStoryList.Contains(mark)) {
                 markStoryList.Add(mark);
+                Debug.Log("新Story Mark :" + mark);
             }
         }
 
@@ -85,6 +91,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void LoadPlayerRecord(List<string> markPlayerList, List<string> varNamePlayerList, List<float> varValuePlayerList) {
+            Debug.Log("LoadPlayerRecord");
             this.markPlayerList = new List<string>(markPlayerList);
             this.valuePlayerDict = new Dictionary<string, float>();
             for (int i = 0; i < varNamePlayerList.Count; i++) {
@@ -110,18 +117,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void InitializeStory() {
-            markPlayerList = new List<string>();
-            valuePlayerDict = new Dictionary<string, float>();
-
             markStoryList = new List<string>();
             valueStoryDict = new Dictionary<string, float>();
             chapterName = null;
         }
 
         public void FinalizeStory() {
-            markPlayerList = null;
-            valuePlayerDict = null;
-
             markStoryList = null;
             valueStoryDict = null;
             chapterName = null;

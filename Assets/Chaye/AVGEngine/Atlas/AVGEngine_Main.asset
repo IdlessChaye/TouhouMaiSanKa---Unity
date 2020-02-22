@@ -15,8 +15,8 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 34d4b5ac16afbb54ca343e35f2aef815, type: 2}
   mSprites:
   - name: Auto_Hover
-    x: 413
-    y: 477
+    x: 102
+    y: 292
     width: 91
     height: 35
     borderLeft: 0
@@ -28,8 +28,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 48
   - name: Auto_Normal
-    x: 0
-    y: 400
+    x: 89
+    y: 258
     width: 89
     height: 33
     borderLeft: 0
@@ -41,8 +41,8 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 49
   - name: Auto_Pressed
-    x: 85
-    y: 310
+    x: 194
+    y: 283
     width: 89
     height: 33
     borderLeft: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
     paddingBottom: 49
   - name: Backlog_Hover
     x: 0
-    y: 468
+    y: 369
     width: 146
     height: 44
     borderLeft: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
     paddingBottom: 92
   - name: Backlog_Normal
     x: 147
-    y: 470
+    y: 371
     width: 144
     height: 42
     borderLeft: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
     paddingBottom: 93
   - name: Config_Hover
     x: 292
-    y: 468
+    y: 354
     width: 120
     height: 44
     borderLeft: 0
@@ -93,8 +93,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 40
   - name: Config_Normal
-    x: 234
-    y: 425
+    x: 147
+    y: 328
     width: 118
     height: 42
     borderLeft: 0
@@ -106,8 +106,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 41
   - name: Exit_Hover
-    x: 102
-    y: 400
+    x: 266
+    y: 247
     width: 76
     height: 35
     borderLeft: 0
@@ -119,8 +119,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 48
   - name: Exit_Normal
-    x: 191
-    y: 314
+    x: 57
+    y: 190
     width: 74
     height: 33
     borderLeft: 0
@@ -132,21 +132,21 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 49
   - name: frame
-    x: 0
-    y: 216
+    x: 334
+    y: 399
     width: 80
     height: 113
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
+    borderLeft: 35
+    borderRight: 38
+    borderTop: 55
+    borderBottom: 48
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
   - name: Hide_Hover
-    x: 102
-    y: 446
+    x: 104
+    y: 347
     width: 22
     height: 21
     borderLeft: 0
@@ -158,8 +158,8 @@ MonoBehaviour:
     paddingTop: 54
     paddingBottom: 53
   - name: Hide_Normal
-    x: 471
-    y: 420
+    x: 448
+    y: 332
     width: 22
     height: 21
     borderLeft: 0
@@ -171,8 +171,8 @@ MonoBehaviour:
     paddingTop: 54
     paddingBottom: 53
   - name: Load_Hover
-    x: 412
-    y: 326
+    x: 266
+    y: 317
     width: 91
     height: 36
     borderLeft: 0
@@ -184,8 +184,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 48
   - name: Load_Normal
-    x: 413
-    y: 442
+    x: 358
+    y: 319
     width: 89
     height: 34
     borderLeft: 0
@@ -197,8 +197,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 49
   - name: Next_Hover
-    x: 412
-    y: 363
+    x: 0
+    y: 263
     width: 88
     height: 35
     borderLeft: 0
@@ -210,8 +210,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 48
   - name: Next_Normal
-    x: 147
-    y: 436
+    x: 0
+    y: 229
     width: 86
     height: 33
     borderLeft: 0
@@ -223,8 +223,8 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 49
   - name: Next_Pressed
-    x: 261
-    y: 391
+    x: 179
+    y: 249
     width: 86
     height: 33
     borderLeft: 0
@@ -235,9 +235,22 @@ MonoBehaviour:
     paddingRight: 20
     paddingTop: 46
     paddingBottom: 49
+  - name: NO
+    x: 167
+    y: 414
+    width: 166
+    height: 98
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 45
+    paddingRight: 45
+    paddingTop: 96
+    paddingBottom: 62
   - name: QL_Hover
-    x: 348
-    y: 356
+    x: 445
+    y: 276
     width: 63
     height: 42
     borderLeft: 0
@@ -249,8 +262,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 41
   - name: QL_Normal
-    x: 341
-    y: 315
+    x: 343
+    y: 242
     width: 61
     height: 40
     borderLeft: 0
@@ -262,8 +275,8 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 42
   - name: QS_Hover
-    x: 410
-    y: 399
+    x: 172
+    y: 206
     width: 60
     height: 42
     borderLeft: 0
@@ -275,8 +288,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 41
   - name: QS_Normal
-    x: 266
-    y: 307
+    x: 233
+    y: 206
     width: 58
     height: 40
     borderLeft: 0
@@ -288,8 +301,8 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 42
   - name: Save_Hover
-    x: 104
-    y: 344
+    x: 358
+    y: 283
     width: 86
     height: 35
     borderLeft: 0
@@ -301,8 +314,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 48
   - name: Save_Normal
-    x: 0
-    y: 330
+    x: 87
+    y: 224
     width: 84
     height: 33
     borderLeft: 0
@@ -314,8 +327,8 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 49
   - name: Skip_Hover
-    x: 179
-    y: 380
+    x: 413
+    y: 354
     width: 81
     height: 44
     borderLeft: 0
@@ -327,8 +340,8 @@ MonoBehaviour:
     paddingTop: 44
     paddingBottom: 40
   - name: Skip_Normal
-    x: 403
-    y: 283
+    x: 415
+    y: 427
     width: 79
     height: 42
     borderLeft: 0
@@ -340,8 +353,8 @@ MonoBehaviour:
     paddingTop: 45
     paddingBottom: 41
   - name: Skip_Pressed
-    x: 261
-    y: 348
+    x: 415
+    y: 470
     width: 79
     height: 42
     borderLeft: 0
@@ -354,7 +367,7 @@ MonoBehaviour:
     paddingBottom: 41
   - name: Voice_Hover
     x: 0
-    y: 364
+    y: 333
     width: 103
     height: 35
     borderLeft: 0
@@ -367,7 +380,7 @@ MonoBehaviour:
     paddingBottom: 48
   - name: Voice_Normal
     x: 0
-    y: 434
+    y: 299
     width: 101
     height: 33
     borderLeft: 0
@@ -379,8 +392,8 @@ MonoBehaviour:
     paddingTop: 46
     paddingBottom: 49
   - name: white
-    x: 353
-    y: 419
+    x: 0
+    y: 180
     width: 56
     height: 48
     borderLeft: 1
@@ -391,5 +404,18 @@ MonoBehaviour:
     paddingRight: 36
     paddingTop: 42
     paddingBottom: 38
+  - name: Yes
+    x: 0
+    y: 414
+    width: 166
+    height: 98
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 45
+    paddingRight: 45
+    paddingTop: 96
+    paddingBottom: 62
   mPixelSize: 1
   mReplacement: {fileID: 0}
