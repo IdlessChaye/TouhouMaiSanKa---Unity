@@ -155,12 +155,16 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
 
         public void InitializeStory() {
+            BGMStop();
+            VoiceStop();
             voiceIndex = null;
             characterName = null;
             bgmIndex = null;
         }
 
         public void FinalizeStory() {
+            BGMStop();
+            VoiceStop();
             voiceIndex = null;
             characterName = null;
             bgmIndex = null;

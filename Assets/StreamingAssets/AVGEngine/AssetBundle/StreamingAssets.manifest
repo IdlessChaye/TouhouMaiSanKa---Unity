@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2531732697
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: bgm.unity3d
+      Dependencies: {}

@@ -64,7 +64,7 @@ MonoBehaviour:
   mPivot: 4
   mWidth: 286
   mHeight: 22
-  mDepth: 10
+  mDepth: 31
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   mPivot: 4
   mWidth: 924
   mHeight: 90
-  mDepth: 0
+  mDepth: 30
   mMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
@@ -302,7 +302,7 @@ MonoBehaviour:
   mPivot: 4
   mWidth: 963
   mHeight: 128
-  mDepth: -1
+  mDepth: 29
   mMat: {fileID: 0}
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0

@@ -1,6 +1,8 @@
 Engine_SystemDebugLog(<Game!Start!>)
 Engine_ChapterNameSet(01.又是闲咸的一天)
+Image_FigureImageAdd(Marisa,*FI_Marisa*,0,0,0.5,0.5)
 WAIT()
+Image_BackgroundImageChange(*BI_StreetSnow1280*)
 TS(*DL_Dialog_0*,我)TSEND
 TS(*DL_Dialog_1*,我)TSEND
 TS(*DL_Dialog_2*,我)TSEND
@@ -13,6 +15,10 @@ TS(*DL_Dialog_8*,我)TSEND
 TS(*DL_Dialog_9*,我)TSEND
 TS(*DL_Dialog_10*,我)TSEND
 TS(*DL_Dialog_11*,我)TSEND
+Music_BGMPlay(*BM_ばんばんしー - 厄神days*)
+Image_FigureImageRemove(Marisa)
+Image_FigureImageAdd(Marisa,*FI_Marisa*,-200,0,0.5,0.5)
+Image_FigureImageAdd(Cirno,*FI_Cupid*,200,0,1,1)
 TS(*DL_Dialog_12*,？？？)TSEND
 TS(*DL_Dialog_13*,我)TSEND
 TS(*DL_Dialog_14*,丘比特)TSEND

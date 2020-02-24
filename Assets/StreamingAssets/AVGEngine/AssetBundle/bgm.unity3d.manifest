@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 142490917
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4b84bac5dd1f4b1b19c791d1d5f276ae
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- "Assets/Chaye/AVGEngine/AVGEngineRes/BGMs/\u3070\u3093\u3070\u3093\u3057\u30FC
+  - \u5384\u795Edays.mp3"
+Dependencies: []
