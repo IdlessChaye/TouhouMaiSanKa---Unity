@@ -16,3 +16,13 @@
 
 
 ![Image](ScreenShots/config.png)
+
+
+
+![Image](ScreenShots/save.png)
+
+
+
+### AVG脚本
+
+![Image](ScreenShots/script.png)
