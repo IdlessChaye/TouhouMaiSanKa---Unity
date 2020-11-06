@@ -1,0 +1,8 @@
+Engine_SystemDebugLog(<TEST!>)
+Engine_ChapterNameSet(02.又又是闲咸的一天)
+Image_FigureImageAdd(Marisa,*FI_Marisa*,0,0,0.5,0.5)
+WAIT()
+Image_BackgroundImageChange(*BI_StreetSnow1280*)
+TS(*DL_Dialog_4*,我)TSEND
+TS(*DL_Dialog_5*,我)TSEND
+WAIT()

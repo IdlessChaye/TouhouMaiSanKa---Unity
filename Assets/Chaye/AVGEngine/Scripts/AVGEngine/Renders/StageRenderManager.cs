@@ -1027,7 +1027,7 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
         public void FinalizeStory() {
-            sequence?.Kill();
+            sequence?.Complete();
             FigureImageDataClear();
             InitializeStory(false);
             FinalizeFirstButtonCallbacks();

@@ -15,7 +15,12 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         private PastScriptManager pastScriptManager;
         private StageRenderManager renderManager;
 
-        public StageContextManager() {
+
+
+		public string StoryScriptFileName => storyScriptFileName;
+		private string storyScriptFileName;
+
+		public StageContextManager() {
             recordManager = PachiGrimoire.I.PlayerRecordManager;
             stateMachine = PachiGrimoire.I.StateMachine;
             scriptManager = PachiGrimoire.I.ScriptManager;
@@ -160,7 +165,10 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
         }
 
 
-        public void InitializeStory() {
+        public void InitializeStory(string storyScriptFileName = null) {
+			if (storyScriptFileName != null)
+				this.storyScriptFileName = storyScriptFileName;
+
             musicManager.InitializeStory();
             scriptManager.InitializeStory();
             markManager.InitializeStory();

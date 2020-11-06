@@ -112,26 +112,32 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         private void Update() {
 
-            #region Test
-            if (Input.GetKeyDown(constData.KeyConfirm)) {
-                StartGame();
-            }
-            #endregion
+			#region Test
+			if (Input.GetKeyDown(constData.KeyConfirm))
+			{
+				StartGame();
+			}
+			else if (Input.GetKeyDown(KeyCode.T))
+			{ 
+				StartGameTest();
+			}
+			#endregion
 
 
 
-            #region State
-            BaseState state = stateMachine.CurrentState;
+			#region State
+			BaseState state = stateMachine.CurrentState;
 
             if (state == RunScriptState.Instance) { // RunScript State
                 bool success = scriptManager.NextSentence();
                 if (success == false) {
-                    //Debug.LogWarning("脚本执行结束");
-                    //if (stageRenderManager.IsShow == true) {
-                    //    stageRenderManager.OnHide();
-                    //    FinalizeGame();
-                    //}
-                }
+					Debug.LogWarning("脚本执行结束");
+					if (stageRenderManager.IsShow == true)
+					{
+						stageRenderManager.OnHide();
+						FinalizeGame();
+					}
+				}
             } else if (state == RunWaitState.Instance) { // RunWait State
                 StateBuff stateBuff = stateMachine.StateBuff;
                 if (stateBuff == StateBuff.Normal) {
@@ -174,14 +180,26 @@ namespace IdlessChaye.IdleToolkit.AVGEngine {
 
         public void StartGame() { // 初始界面入口，初始化，还有UI管理，这个函数么有写完
             if (stageRenderManager.IsShow == false) {
-                stageContextManager.InitializeStory();
+                stageContextManager.InitializeStory(constData.MainScriptFileNameWithoutTXT);
                 stateMachine.TransferStateTo(RunScriptState.Instance);
                 stateMachine.SetStateBuff(StateBuff.Normal);
                 stageRenderManager.OnShow(null);
             }
         }
 
-        public void LoadGame() { // 初始界面读取存档入口，初始化，还有UI管理，这个函数么有写完
+		public void StartGameTest()
+		{ // 测试别的故事脚本用的系统初始化代码
+			if (stageRenderManager.IsShow == false)
+			{
+				stageContextManager.InitializeStory("GameStartTest");
+				stateMachine.TransferStateTo(RunScriptState.Instance);
+				stateMachine.SetStateBuff(StateBuff.Normal);
+				stageRenderManager.OnShow(null);
+			}
+		}
+
+
+		public void LoadGame() { // 初始界面读取存档入口，初始化，还有UI管理，这个函数么有写完
             BaseState currentState = stateMachine.CurrentState;
             if (currentState == IdleState.Instance) {
                 if (saveLoadRenderManager.IsShow == false) {

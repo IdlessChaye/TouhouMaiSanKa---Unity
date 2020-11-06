@@ -26,6 +26,7 @@ public class TestDoTween : MonoBehaviour {
 
 
     private void Start() {
+		
         text.text = "";
         sequence = DOTween.Sequence();
         sequence.AppendCallback(() => Debug.Log("!!"));
@@ -86,7 +87,30 @@ public class TestDoTween : MonoBehaviour {
         state = RunScript;
     }
 
-    public void OnInterupt() {
+
+	private Sequence _sequence;
+	private Image formula;
+
+	private void SwitchFormula()
+	{
+		if (_sequence != null)
+			_sequence.Complete();
+		_sequence = DOTween.Sequence();
+		if (formula.color.a == 0)
+		{ 
+			var tween = formula.DOFade(1, 1f);
+			_sequence.Join(tween);
+		}
+		else
+		{
+			var tween = formula.DOFade(0, 1f);
+			_sequence.Join(tween);
+		}
+	}
+
+
+
+	public void OnInterupt() {
         sequence.Complete();
     }
 
@@ -123,6 +147,8 @@ public class TestDoTween : MonoBehaviour {
             .OnComplete(() => state = RunScript);
         
         
+
+
 
 
         return tweener;
